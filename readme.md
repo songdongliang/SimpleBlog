@@ -61,7 +61,7 @@ Redis在OSF中的使用，主要缓存用户信息、统计计数，同时存储
 	domain.name=localhost
 	domain.ip=127.0.0.1
 	domain.port=8080
-	context=com.lvwang.osf
+	context=osf
 
 	#jdbc config
 	jdbc.driver=com.mysql.jdbc.Driver

@@ -158,13 +158,6 @@ public class AccountController {
 	public Map<String, Object> login(@RequestParam("email") String email,
 					    @RequestParam("password") String password,
 					    HttpSession session) {
-		/*
-		String status = userService.login(email, password);
-		if(Property.SUCCESS_ACCOUNT_LOGIN.equals(status)) {
-			User user = userService.findByEmail(email);
-			session.setAttribute("user", user);			
-		}
-		*/
 		Map<String, Object> ret = userService.login(email, password);
 		String status = (String) ret.get("status");
 		if(Property.SUCCESS_ACCOUNT_LOGIN.equals(status)) {

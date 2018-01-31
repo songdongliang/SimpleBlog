@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -69,17 +70,6 @@ public class UserService {
 		}
 		return result;
 	}
-	
-//	public String confirmPwd(String user_name, String user_pwd) {
-//		if(user_pwd == null || user_name.length() == 0)
-//			return Property.ERROR_PWD_EMPTY;
-//		String pwd = userDao.getPwdByUsername(user_name);
-//		if(pwd.equals(user_pwd)) 
-//			return null;
-//		else
-//			return Property.ERROR_PWD_DIFF;
-//			
-//	}
 	
 	public String newToken(User user) {
 		String token = UUID.randomUUID().toString();
@@ -160,7 +150,7 @@ public class UserService {
 		else {
 			//4 check user status
 			if(STATUS_USER_NORMAL != user.getUser_status()) {
-				ret.put("status", user.getUser_status());
+				ret.put("status", String.valueOf(user.getUser_status()));
 				return ret;
 			}
 		}

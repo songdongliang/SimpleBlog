@@ -65,7 +65,7 @@ $(document).ready(function(){
     
     $('#avatar_file').live('change', function(event) {
  	   $.ajaxFileUpload({
- 	                		url: basePath+'/album/upload/avatar', 
+ 	                		url: basePath + '/album/upload/avatar',
  	                		secureuri:false,
  	                		fileElementId:'avatar_file',
  	                		success: function (data, status){

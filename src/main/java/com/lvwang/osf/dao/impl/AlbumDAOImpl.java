@@ -3,6 +3,10 @@ package com.lvwang.osf.dao.impl;
 import java.io.IOException;
 import java.util.List;
 
+import com.squareup.okhttp.MultipartBuilder;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,33 +42,6 @@ public class AlbumDAOImpl implements AlbumDAO{
 	public int savePhoto(final Photo photo) {
 		albumMapper.savePhoto(photo);
 		return photo.getId();
-	}
-	
-	public String uploadPhoto(MultipartFile img, Photo details) {
-		UploadManager uploadManager = new UploadManager();
-		try {
-			uploadManager.put(img.getBytes(), details.getKey(), getUpToken());
-		} catch (QiniuException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return details.getKey();
-		
-			
-	}
-	public String uploadPhoto(byte[] img, String key){
-		
-		UploadManager uploadManager = new UploadManager();
-		try {
-			uploadManager.put(img, key, getUpToken());
-		} catch (QiniuException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return key;
-		
 	}
 	
 	private String getUpToken(){

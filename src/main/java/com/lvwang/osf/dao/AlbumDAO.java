@@ -28,7 +28,6 @@ public interface AlbumDAO {
 	int savePhoto(Photo photo);
 	
 	//return photo etag
-	String uploadPhoto(MultipartFile img, Photo details);
 	String uploadPhoto(byte[] img, String key);
 	void delPhotoInBucket(String key);
 

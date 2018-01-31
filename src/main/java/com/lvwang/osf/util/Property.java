@@ -17,6 +17,7 @@ public class Property {
 			IMG_BASE_URL = prop.getProperty("img_base_url");
 			POST_COVER_THUMBNAIL = prop.getProperty("post_cover_thumbnail");
 			ALBUM_THUMBNAIL = prop.getProperty("album_thumbnail");
+			UPLOAD_URL = prop.getProperty("upload_url");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -26,6 +27,8 @@ public class Property {
 	public static String POST_COVER_THUMBNAIL;
 	
 	public static String ALBUM_THUMBNAIL;
+
+	public static String UPLOAD_URL;
 	/*
 	 * 数据字典(6位)
 	 * rules:

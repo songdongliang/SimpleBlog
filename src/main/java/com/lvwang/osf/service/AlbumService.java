@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import com.lvwang.osf.model.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,10 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lvwang.osf.dao.AlbumDAO;
-import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Photo;
-import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
 import com.lvwang.osf.util.Property;
 
 @Service("albumService")
@@ -33,9 +30,8 @@ public class AlbumService {
 	public static final int ALBUM_STAUS_TOBERELEASED = 1; //待发布
 	
 	
-	public static String IMG_BASE_URL = Property.IMG_BASE_URL;
-	
-	
+	private static String IMG_BASE_URL = Property.IMG_BASE_URL;
+
 	@Autowired
 	private AlbumDAO albumDao;
 	
@@ -50,12 +46,9 @@ public class AlbumService {
 	@Autowired
 	@Qualifier("relationService")
 	private RelationService relationService;
-	
-	//图片格式校验
-	public String validataImg(MultipartFile img) {
-		
-		return null;
-	}
+
+	@Autowired
+    private ApiService apiService;
 	
 	public String getImgType(MultipartFile img) {
 		String contentType = img.getContentType();
@@ -94,18 +87,18 @@ public class AlbumService {
 	
 	public Map<String, Object> uploadPhoto(MultipartFile img) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Photo details = new Photo();
-		String key = UUID.randomUUID().toString()+"."+getImgType(img);
-		details.setKey(key);
-		String etag = albumDao.uploadPhoto(img, details);
-		if(etag == null || etag.length() ==0) {
-			map.put("status", Property.ERROR_PHOTO_CREATE);
-			return map;
-		} else {	
-			map.put("key", key);
-			map.put("link", IMG_BASE_URL+key);
-			map.put("status", Property.SUCCESS_PHOTO_CREATE);			
-		}
+        try {
+            HttpResult httpResult = apiService.upload(Property.UPLOAD_URL,img);
+            if (0 != httpResult.getCode()) {
+                map.put("status", Property.ERROR_PHOTO_CREATE);
+                return map;
+            } else {
+                map.put("link", IMG_BASE_URL + httpResult.getData());
+                map.put("status", Property.SUCCESS_PHOTO_CREATE);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		return map;
 	}
 	

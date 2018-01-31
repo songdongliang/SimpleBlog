@@ -92,7 +92,7 @@ public class AlbumController {
 		return albumService.getAlbum(id);
 	}
 	
-	/*
+	/**
 	 * 相册上传页面
 	 * 指定album
 	 */
@@ -102,7 +102,7 @@ public class AlbumController {
 	}
 	
 	
-	/*
+	/**
 	 * 相册上传页面
 	 * 未指定album
 	 */

@@ -9,7 +9,7 @@
 		 values(#{notify_type},#{notify_id}, #{object_type}, #{object_id}, #{notified_user}, #{notifier})
 	</insert>
 	<select id="getNotificationsOfType" resultType="com.lvwang.osf.model.Notification">
-		 select * from osf_notifications where notified_user=#{param1} and notify_type=#{param2} order by ts desc";
+		 select * from osf_notifications where notified_user=#{param1} and notify_type=#{param2} order by ts desc
 	</select>
 	<select id="getNotificationsOfTypes" resultType="com.lvwang.osf.model.Notification">
 		 select * from osf_notifications where notified_user= #{param1} 
@@ -20,8 +20,9 @@
 		 order by ts desc
 	</select>
 	
-	<select id="getNotificationsCount" resultType="map" parameterType="int">
-		 select notify_type,count(*) count from  
-		 osf_notifications where notified_user=#{user_id} group by notify_type
+	<select id="getNotificationsCount" resultType="java.util.Map" parameterType="int">
+		 select notify_type,count(*) `count	` from
+		 osf_notifications where notified_user = #{user_id} group by notify_type
 	</select>
+
 </mapper>

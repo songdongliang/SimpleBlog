@@ -46,10 +46,6 @@ public class NotificationService {
 	
 	public Map<String, Long> getNotificationsCount(int user_id){
 		Map<String, Long> notifications = notificationDao.getNotificationsCount(user_id);
-		//Map<String, Integer> notifications_with_type = new HashMap<String, Integer>();
-		//for(Integer type: notifications.keySet()) {
-		//	notifications_with_type.put(Dic.toNotifyTypeDesc(type), notifications.get(type));
-		//}
 		return notifications;
 	}
 	
