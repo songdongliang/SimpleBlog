@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!-- 定义注解驱动 -->
+	<mvc:annotation-driven>
+
+			<mvc:message-converters>
+				<!-- 设置支持中文 -->
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<constructor-arg index="0" value="UTF-8"/>
+				</bean>
+				<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"/>
+			</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 定义Controller的扫描包 -->
+	<context:component-scan base-package="com.lvwang.osf.control"/>
+
+    <!--<mvc:interceptors>-->
+
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/api/v1/**"/>-->
+            <!--<mvc:exclude-mapping path="/js/**"/>-->
+            <!--<mvc:exclude-mapping path="/css/**"/>-->
+            <!--<mvc:exclude-mapping path="/img/**"/>-->
+            <!--<mvc:exclude-mapping path="/font/**"/>-->
+            <!--<mvc:exclude-mapping path="/account/login"/>-->
+            <!--<mvc:exclude-mapping path="/account/logout"/>-->
+            <!--<mvc:exclude-mapping path="/account/register"/>-->
+            <!--<mvc:exclude-mapping path="/account/activation/**"/>-->
+            <!--<mvc:exclude-mapping path="/account/resetpwd"/>-->
+            <!--<mvc:exclude-mapping path="/album/*/photos"/>-->
+            <!--<mvc:exclude-mapping path="/comment/*"/>-->
+            <!--<mvc:exclude-mapping path="/comment/*/*"/>-->
+            <!--<mvc:exclude-mapping path="/comment/attach/*/*"/>-->
+            <!--<mvc:exclude-mapping path="/explore"/>-->
+            <!--<mvc:exclude-mapping path="/explore/"/>-->
+            <!--<mvc:exclude-mapping path="/explore/page/*"/>-->
+            <!--<mvc:exclude-mapping path="/sidebar"/>-->
+            <!--<mvc:exclude-mapping path="/welcome"/>-->
+            <!--<mvc:exclude-mapping path="/popup_usercard/*"/>-->
+            <!--<mvc:exclude-mapping path="/post/*"/>-->
+            <!--<mvc:exclude-mapping path="/tag/*"/>-->
+            <!--<mvc:exclude-mapping path="/user/*"/>-->
+            <!--<bean class="com.lvwang.osf.web.LoginRequiredInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/comment/create"/>-->
+            <!--<mvc:mapping path="/post/create"/>-->
+            <!--<mvc:mapping path="/post/delete/*"/>-->
+            <!--<bean class="com.lvwang.osf.web.LoginRequiredInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+
+        <!--&lt;!&ndash; API access interceptor &ndash;&gt;-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/api/v1/**"/>-->
+            <!--<mvc:exclude-mapping path="/api/v1/account/login"/>-->
+            <!--&lt;!&ndash; <mvc:exclude-mapping path="/api/v1/account/logout"/> &ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/api/v1/account/register"/>-->
+            <!--<bean class="com.lvwang.osf.web.APIAccessAuthRequiredInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/img/" mapping="/img/**"/>
+    <mvc:resources location="/fonts/" mapping="/fonts/**"/>
+	
+	<!-- 定义试图解析器 -->
+	<!-- 
+		Example: prefix="/WEB-INF/jsp/", suffix=".jsp", viewname="test" -> "/WEB-INF/jsp/test.jsp" 
+	 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:maxUploadSize="500000" />
+</beans>

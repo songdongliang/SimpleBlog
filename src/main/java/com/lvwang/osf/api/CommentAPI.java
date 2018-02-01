@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.lvwang.osf.model.Comment;
 import com.lvwang.osf.model.Notification;
@@ -75,11 +72,11 @@ public class CommentAPI {
 		Map<String, String> ret = commentService.newComment(comment.getComment_object_type(), 
 															comment.getComment_object_id(), 
 															user.getId(), 
-															user.getUser_name(), 
+															user.getUserName(),
 															comment.getComment_content(), 
 															comment.getComment_parent(),
 															comment_parent_author.getId(),
-															comment_parent_author.getUser_name());
+															comment_parent_author.getUserName());
 		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
 													  comment.getComment_object_type(),
@@ -101,11 +98,11 @@ public class CommentAPI {
 		}
 		
 		
-		ret.put("avatar", userService.findById(user.getId()).getUser_avatar());
+		ret.put("avatar", userService.findById(user.getId()).getUserAvatar());
 		ret.put("author_id", String.valueOf(user.getId()));
-		ret.put("author_name", user.getUser_name());
+		ret.put("author_name", user.getUserName());
 		ret.put("reply_to_author", String.valueOf(comment_parent_author.getId()));
-		ret.put("reply_to_authorname", comment_parent_author.getUser_name());
+		ret.put("reply_to_authorname", comment_parent_author.getUserName());
 		return ret;
 	}
 

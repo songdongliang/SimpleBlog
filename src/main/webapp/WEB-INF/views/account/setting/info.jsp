@@ -42,12 +42,12 @@
 					<div class="ui form setting info">
 					    <div class="inline disabled field">
 					      <label>用户名</label>
-					      <input type="text" id="user_name" placeholder="${user.user_name }">
+					      <input type="text" id="userName" placeholder="${user.userName }">
 					      <span id="user_name_tip" style="color: red"></span>
 					    </div>
 					    <div class="inline disabled field">
 					      <label>签名</label>
-					      <textarea id="user_desc" plcaeholder="">${user.user_desc }</textarea>
+					      <textarea id="userDesc" plcaeholder="">${user.userDesc }</textarea>
 					    </div>
 					    <div class="inline field">
 					   		<label for="#"></label>

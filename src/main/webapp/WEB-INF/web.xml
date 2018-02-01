@@ -13,22 +13,33 @@
   
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring/app*.xml</param-value>
+    <param-value>classpath:spring/applicationContext*.xml</param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-  <servlet>
-    <servlet-name>osf</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>osf</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
-  
+    <!-- 配置SpringMVC框架入口 -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/springmvc-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <!--
+            可用： *.xxx，/，/xxx/*
+            不可用：/*
+         -->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
   <error-page>
   	<error-code>404</error-code>
   	<location>/404</location>

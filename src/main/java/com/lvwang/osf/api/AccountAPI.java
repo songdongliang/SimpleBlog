@@ -28,7 +28,7 @@ public class AccountAPI {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public Map<String, Object> login(@RequestBody User user) {
 		
-		Map<String, Object> ret = userService.login(user.getUser_email(), user.getUser_pwd());
+		Map<String, Object> ret = userService.login(user.getUserEmail(), user.getUserPwd());
 		String status = (String) ret.get("status");
 		if(Property.SUCCESS_ACCOUNT_LOGIN.equals(status)) {
 			ret.put("token", userService.newToken((User)ret.get("user")));	
@@ -54,11 +54,11 @@ public class AccountAPI {
 	public Map<String, String> register(@RequestBody User user) {
 		System.out.println("resister....");
 		Map<String, String> map = new HashMap<String, String>();
-		String status = userService.register(user.getUser_email(), user.getUser_pwd(), user.getUser_cfm_pwd(), map);
+		String status = userService.register(user.getUserEmail(), user.getUserPwd(), user.getUserConfirmPwd(), map);
 		if(Property.SUCCESS_ACCOUNT_REG.equals(status)){
-			userService.activateUser(user.getUser_email(), map.get("activationKey"));
-			user.setUser_pwd(null);
-			user.setUser_cfm_pwd(null);
+			userService.activateUser(user.getUserEmail(), map.get("activationKey"));
+			user.setUserPwd(null);
+			user.setUserConfirmPwd(null);
 			map.put("token", userService.newToken(user));
 		} 
 		map.put("status", status);

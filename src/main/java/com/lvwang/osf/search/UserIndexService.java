@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
@@ -27,7 +26,7 @@ public class UserIndexService implements IndexService<User>{
 	public void add(User user) {
 		Document doc = new Document();
 		doc.add(new LongField("user_id", user.getId(), Field.Store.YES));
-		doc.add(new TextField("user_name", user.getUser_name(), Field.Store.NO));
+		doc.add(new TextField("user_name", user.getUserName(), Field.Store.NO));
 		
 		try {
 			IndexHolder.getIndexWriter().addDocument(doc);
@@ -38,7 +37,6 @@ public class UserIndexService implements IndexService<User>{
 	
 	public List<Integer> findUserByName(String username) {
 		List<Integer> users = new ArrayList<Integer>();
-//		Analyzer analyzer=new StandardAnalyzer();
 		Analyzer analyzer = new IKAnalyzer();
 		QueryParser parser = new QueryParser("user_name", analyzer);
 		Query query;

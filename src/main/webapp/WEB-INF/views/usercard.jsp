@@ -4,14 +4,14 @@
 
 	            <div class="ui card">
 	              <div class="ui small centered circular  image">
-	                <a href="<c:url value="/user/${u.id }" />"><img src="<c:url value="${img_base_url }${u.user_avatar }"/> "></a>
+	                <a href="<c:url value="/user/${u.id }" />"><img src="<c:url value="${img_base_url }${u.userAvatar }"/> "></a>
 	              </div>
 	              <div class="content">
 	                <a class="header centered" href="<c:url value="/user/${u.id}" />">
-	                	${u.user_name }
+	                	${u.userName }
 	                </a>
 	                <div class="meta centered">
-	                  <span class="date">不想成为画家的黑客不是好摄影师</span>
+	                  <span class="date">时间是让人猝不及防的东西</span>
 	                </div>	                
 					<div class="ui mini statistics">
 					  <div class="statistic">

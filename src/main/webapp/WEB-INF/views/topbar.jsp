@@ -23,9 +23,9 @@
 	      	</li>
 	      	<c:if test="${not empty sessionScope.user}">
 	      		<li>
-	      			<%-- <a href='<c:url value="/user/${sessionScope.user.id }"></c:url>'>${sessionScope.user.user_name }</a> --%>
+	      			<%-- <a href='<c:url value="/user/${sessionScope.user.id }"></c:url>'>${sessionScope.user.userName }</a> --%>
 	      			<div class="ui simple dropdown item">
-				      ${sessionScope.user.user_name }
+				      ${sessionScope.user.userName }
 				      <i class="dropdown icon"></i>
 					  <div class="ui vertical menu">
 						  <a class="item" href="<c:url value="/notifications/comment" />">

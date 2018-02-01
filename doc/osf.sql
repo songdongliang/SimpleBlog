@@ -4,18 +4,18 @@ use osf;
 drop table if EXISTS `osf`.`osf_users`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_name` VARCHAR(50) NULL,
-  `user_email` VARCHAR(100) NOT NULL,
-  `user_pwd` VARCHAR(100) NOT NULL,
-  `user_registered_date` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `user_status` INT NULL,
-  `user_activationKey` VARCHAR(24) NULL,
-  `user_avatar` VARCHAR(100) null,
-  `user_desc` TEXT null,
+  `userName` VARCHAR(50) NULL,
+  `userEmail` VARCHAR(100) NOT NULL,
+  `userPwd` VARCHAR(100) NOT NULL,
+  `userRegisteredDate` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `userStatus` INT NULL,
+  `userActivationKey` VARCHAR(24) NULL,
+  `userAvatar` VARCHAR(100) null,
+  `userDesc` TEXT null,
   `resetpwd_key` VARCHAR(100) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf_users` add unique(`user_name`, `user_email`);
+alter table `osf_users` add unique(`userName`, `userEmail`);
 
 
 drop table if EXISTS `osf`.`osf_posts`;
@@ -76,8 +76,8 @@ CREATE TABLE IF NOT EXISTS `osf`.`osf_events` (
   `object_id` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `user_id` INT NOT NULL,
-  `user_name` VARCHAR(50) NULL,
-  `user_avatar` VARCHAR(100) NULL,
+  `userName` VARCHAR(50) NULL,
+  `userAvatar` VARCHAR(100) NULL,
   `like_count` INT NOT NULL,
   `share_count` INT NOT NULL,
   `comment_count` INT NOT NULL,
@@ -97,7 +97,7 @@ drop table if EXISTS `osf`.`osf_followings`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_followings` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
-  `user_name` VARCHAR(50) NULL,
+  `userName` VARCHAR(50) NULL,
   `following_user_id` INT NOT NULL,
   `following_user_name` VARCHAR(50) NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -110,7 +110,7 @@ drop table if EXISTS `osf`.`osf_followers` ;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_followers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
-  `user_name` VARCHAR(50) NULL,
+  `userName` VARCHAR(50) NULL,
   `follower_user_id` INT NOT NULL,
   `follower_user_name` VARCHAR(50) NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,

@@ -147,8 +147,8 @@ public class FeedService {
 			return events;
 		for(Event event : events) {
 			User user = userService.findById(event.getUser_id());
-			event.setUser_name(user.getUser_name());
-			event.setUser_avatar(user.getUser_avatar());
+			event.setUser_name(user.getUserName());
+			event.setUser_avatar(user.getUserAvatar());
 		}
 		return events;
 	}

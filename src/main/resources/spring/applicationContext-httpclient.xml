@@ -37,7 +37,7 @@
 		factory-bean="requestConfigBuilder" factory-method="build" />
 
 	<!-- 定期关闭无效连接 -->
-	<bean class="com.sdl.ss.util.IdleConnectionEvictor">
+	<bean class="com.lvwang.osf.util.IdleConnectionEvictor">
 		<constructor-arg index="0" ref="httpClientConnectionManager" />
 	</bean>
 

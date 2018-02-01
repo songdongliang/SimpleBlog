@@ -170,7 +170,7 @@ public class HomePage {
 	@RequestMapping("/followers")
 	public ModelAndView getFollowers(HttpSession session){
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("followers", userService.findAllbyIDs(
+		mav.addObject("followers", userService.findByIDs(
 								   followService.getFollowerIDs(
 										   ((User)session.getAttribute("user")).getId())
 								   ));
@@ -182,7 +182,7 @@ public class HomePage {
 	@RequestMapping("/followings")
 	public ModelAndView getFollowings(HttpSession session){
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("followings", userService.findAllbyIDs(
+		mav.addObject("followings", userService.findByIDs(
 									followService.getFollowingIDs(
 											((User)session.getAttribute("user")).getId())
 									));

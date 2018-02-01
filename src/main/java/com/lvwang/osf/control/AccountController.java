@@ -57,7 +57,7 @@ public class AccountController {
 		String status = null;
 		
 		if(user_name == null || user_name.length() == 0){
-			user_name = me.getUser_name();
+			user_name = me.getUserName();
 		} else {
 			User user = userService.findByUsername(user_name);
 			
@@ -75,8 +75,8 @@ public class AccountController {
 										  user_name,
 										  user_desc);
 		//update session
-		me.setUser_name(user_name);
-		me.setUser_desc(user_desc);
+		me.setUserName(user_name);
+		me.setUserDesc(user_desc);
 	
 		map.put("status", status);
 		return map;
@@ -125,7 +125,7 @@ public class AccountController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User)session.getAttribute("user");
 		
-		map.put("status", userService.resetPassword(user.getUser_email(), password, cfm_pwd));
+		map.put("status", userService.resetPassword(user.getUserEmail(), password, cfm_pwd));
 		return map;
 	}
 	
@@ -136,7 +136,7 @@ public class AccountController {
 										HttpSession session){
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User)session.getAttribute("user");
-		map.put("status", userService.changePassword(user.getUser_email(), old_pwd, new_pwd));
+		map.put("status", userService.changePassword(user.getUserEmail(), old_pwd, new_pwd));
 		return map;
 	}
 	
@@ -146,7 +146,7 @@ public class AccountController {
 	public Map<String, Object> sendResetPwdEmail(HttpSession session){
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User) session.getAttribute("user");
-		mailService.sendResetPwdEmail(user.getUser_email(), userService.updateResetPwdKey(user.getUser_email()));
+		mailService.sendResetPwdEmail(user.getUserEmail(), userService.updateResetPwdKey(user.getUserEmail()));
 		map.put("status", Property.SUCCESS_EMAIL_RESETPWD_SEND);
 		return map;
 	}

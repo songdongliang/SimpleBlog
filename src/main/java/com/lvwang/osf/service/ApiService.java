@@ -149,6 +149,28 @@ public class ApiService implements BeanFactoryAware {
         return getHttpResult(httpPost);
     }
 
+    /**
+     * 上传文件
+     * @param url
+     * @param bytes
+     * @return
+     */
+    public HttpResult upload(String url,byte[] bytes,String fileName) throws IOException {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setConfig(requestConfig);
+        if (bytes != null) {
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addBinaryBody("file"
+                    , bytes
+                    , ContentType.MULTIPART_FORM_DATA
+                    , fileName);
+
+            HttpEntity entity = builder.build();
+            httpPost.setEntity(entity);
+        }
+        return getHttpResult(httpPost);
+    }
+
     private HttpResult getHttpResult(HttpPost httpPost) throws IOException{
         CloseableHttpResponse response = null;
         try {

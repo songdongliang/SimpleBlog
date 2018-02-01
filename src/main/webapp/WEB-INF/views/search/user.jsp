@@ -54,8 +54,8 @@
 					<c:forEach items="${feeds }" var="feed">
 						<div class="userbox">
 							<div class="header">
-								<img class="avatar" src="${img_base_url }${feed.key.user_avatar }" alt="" />
-								<div class="desc">${feed.key.user_name }</div>
+								<img class="avatar" src="${img_base_url }${feed.key.userAvatar }" alt="" />
+								<div class="desc">${feed.key.userName }</div>
 								<c:if test="${isFollowings[feed.key.id] }">
 									<div class="ui tiny basic button follow" following="${feed.key.id }">已关注</div>
 								</c:if>
@@ -108,14 +108,14 @@
           		<c:if test="${not empty sessionScope.user}">
 	            <div class="ui card">
 	              <div class="ui small centered circular  image">
-	                <a href="<c:url value="/user/${user.id }" />"><img src="<c:url value="${img_base_url }${user.user_avatar }"/> "></a>
+	                <a href="<c:url value="/user/${user.id }" />"><img src="<c:url value="${img_base_url }${user.userAvatar }"/> "></a>
 	              </div>
 	              <div class="content">
 	                <a class="header centered" href="<c:url value="/user/${user.id}" />">
-	                	${user.user_name }
+	                	${user.userName }
 	                </a>
 	                <div class="meta centered">
-	                  <span class="date">不想成为画家的黑客不是好摄影师</span>
+	                  <span class="date">时间是让人猝不及防的东西</span>
 	                </div>	                
 					<div class="ui mini statistics">
 					  <div class="statistic">

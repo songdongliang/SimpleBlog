@@ -75,11 +75,11 @@ public class CommentController {
 		Map<String, String> ret = commentService.newComment(comment_object_type, 
 															comment_object_id, 
 															user.getId(), 
-															user.getUser_name(), 
+															user.getUserName(),
 															comment_content, 
 															comment_parent,
 															comment_parent_author.getId(),
-															comment_parent_author.getUser_name());
+															comment_parent_author.getUserName());
 		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
 													  comment_object_type,
@@ -100,11 +100,11 @@ public class CommentController {
 		}
 		
 		
-		ret.put("avatar", userService.findById(user.getId()).getUser_avatar());
+		ret.put("avatar", userService.findById(user.getId()).getUserAvatar());
 		ret.put("author_id", String.valueOf(user.getId()));
-		ret.put("author_name", user.getUser_name());
+		ret.put("author_name", user.getUserName());
 		ret.put("reply_to_author", String.valueOf(comment_parent_author.getId()));
-		ret.put("reply_to_authorname", comment_parent_author.getUser_name());
+		ret.put("reply_to_authorname", comment_parent_author.getUserName());
 		return ret;
 	}
 	

@@ -51,10 +51,6 @@ public class LoginRequiredInterceptor implements HandlerInterceptor{
 			session.setAttribute("lastvisit", contextPath+servletPath);
 			rpo.setCharacterEncoding("UTF-8");  
 		    rpo.setContentType("application/json; charset=utf-8"); 
-//		    PrintWriter writer = rpo.getWriter();
-//		    String json = "{\"status\":\""+Property.ERROR_ACCOUNT_NOTLOGIN+"\"}";
-//		    writer.write(json);
-//		    writer.close();
 		} else {
 			session.setAttribute("notifications", notificationService.getNotificationsCount(user.getId()));
 			return true;

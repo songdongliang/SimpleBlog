@@ -41,9 +41,9 @@ public class FollowController {
 									  HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		Map<String, Object> map = followService.newFollowing(user.getId(), 
-															 user.getUser_name(), 
+															 user.getUserName(),
 															 following_user_id, 
-															 userService.findById(following_user_id).getUser_name());
+															 userService.findById(following_user_id).getUserName());
 		Notification notification = new Notification(Dic.NOTIFY_TYPE_FOLLOW, 
 												     0, 
 												     Dic.OBJECT_TYPE_USER, 

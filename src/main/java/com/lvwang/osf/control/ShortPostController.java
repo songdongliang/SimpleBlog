@@ -60,8 +60,8 @@ public class ShortPostController {
 		followers.add(user.getId());
 		feedService.push(followers, event_id);
 		
-		map.put("avatar", userService.findById(user.getId()).getUser_avatar());
-		map.put("author_name", user.getUser_name());
+		map.put("avatar", userService.findById(user.getId()).getUserAvatar());
+		map.put("author_name", user.getUserName());
 		
 		return map;
 	}

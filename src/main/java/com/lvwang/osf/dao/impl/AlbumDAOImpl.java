@@ -1,15 +1,9 @@
 package com.lvwang.osf.dao.impl;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.squareup.okhttp.MultipartBuilder;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.lvwang.osf.dao.AlbumDAO;
 import com.lvwang.osf.mappers.AlbumMapper;
@@ -17,7 +11,6 @@ import com.lvwang.osf.model.Album;
 import com.lvwang.osf.model.Photo;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.BucketManager;
-import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
@@ -43,8 +36,13 @@ public class AlbumDAOImpl implements AlbumDAO{
 		albumMapper.savePhoto(photo);
 		return photo.getId();
 	}
-	
-	private String getUpToken(){
+
+    @Override
+    public String uploadPhoto(byte[] img, String key) {
+        return null;
+    }
+
+    private String getUpToken(){
 	    return auth.uploadToken(bucket, null, 3600, new StringMap().
 	    		putNotEmpty("returnBody", "{\"key\": $(key), \"hash\": $(etag), \"width\": $(imageInfo.width), \"height\": $(imageInfo.height)}"));
 	}

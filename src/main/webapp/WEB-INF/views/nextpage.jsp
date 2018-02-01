@@ -7,11 +7,11 @@
 	<c:if test="${feed.object_type == dic.object_type_shortpost }">
 		<div class="event row" type="spost" object_type="${feed.object_type }" object_id="${feed.object_id }">
 		   <div class="label span2">
-		     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.user_avatar }"></a>
+		     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
 		   </div>
 		   <div class="content span6">
 		     <div class="summary">
-		       <a href="<c:url value="/user/${feed.user_id }" />">${feed.user_name }</a> 说
+		       <a href="<c:url value="/user/${feed.user_id }" />">${feed.userName }</a> 说
 		       <div class="date">
 		         ${feed.ts }
 		       </div>
@@ -51,11 +51,11 @@
  <c:if test="${feed.object_type == dic.object_type_post}">
  <div class="event row" type="post" object_type="${feed.object_type }" object_id="${feed.object_id }">
    <div class="label span2">
-     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.user_avatar }"></a>
+     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
    <div class="content span6">
      <div class="summary">
-       <a href="<c:url value="/user/${feed.user_id }" />">${feed.user_name }</a> 发表了日志
+       <a href="<c:url value="/user/${feed.user_id }" />">${feed.userName }</a> 发表了日志
        <div class="date">
          ${feed.ts }
        </div>
@@ -111,11 +111,11 @@
  <c:if test="${feed.object_type == dic.object_type_album }">
  <div class="event row" type="album" object_type="${feed.object_type }" object_id="${feed.object_id }">
    <div class="label span2">
-     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.user_avatar }"></a>
+     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
    <div class="content span6">
      <div class="summary">
-       <a>${feed.user_name }</a> 上传了相册 <a href="<c:url value="/album/${feed.object_id }" /> "></a>
+       <a>${feed.userName }</a> 上传了相册 <a href="<c:url value="/album/${feed.object_id }" /> "></a>
     <div class="date">
       ${feed.ts }
     </div>                          

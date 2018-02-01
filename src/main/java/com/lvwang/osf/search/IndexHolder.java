@@ -9,7 +9,6 @@ import java.util.Properties;
 import javax.annotation.PreDestroy;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -36,7 +35,7 @@ public class IndexHolder {
 		Properties prop = new Properties();  
 		
 		try {
-			InputStream in = new FileInputStream(classpath+"/spring/property.properties");  
+			InputStream in = new FileInputStream(classpath+ "/property.properties");
 			prop.load(in);
 			indexDir = prop.getProperty("index.dir");
 			System.out.println(indexDir);

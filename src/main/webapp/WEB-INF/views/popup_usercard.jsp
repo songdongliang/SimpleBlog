@@ -6,14 +6,14 @@
 						<div class='row'>
 							<div class='span1'>
 								<div class='ui tiny centered circular image'>
-									<img src='${img_base_url }${u.user_avatar}' alt='${u.user_name }' />
+									<img src='${img_base_url }${u.userAvatar}' alt='${u.userName }' />
 								</div>
 								
 							</div>
 							<div class='span2'>
 								<div class='content'>
-      								<div class='ui sub header'>${u.user_name }</div>
-      								${u.user_desc }
+      								<div class='ui sub header'>${u.userName }</div>
+      								${u.userDesc }
     							</div>
 							</div>
 						</div>

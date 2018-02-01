@@ -27,9 +27,10 @@ import com.lvwang.osf.util.Property;
 public class AlbumService {
 	
 	public static final int ALBUM_STAUS_NORMAL = 0;
-	public static final int ALBUM_STAUS_TOBERELEASED = 1; //待发布
-	
-	
+    //待发布
+	public static final int ALBUM_STAUS_TOBERELEASED = 1;
+
+
 	private static String IMG_BASE_URL = Property.IMG_BASE_URL;
 
 	@Autowired
@@ -52,7 +53,7 @@ public class AlbumService {
 	
 	public String getImgType(MultipartFile img) {
 		String contentType = img.getContentType();
-		return contentType.substring(contentType.indexOf('/')+1);
+		return contentType.substring(contentType.indexOf('/') + 1);
 	}
 	
 	public Map<String, Object> newAlbum(int user_id, String title, String desc, int status, String cover) {
@@ -89,10 +90,12 @@ public class AlbumService {
 		Map<String, Object> map = new HashMap<String, Object>();
         try {
             HttpResult httpResult = apiService.upload(Property.UPLOAD_URL,img);
-            if (0 != httpResult.getCode()) {
+            if (200 != httpResult.getCode()) {
                 map.put("status", Property.ERROR_PHOTO_CREATE);
                 return map;
             } else {
+                String key = UUID.randomUUID().toString() + "." + getImgType(img);
+                map.put("key",key);
                 map.put("link", IMG_BASE_URL + httpResult.getData());
                 map.put("status", Property.SUCCESS_PHOTO_CREATE);
             }
@@ -109,7 +112,8 @@ public class AlbumService {
 		details.setKey(key);
 		details.setAlbum_id(album_id);
 		details.setDesc(desc);
-		String etag = albumDao.uploadPhoto(img, details);
+//		String etag = albumDao.uploadPhoto(img, details);
+        String etag = "";
 		if(etag == null || etag.length() ==0) {
 			map.put("status", Property.ERROR_PHOTO_CREATE);
 			return map;
@@ -262,29 +266,29 @@ public class AlbumService {
 	public String cropAvatar(String key, int x, int y, int width, int height) {
 		String classpath = AlbumService.class.getClassLoader().getResource("").getPath();
 		try {
-			File ori_img = new File(classpath+"/tmp/"+key);
+			File ori_img = new File(classpath + "/tmp/" + key);
 			
 			BufferedImage croped_img = Thumbnails.of(ImageIO.read(ori_img))
 									  .sourceRegion(x, y, width, height)
 									  .size(200, 200).asBufferedImage();
 			String img_type = key.split("\\.")[1];
-			//convert bufferedimage to inputstream
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();  
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ImageIO.write(croped_img, img_type, bos);  
 			
 			albumDao.delPhotoInBucket(key);
 			
-			String new_key = UUID.randomUUID().toString()+"."+img_type;
-			if( albumDao.uploadPhoto(bos.toByteArray(), new_key) != null ){
+			String new_key = UUID.randomUUID().toString() + "." + img_type;
+			HttpResult httpResult = apiService.upload(Property.UPLOAD_URL,bos.toByteArray(),key);
+			if( httpResult.getCode() != null && httpResult.getCode() == 200){
 				if(ori_img.exists()){
 					ori_img.delete();
 				}
-				return new_key;
+				return httpResult.getData();
 			} else {
 				return key;
 			}
-			
-		} catch (IOException e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		return key;
@@ -294,5 +298,4 @@ public class AlbumService {
 		albumDao.delPhoto(id);
 	}
 
-	
 }

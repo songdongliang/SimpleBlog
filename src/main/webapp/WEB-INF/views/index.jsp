@@ -154,14 +154,14 @@
           		<c:if test="${not empty sessionScope.user}">
 	            <div class="ui card">
 	              <div class="ui small centered circular  image">
-	                <a href="<c:url value="/user/${user.id }" />"><img src="<c:url value="${img_base_url }${user.user_avatar }"/> "></a>
+	                <a href="<c:url value="/user/${user.id }" />"><img src="<c:url value="${img_base_url }${user.userAvatar }"/> "></a>
 	              </div>
 	              <div class="content">
 	                <a class="header centered" href="<c:url value="/user/${user.id}" />">
-	                	${user.user_name }
+	                	${user.userName }
 	                </a>
 	                <div class="meta centered">
-	                  <span class="date">不想成为画家的黑客不是好摄影师</span>
+	                  <span class="date">时间是让人猝不及防的东西</span>
 	                </div>	                
 					<div class="ui mini statistics">
 					  <div class="statistic">

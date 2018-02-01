@@ -7,7 +7,7 @@
 	<insert id="save" parameterType="com.lvwang.osf.model.Event" useGeneratedKeys="true" keyProperty="id">
 			insert into  osf_events   
 			 values(null,#{object_type},#{object_id},#{ts},
-			 #{user_id},#{user_name},#{user_avatar},#{like_count},
+			 #{user_id},#{userName},#{userAvatar},#{like_count},
 			 #{share_count},#{comment_count},#{title},#{summary},
 			 #{content},#{tags_str},#{following_user_id},
 			 #{following_user_name},#{follower_user_id},
@@ -69,7 +69,5 @@
 	<delete id="deleteByObject">
 		delete from osf_events where object_type=#{param1} and object_id=#{param2}
 	</delete>
-	
-	
-	
+
 </mapper>

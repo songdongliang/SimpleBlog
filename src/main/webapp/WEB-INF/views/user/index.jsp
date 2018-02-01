@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>${u.user_name }</title>
+	<title>${u.userName }</title>
 	<c:if test="${not empty sessionScope.user}">
 		<meta name="isLogin" content="true"/>
 	</c:if>

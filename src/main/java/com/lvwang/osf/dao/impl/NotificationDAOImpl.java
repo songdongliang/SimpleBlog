@@ -78,7 +78,7 @@ public class NotificationDAOImpl{
 		
 		if(!redisTemplate.hasKey(NOTIFY_KEY+user_id)){
 			initNotification(notifications);
-//			refreshNotifications(user_id, notifications);
+			refreshNotifications(user_id, notifications);
 		} else{
 			for(String key: hashOps.keys(NOTIFY_KEY + user_id)){
 				notifications.put(key, hashOps.get(NOTIFY_KEY + user_id, key));

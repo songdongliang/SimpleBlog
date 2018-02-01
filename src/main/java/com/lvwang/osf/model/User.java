@@ -3,66 +3,78 @@ package com.lvwang.osf.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.lvwang.osf.pojo.BasePojo;
 import com.lvwang.osf.search.Searchable;
 
-public class User implements Serializable, Searchable{
+import javax.persistence.*;
+
+@Table(name = "osf_users")
+public class User extends BasePojo implements Serializable, Searchable{
 
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
-	private String user_name;
-	private String user_email;
-	private String user_pwd;
-	private String user_cfm_pwd;
-	private String user_nicename;
-	private Date user_registered_date;
-	private int user_status;
-	private String user_avatar;
-	private String user_activationKey;
-	private String user_desc;
-	
+
+	private String userName;
+	private String userEmail;
+	private String userPwd;
+	private String userConfirmPwd;
+	private String userNickname;
+	private Date userRegisteredDate;
+	private int userStatus;
+	private String userAvatar;
+	private String userActivationKey;
+	private String userDesc;
+
+	@Override
 	public boolean equals(Object that){
 		User user = (User)that;
-		return this.id == user.getId()?true:false;
+		return this.id == user.getId();
 	}
+
+	@Override
 	public int hashCode() {
 		return this.id;
 	}
 	
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public String getUser_email() {
-		return user_email;
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
-	public String getUser_pwd() {
-		return user_pwd;
+	public String getUserPwd() {
+		return userPwd;
 	}
-	public void setUser_pwd(String user_pwd) {
-		this.user_pwd = user_pwd;
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
 	}
-	public String getUser_nicename() {
-		return user_nicename;
+	public String getUserNickname() {
+		return userNickname;
 	}
-	public void setUser_nicename(String user_nicename) {
-		this.user_nicename = user_nicename;
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
 	}
-	public Date getUser_registered_date() {
-		return user_registered_date;
+	public Date getUserRegisteredDate() {
+		return userRegisteredDate;
 	}
-	public void setUser_registered_date(Date user_registered_date) {
-		this.user_registered_date = user_registered_date;
+	public void setUserRegisteredDate(Date userRegisteredDate) {
+		this.userRegisteredDate = userRegisteredDate;
 	}
-	public int getUser_status() {
-		return user_status;
+	public int getUserStatus() {
+		return userStatus;
 	}
-	public void setUser_status(int user_status) {
-		this.user_status = user_status;
+	public void setUserStatus(int userStatus) {
+		this.userStatus = userStatus;
 	}
 	public int getId() {
 		return id;
@@ -70,28 +82,28 @@ public class User implements Serializable, Searchable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getUser_activationKey() {
-		return user_activationKey;
+	public String getUserActivationKey() {
+		return userActivationKey;
 	}
-	public void setUser_activationKey(String user_activationKey) {
-		this.user_activationKey = user_activationKey;
+	public void setUserActivationKey(String userActivationKey) {
+		this.userActivationKey = userActivationKey;
 	}
-	public String getUser_avatar() {
-		return user_avatar;
+	public String getUserAvatar() {
+		return userAvatar;
 	}
-	public void setUser_avatar(String user_avatar) {
-		this.user_avatar = user_avatar;
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
 	}
-	public String getUser_desc() {
-		return user_desc;
+	public String getUserDesc() {
+		return userDesc;
 	}
-	public void setUser_desc(String user_desc) {
-		this.user_desc = user_desc;
+	public void setUserDesc(String userDesc) {
+		this.userDesc = userDesc;
 	}
-	public String getUser_cfm_pwd() {
-		return user_cfm_pwd;
+	public String getUserConfirmPwd() {
+		return userConfirmPwd;
 	}
-	public void setUser_cfm_pwd(String user_cfm_pwd) {
-		this.user_cfm_pwd = user_cfm_pwd;
+	public void setUserConfirmPwd(String userConfirmPwd) {
+		this.userConfirmPwd = userConfirmPwd;
 	}
 }

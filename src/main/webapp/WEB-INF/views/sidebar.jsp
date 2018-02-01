@@ -9,7 +9,7 @@
   <div class="item">
   	<c:forEach items="${popusers }" var="popuser">
 		<a href="<c:url value="/user/${popuser.id }" />" class="popuser">
-			<img class="ui inline image" src="${img_base_url }${popuser.user_avatar}?imageView2/1/w/100/h/100">
+			<img class="ui inline image" src="${img_base_url }${popuser.userAvatar}?imageView2/1/w/100/h/100">
 		</a>
 		<%-- <jsp:include page="/popup_usercard/${popuser.id }" flush="true"></jsp:include>	 --%>
 	</c:forEach>

@@ -42,11 +42,11 @@
 					<c:forEach items="${followers }" var="follower">
 			            <div class="ui card" style="width:33%">
 			              <div class="ui small centered circular  image">
-			                <a href="<c:url value="/user/${follower.id }" />"><img src="<c:url value="${img_base_url }${follower.user_avatar }"/> "></a>
+			                <a href="<c:url value="/user/${follower.id }" />"><img src="<c:url value="${img_base_url }${follower.userAvatar }"/> "></a>
 			              </div>
 			              <div class="content">
 			                <a class="header centered" href="<c:url value="/user/${following.id}" />">
-			                	${follower.user_name }
+			                	${follower.userName }
 			                </a>
 			              </div>
 			            </div> 

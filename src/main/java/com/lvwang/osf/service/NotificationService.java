@@ -1,7 +1,6 @@
 package com.lvwang.osf.service;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.NotificationDAO;
 import com.lvwang.osf.dao.impl.NotificationDAOImpl;
 import com.lvwang.osf.model.Event;
 import com.lvwang.osf.model.Notification;
@@ -67,8 +65,8 @@ public class NotificationService {
 		if(notifications != null) {
 			for(Notification notification : notifications){
 				User user = userService.findById(notification.getNotifier());
-				notification.setNotifier_name(user.getUser_name());
-				notification.setNotifier_avatar(user.getUser_avatar());
+				notification.setNotifier_name(user.getUserName());
+				notification.setNotifier_avatar(user.getUserAvatar());
 				
 				Event event = eventService.getEvent(notification.getObject_type(), notification.getObject_id());
 				

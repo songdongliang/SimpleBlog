@@ -43,8 +43,8 @@
 				<div id="rightside">
 					<div class="album metas">
 						<div class="meta author">
-							<a href="<c:url value="/user/${u.id }" />"><img class="ui avatar image" src="<c:url value="${img_base_url}${u.user_avatar }"/>"></a>
-							<span>${u.user_name }</span>
+							<a href="<c:url value="/user/${u.id }" />"><img class="ui avatar image" src="<c:url value="${img_base_url}${u.userAvatar }"/>"></a>
+							<span>${u.userName }</span>
 							<c:if test="${!empty sessionScope.user }">
 								<c:if test="${sessionScope.user.id ne u.id }">
 									<c:if test="${follow }">

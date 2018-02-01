@@ -367,7 +367,6 @@ public class AlbumController {
 										 @RequestParam("height") int height,
 									     HttpSession session){
 		
-		//System.out.println("x:"+x+" y:"+y + " width:"+width+ " height:"+height);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String key = (String) session.getAttribute("temp_avatar");
@@ -376,11 +375,11 @@ public class AlbumController {
 			return map;
 		}
 		
-		String avatar_img = albumService.cropAvatar(key, x, y, width, height);
-		String status = userService.changeAvatar(((User)session.getAttribute("user")).getId(), avatar_img);
+		String avatar = albumService.cropAvatar(key, x, y, width, height);
+		String status = userService.changeAvatar(((User)session.getAttribute("user")).getId(), avatar);
 		if(Property.SUCCESS_AVATAR_CHANGE.equals(status)) {
 			//update session
-			((User)session.getAttribute("user")).setUser_avatar(avatar_img);			
+			((User)session.getAttribute("user")).setUserAvatar(avatar);
 		}
 		
 		map.put("status", status);

@@ -60,8 +60,8 @@
 						</c:if>
  						<div class="meta">
 							<a href="<c:url value="/user/${event.user_id }" />">
-								<img class="ui avatar image" src="${img_base_url }${event.user_avatar}?imageView2/1/w/48/h/48">
-								<span>${event.user_name}</span>
+								<img class="ui avatar image" src="${img_base_url }${event.userAvatar}?imageView2/1/w/48/h/48">
+								<span>${event.userName}</span>
 							</a>
 						</div>
 					</div>
@@ -102,8 +102,8 @@
 						<c:forEach items="${feeds }" var="feed">
 							<div class="userbox">
 								<div class="header">
-									<img class="avatar" src="${img_base_url }${feed.key.user_avatar }" alt="" />
-									<div class="desc">${feed.key.user_name }</div>
+									<img class="avatar" src="${img_base_url }${feed.key.userAvatar }" alt="" />
+									<div class="desc">${feed.key.userName }</div>
 									<c:if test="${isFollowings[feed.key.id] }">
 										<div class="ui tiny basic button follow" following="${feed.key.id }">已关注</div>
 									</c:if>

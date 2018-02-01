@@ -12,7 +12,7 @@ public class Property {
 		 
 		Properties prop = new Properties();  
 		try {
-			InputStream in = new FileInputStream(classpath+"/spring/property.properties");  
+			InputStream in = new FileInputStream(classpath+ "/property.properties");
 			prop.load(in);
 			IMG_BASE_URL = prop.getProperty("img_base_url");
 			POST_COVER_THUMBNAIL = prop.getProperty("post_cover_thumbnail");

@@ -93,7 +93,7 @@ public class CommentService {
 		//add avatars;
 		if(comments != null && comments.size() !=0) {
 			for(Comment comment: comments) {
-				comment.setComment_author_avatar(userService.findById(comment.getComment_author()).getUser_avatar());
+				comment.setComment_author_avatar(userService.findById(comment.getComment_author()).getUserAvatar());
 			}
 		}
 		return comments;
