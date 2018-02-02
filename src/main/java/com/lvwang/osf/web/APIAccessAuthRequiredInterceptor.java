@@ -2,18 +2,16 @@ package com.lvwang.osf.web;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.UserService;
 import com.lvwang.osf.util.CipherUtil;
 

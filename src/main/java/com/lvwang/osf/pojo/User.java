@@ -1,9 +1,8 @@
-package com.lvwang.osf.model;
+package com.lvwang.osf.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import com.lvwang.osf.pojo.BasePojo;
 import com.lvwang.osf.search.Searchable;
 
 import javax.persistence.*;

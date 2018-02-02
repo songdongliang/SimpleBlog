@@ -1,20 +1,17 @@
-package com.lvwang.osf.api;
+package com.lvwang.osf.control;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lvwang.osf.model.Notification;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.InterestService;
 import com.lvwang.osf.service.LikeService;
 import com.lvwang.osf.service.NotificationService;
@@ -29,7 +26,6 @@ import com.lvwang.osf.web.RequestAttribute;
 public class ActionAPI {
 
 	@Autowired
-	@Qualifier("userService")
 	private UserService userService;
 	
 	@Autowired

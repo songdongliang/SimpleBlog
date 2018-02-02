@@ -133,7 +133,7 @@
 	                            <i class="comment outline icon"></i><span>0</span>
 	                          </a>                           
 	                          <a class="like">
-	                          	<i class="heart icon" object_type="4" object_id=""></i><span>0</span>
+	                          	<i class="heart icon" objectType="4" objectId=""></i><span>0</span>
 	                          </a>                         
                           </div>
 

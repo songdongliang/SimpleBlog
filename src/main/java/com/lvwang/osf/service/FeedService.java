@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lvwang.osf.dao.FeedDAO;
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Relation;
 import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.search.EventIndexService;
 
 @Service("feedService")
@@ -146,9 +146,9 @@ public class FeedService {
 		if(events == null || events.size() == 0)
 			return events;
 		for(Event event : events) {
-			User user = userService.findById(event.getUser_id());
-			event.setUser_name(user.getUserName());
-			event.setUser_avatar(user.getUserAvatar());
+			User user = userService.findById(event.getUserId());
+			event.setUserName(user.getUserName());
+			event.setUserAvatar(user.getUserAvatar());
 		}
 		return events;
 	}
@@ -157,11 +157,11 @@ public class FeedService {
 		if(events == null || events.size() == 0)
 			return;
 		for(Event event : events) {
-			event.setLike_count((int)likeService.likersCount(event.getObject_type(), 
-															 event.getObject_id()));
-			event.setIs_like(likeService.isLike(user_id, 
-												event.getObject_type(), 
-												event.getObject_id()));
+			event.setLikeCount((int)likeService.likersCount(event.getObjectType(),
+															 event.getObjectId()));
+			event.setLike(likeService.isLike(user_id,
+												event.getObjectType(),
+												event.getObjectId()));
 		}
 	}
 	
@@ -169,8 +169,8 @@ public class FeedService {
 		if(events == null || events.size() == 0)
 			return;
 		for(Event event : events) {
-			event.setComment_count(commentService.getCommentsCount(event.getObject_type(), 
-															 	   event.getObject_id()));
+			event.setCommentCount(commentService.getCommentsCount(event.getObjectType(),
+															 	   event.getObjectId()));
 		}
 	}
 	

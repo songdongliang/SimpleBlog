@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lvwang.osf.model.Comment;
+import com.lvwang.osf.pojo.Comment;
 import com.lvwang.osf.model.Notification;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.CommentService;
 import com.lvwang.osf.service.NotificationService;
 import com.lvwang.osf.service.PostService;

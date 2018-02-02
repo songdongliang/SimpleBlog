@@ -7,12 +7,28 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
+	<!-- 定义分片式连接池 -->
+	<bean class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0">
+			<bean class="redis.clients.jedis.JedisPoolConfig">
+				<property name="maxTotal" value="${redis.maxTotal}"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.node1.host}"/>
+					<constructor-arg index="1" value="${redis.node1.port}"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
 	<bean id="jedisConnFactory"
 		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
 		  p:use-pool="true"
-		  p:hostName="${redis.host}"
-		  p:port="${redis.port}"
-		  p:password="${redis.password}"/>
+		  p:hostName="${redis.node1.host}"
+		  p:port="${redis.node1.port}"/>
 
 	<!-- redis template definition -->
 	<bean id="redisTemplate"
@@ -25,5 +41,6 @@
 			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 		</property>
 	</bean>
+
 
 </beans>

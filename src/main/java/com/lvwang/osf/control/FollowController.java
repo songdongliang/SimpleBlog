@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lvwang.osf.model.Notification;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.FollowService;
 import com.lvwang.osf.service.NotificationService;
 import com.lvwang.osf.service.UserService;

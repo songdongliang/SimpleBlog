@@ -4,25 +4,25 @@
      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lvwang.osf.mappers.EventMapper"> 
-	<insert id="save" parameterType="com.lvwang.osf.model.Event" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.lvwang.osf.pojo.Event" useGeneratedKeys="true" keyProperty="id">
 			insert into  osf_events   
-			 values(null,#{object_type},#{object_id},#{ts},
-			 #{user_id},#{userName},#{userAvatar},#{like_count},
-			 #{share_count},#{comment_count},#{title},#{summary},
-			 #{content},#{tags_str},#{following_user_id},
-			 #{following_user_name},#{follower_user_id},
-			 #{follower_user_name})
+			 values(null,#{objectType},#{objectId},#{ts},
+			 #{userId},#{userName},#{userAvatar},#{likeCount},
+			 #{shareCount},#{commentCount},#{title},#{summary},
+			 #{content},#{tags_str},#{followingUserId},
+			 #{followingUserName},#{followerUserId},
+			 #{followerUserName})
 	</insert>
 	
-	<select id="getEvent" resultType="com.lvwang.osf.model.Event">
-		select * from osf_events where object_type=#{param1} and object_id=#{param2}
+	<select id="getEvent" resultType="com.lvwang.osf.pojo.Event">
+		select * from osf_events where objectType=#{param1} and objectId=#{param2}
 	</select>
 	
-	<select id="getEvents" resultType="com.lvwang.osf.model.Event">
+	<select id="getEvents" resultType="com.lvwang.osf.pojo.Event">
 		select * from osf_events limit #{param1},#{param2}
 	</select>
 	
-	<select id="getEventsWithIDs" parameterType="list" resultType="com.lvwang.osf.model.Event">
+	<select id="getEventsWithIDs" parameterType="list" resultType="com.lvwang.osf.pojo.Event">
 		select * from osf_events 
 		<where>
 			 id in 
@@ -33,33 +33,33 @@
 		order by ts desc
 	</select>
 	
-	<select id="getEventsWithRelations" parameterType="map" resultType="com.lvwang.osf.model.Event">
+	<select id="getEventsWithRelations" parameterType="map" resultType="com.lvwang.osf.pojo.Event">
 		select * from osf_events 
 		<where>
 			<if test="0 != null">
-				(object_type=0 and 
-					<foreach item="object_id" collection="0" open="(" separator="," close=")">
-						#{object_id}
+				(objectType=0 and
+					<foreach item="objectId" collection="0" open="(" separator="," close=")">
+						#{objectId}
 					</foreach>
 				)
 			</if>
 			<if test="2 != null">
-				or (object_type=2 and 
-					<foreach item="object_id" collection="2" open="(" separator="," close=")">
-						#{object_id}
+				or (objectType=2 and
+					<foreach item="objectId" collection="2" open="(" separator="," close=")">
+						#{objectId}
 					</foreach>
 				)
 			</if>
 		</where>
 	</select>
 	
-	<select id="getEventsOfUser" resultType="com.lvwang.osf.model.Event">
-		select * from osf_events where user_id=#{param1} order by ts desc limit #{param2}
+	<select id="getEventsOfUser" resultType="com.lvwang.osf.pojo.Event">
+		select * from osf_events where userId=#{param1} order by ts desc limit #{param2}
 	</select>
 	
-	<select id="getEventsHasPhoto" resultType="com.lvwang.osf.model.Event">
-		select * from osf_events where (object_type=0 and content is not null) 
-		or (object_type=2 and title is not null) limit #{param1},#{param2}
+	<select id="getEventsHasPhoto" resultType="com.lvwang.osf.pojo.Event">
+		select * from osf_events where (objectType=0 and content is not null)
+		or (objectType=2 and title is not null) limit #{param1},#{param2}
 	</select>
 	
 	<delete id="delete" parameterType="int">
@@ -67,7 +67,7 @@
 	</delete>
 	
 	<delete id="deleteByObject">
-		delete from osf_events where object_type=#{param1} and object_id=#{param2}
+		delete from osf_events where objectType=#{param1} and objectId=#{param2}
 	</delete>
 
 </mapper>

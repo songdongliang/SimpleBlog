@@ -6,45 +6,49 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.lvwang.osf.mappers.FollowerMapper;
+import com.lvwang.osf.mappers.FollowingMapper;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.FollowDAO;
-import com.lvwang.osf.model.Follower;
+import com.lvwang.osf.pojo.Follower;
 import com.lvwang.osf.model.Following;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Property;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service("followService")
-public class FollowService {
+import javax.annotation.Resource;
+
+@Transactional
+@Service
+public class FollowService extends BaseService {
 	
-	@Autowired
-	@Qualifier("followDao")
-	private FollowDAO followDao;
+	@Resource
+	private FollowerService followerService;
+	@Resource
+	private FollowingService followingService;
 	
 	public Map<String, Object> newFollowing(int user_id, String user_name, int following_user_id, String following_user_name) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Following following = new Following();
 		
-		following.setUser_id(user_id);
-		following.setUser_name(user_name);
-		following.setFollowing_user_id(following_user_id);
-		following.setFollowing_user_name(following_user_name);
-		int id = followDao.saveFollowing(following);
-		if(id == 0) {
+		following.setUserId(user_id);
+		following.setUserName(user_name);
+		following.setFollowingUserId(following_user_id);
+		following.setFollowingUserName(following_user_name);
+		super.save(following);
+		if(following.getId() == 0) {
 			map.put("status", Property.ERROR_FOLLOW);
 			return map;
 		}
 		map.put("following", following);
 		
 		Follower follower = new Follower();
-		follower.setUser_id(following_user_id);
-		follower.setUser_name(following_user_name);
-		follower.setFollower_user_id(user_id);
-		follower.setFollower_user_name(user_name);
-		followDao.saveFollower(follower);
-		if(id == 0) {
+		follower.setUserId(following_user_id);
+		follower.setUserName(following_user_name);
+		follower.setFollowerUserId(user_id);
+		follower.setFollowerUserName(user_name);
+		super.save(follower);
+		if(follower.getId() == 0) {
 			map.put("status", Property.ERROR_FOLLOW);
 			return map;
 		}
@@ -57,18 +61,18 @@ public class FollowService {
 	public Map<String, Object> undoFollow(int user_id, int following_user_id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Following following = new Following();
-		following.setUser_id(user_id);
-		following.setFollowing_user_id(following_user_id);
-		if(followDao.delFollowing(following) == 0) {
+		following.setUserId(user_id);
+		following.setFollowingUserId(following_user_id);
+		if(super.deleteByWhere(following) == 0) {
 			map.put("status", Property.ERROR_FOLLOW_UNDO);
 			return map;
 		}
 		map.put("following", following);
 		
 		Follower follower = new Follower();
-		follower.setUser_id(following_user_id);
-		follower.setFollower_user_id(user_id);
-		if(followDao.delFollower(follower) > 0) {
+		follower.setUserId(following_user_id);
+		follower.setFollowerUserId(user_id);
+		if(super.deleteByWhere(follower) > 0) {
 			map.put("status", Property.SUCCESS_FOLLOW_UNDO);
 			map.put("follower", follower);
 		} else {

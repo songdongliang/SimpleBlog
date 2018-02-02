@@ -1,4 +1,4 @@
-package com.lvwang.osf.api;
+package com.lvwang.osf.control;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -10,27 +10,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
+import javax.annotation.Resource;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Photo;
-import com.lvwang.osf.model.ShortPost;
+import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.AlbumService;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;
@@ -47,8 +45,7 @@ import com.lvwang.osf.web.RequestAttribute;
 @RequestMapping("/api/v1/timeline")
 public class TimeLineAPI {
 
-	@Autowired
-	@Qualifier("userService")
+	@Resource
 	private UserService userService;
 	
 	@Autowired

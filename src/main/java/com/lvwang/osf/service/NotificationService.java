@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lvwang.osf.dao.impl.NotificationDAOImpl;
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Notification;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Dic;
 
 @Service("notificationService")

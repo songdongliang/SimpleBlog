@@ -1,11 +1,15 @@
 package com.lvwang.osf.mappers;
 
-import org.apache.ibatis.annotations.CacheNamespace;
+import com.github.abel533.mapper.BaseMapper;
+import com.lvwang.osf.pojo.Post;
 
-import com.lvwang.osf.dao.PostDAO;
+import java.util.List;
 
-@CacheNamespace
-public interface PostMapper extends PostDAO{
-	
+public interface PostMapper extends BaseMapper<Post>{
 
+    List<Post> getPostsByUserID(int userId);
+
+    Long count(int userId);
+
+    int getAuthorOfPost(int id);
 }

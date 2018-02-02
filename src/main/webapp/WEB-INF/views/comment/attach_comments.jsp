@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="com.lvwang.osf.model.User" %>
+<%@ page import="com.lvwang.osf.pojo.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
@@ -22,25 +22,25 @@
 				  <div class="item">
 
 				    <c:if test="${!empty sessionScope.user }">
-				    	<c:if test="${comment.comment_author ne sessionScope.user.id }">
+				    	<c:if test="${comment.commentAuthor ne sessionScope.user.id }">
 						    <div class="right floated content actions">
-						      <a class="reply" comment_object_id="${comment.comment_object_id }" 
-						      reply_to_author="${comment.comment_author }" 
-						      reply_to_authorname="${comment.comment_author_name }" 
-						      comment_object_type=${comment.comment_object_type  } 
-						      comment_parent=${comment.id }>回复</a>
+						      <a class="reply" commentObjectId="${comment.commentObjectId }"
+						      reply_to_author="${comment.commentAuthor }"
+						      reply_to_authorname="${comment.commentAuthorName }"
+						      commentObjectType=${comment.commentObjectType  }
+						      commentParent=${comment.id }>回复</a>
 						    </div>
 				    	</c:if>
 				    </c:if>
-				    <img class="ui avatar image" src="<c:url value="${img_base_url }${comment.comment_author_avatar }"/>">
+				    <img class="ui avatar image" src="<c:url value="${img_base_url }${comment.commentAuthorAvatar }"/>">
 					<div class="content">
-					  	<c:if test="${comment.comment_parent == 0 }">
-					    	<a class="author"  href="<c:url value="/user/${comment.comment_author }" />" >${comment.comment_author_name }</a>
+					  	<c:if test="${comment.commentParent == 0 }">
+					    	<a class="author"  href="<c:url value="/user/${comment.commentAuthor }" />" >${comment.commentAuthorName }</a>
 					    </c:if>
-					    <c:if test="${comment.comment_parent != 0 }">
-					    	<a class="author" href="<c:url value="/user/${comment.comment_author }" />">${comment.comment_author_name }</a> 回复 <a class="author" href="<c:url value="/user/${comment.comment_parent_author }" />">${comment.comment_parent_author_name }</a>
+					    <c:if test="${comment.commentParent != 0 }">
+					    	<a class="author" href="<c:url value="/user/${comment.commentAuthor }" />">${comment.commentAuthorName }</a> 回复 <a class="author" href="<c:url value="/user/${comment.commentParentAuthor }" />">${comment.commentParentAuthorName }</a>
 					    </c:if>
-					    ${comment.comment_content }
+					    ${comment.commentContent }
 					 </div>
 					 <!-- end content -->
 				  </div>

@@ -40,26 +40,26 @@
 	                      <div class="content">
 	                        <div class="text">
 	                        	<div class="row">
-	                        	<c:if test="${not empty post.post_cover}">
+	                        	<c:if test="${not empty post.postCover}">
 	                        		<div class="span6">
 	                        	</c:if>
-	                        	<c:if test="${empty post.post_cover}">
+	                        	<c:if test="${empty post.postCover}">
 	                        		<div class="span8">
 	                        	</c:if>
 	                        		
 	                        			<h3 class="ui header">
-	                        				<a href="<%=request.getContextPath() %>/post/${post.id}">${post.post_title }</a>
+	                        				<a href="<%=request.getContextPath() %>/post/${post.id}">${post.postTitle }</a>
 	                        			</h3>
 	                        			<div>
-	                        				${post.post_excerpt }
+	                        				${post.postExcerpt }
 	                        			</div>
 	                        			<div class="postmeta">
 	
 	                        			</div>
 	                        		</div>
-	                        		<c:if test="${not empty post.post_cover}">
+	                        		<c:if test="${not empty post.postCover}">
 		                        		<div class="span2">
-		                        			<img class="ui small image" src="${img_base_url }${post.post_cover }?imageView2/1/w/200/h/200" alt=""  />
+		                        			<img class="ui small image" src="${img_base_url }${post.postCover }?imageView2/1/w/200/h/200" alt=""  />
 		                        		</div>
 	                        		</c:if>
 	                        		
@@ -68,19 +68,19 @@
 	                        <div class="meta">
 	                          <span style="float: left"> 
 	                        	<i class="tag icon"></i>
-	                        	<c:forEach items="${post.post_tags }" var="tag">
+	                        	<c:forEach items="${post.postTags }" var="tag">
 	                        		<a href="<c:url value="/tag/${tag.id }" />">${tag.tag }</a>
 	                        	</c:forEach>
 	                          </span>
 	                          <span style="float: right">
 <%-- 		                          <a class="like">
-		                            <i class="like icon"></i> ${post.like_count }
+		                            <i class="like icon"></i> ${post.likeCount }
 		                          </a>
 		                          <a class="share">
-		                            <i class="share alternate icon"></i> ${post.share_count }
+		                            <i class="share alternate icon"></i> ${post.shareCount }
 		                          </a>   
 		                          <a class="comment">
-		                            <i class="comment outline icon"></i> ${post.comment_count }
+		                            <i class="comment outline icon"></i> ${post.commentCount }
 		                          </a>    --%>
 							  </span>
 	                        </div>

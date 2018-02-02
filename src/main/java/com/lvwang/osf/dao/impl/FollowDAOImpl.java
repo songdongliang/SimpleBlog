@@ -14,8 +14,8 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Repository;
 
 import com.lvwang.osf.dao.FollowDAO;
-import com.lvwang.osf.mappers.FollowMapper;
-import com.lvwang.osf.model.Follower;
+import com.lvwang.osf.mappers.FollowerMapper;
+import com.lvwang.osf.pojo.Follower;
 import com.lvwang.osf.model.Following;
 import com.lvwang.osf.util.OSFUtils;
 
@@ -28,7 +28,7 @@ public class FollowDAOImpl implements FollowDAO{
 	private static final int FOLLOW_SCAN_COUNT = 10;
 	
 	@Autowired
-	private FollowMapper followMapper;
+	private FollowerMapper followerMapper;
 	
 	@Autowired
 	@Qualifier("redisTemplate")
@@ -39,17 +39,17 @@ public class FollowDAOImpl implements FollowDAO{
 	
 	public int saveFollowing(final Following following) {
 		
-		followMapper.saveFollowing(following);
+		followerMapper.saveFollowing(following);
 		
-		setOps.add(FOLLOWING_KEY+following.getUser_id(), following.getFollowing_user_id());
+		setOps.add(FOLLOWING_KEY+following.getUserId(), following.getFollowingUserId());
 		
 		return following.getId();
 	}
 	
 	
 	public int saveFollower(final Follower follower) {
-		followMapper.saveFollower(follower);
-		setOps.add(FOLLOWER_KEY+follower.getUser_id() ,follower.getFollower_user_id());
+		followerMapper.saveFollower(follower);
+		setOps.add(FOLLOWER_KEY+follower.getUserId() ,follower.getFollowerUserId());
 		
 		return follower.getId();
 	}
@@ -74,23 +74,23 @@ public class FollowDAOImpl implements FollowDAO{
 	}
 	
 	public List<Following> getFollowings(int user_id) {
-		return followMapper.getFollowings(user_id);
+		return followerMapper.getFollowings(user_id);
 	}
 
 	public List<Follower> getFollowers(final int user_id) {		
-		return followMapper.getFollowers(user_id);
+		return followerMapper.getFollowers(user_id);
 	}
 
 	public int delFollowing(final Following following) {
-		int effrows = followMapper.delFollowing(following);
+		int effrows = followerMapper.delFollowing(following);
 		
-		setOps.remove(FOLLOWING_KEY+following.getUser_id(), following.getFollowing_user_id());
+		setOps.remove(FOLLOWING_KEY+following.getUserId(), following.getFollowingUserId());
 		return effrows;
 	}
 
 	public int delFollower(final Follower follower) {
-		int effrows = followMapper.delFollower(follower);
-		setOps.remove(FOLLOWER_KEY+follower.getUser_id(), follower.getFollower_user_id());
+		int effrows = followerMapper.delFollower(follower);
+		setOps.remove(FOLLOWER_KEY+follower.getUserId(), follower.getFollowerUserId());
 		return effrows;
 	}
 

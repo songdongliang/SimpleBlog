@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lvwang.osf.mappers.CommentMapper">
+
+    <select id="getCommentsByType" resultType="Comment">
+        select * from osf_comments where comment_object_type = #{type}
+			and comment_object_id = #{id} order by comment_ts desc limit #{offset},#{count}
+    </select>
+
+</mapper>

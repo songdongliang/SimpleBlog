@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lvwang.osf.dao.impl.ShortPostDAOImpl;
-import com.lvwang.osf.model.ShortPost;
+import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.util.Property;
 
 @Service("shortPostService")
@@ -25,8 +25,8 @@ public class ShortPostService extends PostService{
 			return map;
 		}
 		ShortPost spost = new ShortPost();
-		spost.setPost_author(author);
-		spost.setPost_content(content);
+		spost.setPostAuthor(author);
+		spost.setPostContent(content);
 		spost.setId(savePost(spost));
 		map.put("spost", spost);
 		map.put("status", Property.SUCCESS_POST_CREATE);
@@ -34,7 +34,7 @@ public class ShortPostService extends PostService{
 	}
 	
 	@Override
-	public long count(int user_id){
-		return shortPostDao.count(user_id);
+	public long count(int userId){
+		return shortPostDao.count(userId);
 	}
 }

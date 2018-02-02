@@ -20,8 +20,14 @@ public abstract class BaseService<T extends BasePojo> {
      * @param id
      * @return
      */
-    public T queryById(Long id) {
+    public T queryById(Integer id) {
         return mapper.selectByPrimaryKey(id) ;
+    }
+
+    public List<T> queryByIds(Class<T> clazz,List ids,String property) {
+        Example example = new Example(clazz);
+        example.createCriteria().andIn(property,ids);
+        return mapper.selectByExample(example);
     }
 
     /**
@@ -110,7 +116,7 @@ public abstract class BaseService<T extends BasePojo> {
      * @param id
      * @return
      */
-    public Integer deleteById(Long id) {
+    public Integer deleteById(Integer id) {
         return mapper.deleteByPrimaryKey(id);
     }
 

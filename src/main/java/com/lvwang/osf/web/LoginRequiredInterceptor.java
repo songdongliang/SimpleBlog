@@ -1,7 +1,5 @@
 package com.lvwang.osf.web;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,9 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.NotificationService;
-import com.lvwang.osf.util.Property;
 
 public class LoginRequiredInterceptor implements HandlerInterceptor{
 

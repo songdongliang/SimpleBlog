@@ -5,28 +5,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lvwang.osf.mappers.EventMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lvwang.osf.dao.AlbumDAO;
-import com.lvwang.osf.dao.EventDAO;
 import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Photo;
-import com.lvwang.osf.model.Post;
+import com.lvwang.osf.pojo.Post;
 import com.lvwang.osf.model.Relation;
-import com.lvwang.osf.model.ShortPost;
+import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.search.EventIndexService;
 import com.lvwang.osf.util.Dic;
 
+import javax.annotation.Resource;
+
 @Service("eventService")
-public class EventService {
-	
-	@Autowired
-	@Qualifier("eventDao")
-	private EventDAO eventDao; 
-	
+public class EventService extends BaseService<Event>{
+
+	@Resource
+	private EventMapper eventMapper;
+
 	@Autowired
 	@Qualifier("albumDao")
 	private AlbumDAO albumDao;
@@ -39,22 +40,22 @@ public class EventService {
 		Event event = new Event();
 		if(Dic.OBJECT_TYPE_POST == object_type) {
 			Post post = (Post)obj;
-			event.setObject_type(Dic.OBJECT_TYPE_POST);
-			event.setObject_id(post.getId());
-			event.setUser_id(post.getPost_author());
-			event.setTitle(post.getPost_title());
-			event.setSummary(post.getPost_excerpt());
-			event.setContent(post.getPost_cover());
-			event.setLike_count(post.getLike_count());
-			event.setShare_count(post.getShare_count());
-			event.setComment_count(post.getComment_count());
-			event.setTags_list(post.getPost_tags_list());
+			event.setObjectType(Dic.OBJECT_TYPE_POST);
+			event.setObjectId(post.getId());
+			event.setUserId(post.getPostAuthor());
+			event.setTitle(post.getPostTitle());
+			event.setSummary(post.getPostExcerpt());
+			event.setContent(post.getPostCover());
+			event.setLikeCount(post.getLikeCount());
+			event.setShareCount(post.getShareCount());
+			event.setCommentCount(post.getCommentCount());
+			event.setTags_list(post.getPostTagsList());
 			
 		} else if(Dic.OBJECT_TYPE_ALBUM == object_type) {
 			Album album = (Album)obj;
-			event.setObject_type(Dic.OBJECT_TYPE_ALBUM);
-			event.setObject_id(album.getId());
-			event.setUser_id(album.getUser_id());
+			event.setObjectType(Dic.OBJECT_TYPE_ALBUM);
+			event.setObjectId(album.getId());
+			event.setUserId(album.getUser_id());
 			event.setTitle(album.getCover());
 			event.setSummary(album.getAlbum_desc());
 			
@@ -64,53 +65,53 @@ public class EventService {
 				keys.append(photo.getKey()+":");
 			}
 			event.setContent(keys.toString());
-			event.setLike_count(0);
-			event.setShare_count(0);
-			event.setComment_count(0);
+			event.setLikeCount(0);
+			event.setShareCount(0);
+			event.setCommentCount(0);
 			event.setTags_list(album.getAlbum_tags_list());
 			
 		} else if(Dic.OBJECT_TYPE_PHOTO == object_type) {
 			//event_id = eventDao.savePhotoEvent((Photo)obj);
 		} else if(Dic.OBJECT_TYPE_SHORTPOST == object_type){
 			ShortPost spost = (ShortPost) obj;
-			event.setObject_type(Dic.OBJECT_TYPE_SHORTPOST);
-			event.setObject_id(spost.getId());
-			event.setSummary(spost.getPost_content());
-			event.setUser_id(spost.getPost_author());
-			event.setLike_count(spost.getLike_count());
-			event.setShare_count(spost.getShare_count());
-			event.setComment_count(spost.getComment_count());
+			event.setObjectType(Dic.OBJECT_TYPE_SHORTPOST);
+			event.setObjectId(spost.getId());
+			event.setSummary(spost.getPostContent());
+			event.setUserId(spost.getPostAuthor());
+			event.setLikeCount(spost.getLikeCount());
+			event.setShareCount(spost.getShareCount());
+			event.setCommentCount(spost.getCommentCount());
 		}
 		return event;
 	}
 	
 	/**
 	 * 保存event，并索引
-	 * @param object_type
+	 * @param objectType
 	 * @param obj
 	 * @return event_id
 	 */
-	public int newEvent(int object_type, Object obj) {
-		Event event = toEvent(object_type, obj);
-		int event_id = eventDao.save(event);
-		event.setId(event_id);
+	public int newEvent(int objectType, Object obj) {
+		Event event = toEvent(objectType, obj);
+		save(event);
+		event.setId(event.getId());
 		eventIndexService.add(event, obj);
-		return event_id;
+		return event.getId();
 	}
 	
 	/**
 	 * 
-	 * @param limit
-	 * @param count
+	 * @param start
+	 * @param step
 	 * @return
 	 */
 	public List<Event> getEvents(int start, int step) {
-		return eventDao.getEvents(start, step);
+		return eventMapper.getEvents(start, step);
 	}
 	
 	
-	/*
-	 * 根据relation关系(object_type, object_id)查询event
+	/**
+	 * 根据relation关系(objectType, object_id)查询event
 	 */
 	public List<Event> getEventsWithRelations(List<Relation> relations) {
 		List<Event> events = new ArrayList<Event>();
@@ -122,11 +123,18 @@ public class EventService {
 				}
 				category.get(relation.getObject_type()).add(relation.getObject_id());
 			}
-			events = eventDao.getEventsWithRelations(category);
+			events = getEventsWithRelations(category);
 		}
 		return events;
 	}
-	
+
+	private List<Event> getEventsWithRelations(Map<Integer, List<Integer>> relationsCategory) {
+		if(relationsCategory == null || relationsCategory.size() == 0) {
+			return new ArrayList<>();
+		}
+		return eventMapper.getEventsWithRelations(relationsCategory);
+	}
+
 	/**
 	 * 获取含有图片的Event
 	 * @param start 
@@ -134,32 +142,30 @@ public class EventService {
 	 * @return 
 	 */
 	public List<Event> getEventsHasPhoto(int start, int step) {
-		return eventDao.getEventsHasPhoto(start, step);
+		return eventMapper.getEventsHasPhoto(start, step);
 	}
 	
 	public Event getEvent(int object_type, int object_id){
-		return eventDao.getEvent(object_type, object_id);
+		return eventMapper.getEvent(object_type, object_id);
 	}
 	
-	/*
+	/**
 	 * 根据event id查询event
 	 */
 	public List<Event> getEventsWithIDs(List<Integer> event_ids) {
-		return eventDao.getEventsWithIDs(event_ids);
+		return queryByIds(Event.class,event_ids,"id");
 	}
 	
 	public List<Event> getEventsOfUser(int user_id, int count){
-		return eventDao.getEventsOfUser(user_id, count);
+		return eventMapper.getEventsOfUser(user_id, count);
 	}
-		
-	
+
 	public void delete(int id){
-		eventDao.delete(id);
+		deleteById(id);
 	}
 	
 	public void delete(int object_type, int object_id){
-		eventDao.deleteByObject(object_type, object_id);
+		eventMapper.deleteByObject(object_type, object_id);
 	}
-	
-	
+
 }

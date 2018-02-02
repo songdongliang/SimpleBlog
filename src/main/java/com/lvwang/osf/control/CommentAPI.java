@@ -1,4 +1,4 @@
-package com.lvwang.osf.api;
+package com.lvwang.osf.control;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lvwang.osf.model.Comment;
+import com.lvwang.osf.pojo.Comment;
 import com.lvwang.osf.model.Notification;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.CommentService;
 import com.lvwang.osf.service.NotificationService;
 import com.lvwang.osf.service.PostService;
@@ -34,7 +34,6 @@ public class CommentAPI {
 	private CommentService commentService;
 	
 	@Autowired
-	@Qualifier("userService")
 	private UserService userService;
 	
 	@Autowired
@@ -65,29 +64,29 @@ public class CommentAPI {
 											 @RequestAttribute("uid") Integer id) {
 		User user = (User)userService.findById(id);
 		User comment_parent_author = new User();
-		if(comment.getComment_parent() !=0 ){
-			comment_parent_author = commentService.getCommentAuthor(comment.getComment_parent());
+		if(comment.getCommentParent() !=0 ){
+			comment_parent_author = commentService.getCommentAuthor(comment.getCommentParent());
 		}
 		
-		Map<String, String> ret = commentService.newComment(comment.getComment_object_type(), 
-															comment.getComment_object_id(), 
+		Map<String, String> ret = commentService.newComment(comment.getCommentObjectType(),
+															comment.getCommentObjectId(),
 															user.getId(), 
 															user.getUserName(),
-															comment.getComment_content(), 
-															comment.getComment_parent(),
+															comment.getCommentContent(),
+															comment.getCommentParent(),
 															comment_parent_author.getId(),
 															comment_parent_author.getUserName());
 		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
-													  comment.getComment_object_type(),
-													  comment.getComment_object_id(),
-													  userService.getAuthor(comment.getComment_object_type(), 
-															  				comment.getComment_object_id()).getId(),
+													  comment.getCommentObjectType(),
+													  comment.getCommentObjectId(),
+													  userService.getAuthor(comment.getCommentObjectType(),
+															  				comment.getCommentObjectId()).getId(),
 													  user.getId()
 													  );
 		
 		
-		if(comment.getComment_parent()!=0) {
+		if(comment.getCommentParent()!=0) {
 			//reply notification
 			notification.setNotify_type(Dic.NOTIFY_TYPE_COMMENT_REPLY);
 			notification.setNotified_user(comment_parent_author.getId());

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lvwang.osf.model.ShortPost;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.ShortPost;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;
 import com.lvwang.osf.service.FollowService;

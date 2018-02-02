@@ -21,26 +21,26 @@ alter table `osf_users` add unique(`userName`, `userEmail`);
 drop table if EXISTS `osf`.`osf_posts`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_posts` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `post_author` INT NOT NULL COMMENT '作者ID',
-  `post_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `post_content` LONGTEXT NOT NULL,
-  `post_title` TEXT  NULL,
-  `post_excerpt` TEXT NULL COMMENT '摘要',
-  `post_status` INT NOT NULL DEFAULT 0,
-  `comment_status` INT NOT NULL DEFAULT 0,
-  `post_pwd` VARCHAR(60) NULL,
-  `post_lastts` TIMESTAMP NOT NULL DEFAULT current_timestamp on update CURRENT_TIMESTAMP,
-  `comment_count` INT NOT NULL DEFAULT 0,
-  `like_count` INT NOT NULL DEFAULT 0,
-  `share_count` INT NOT NULL DEFAULT 0,
-  `post_url` VARCHAR(45) NULL,
-  `post_tags` TEXT NULL,
-  `post_album` INT NOT NULL DEFAULT 0,
-  `post_cover` VARCHAR(100) NULL,
+  `postAuthor` INT NOT NULL COMMENT '作者ID',
+  `postTs` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `postContent` LONGTEXT NOT NULL,
+  `postTitle` TEXT  NULL,
+  `postExcerpt` TEXT NULL COMMENT '摘要',
+  `postStatus` INT NOT NULL DEFAULT 0,
+  `commentStatus` INT NOT NULL DEFAULT 0,
+  `postPwd` VARCHAR(60) NULL,
+  `postLastts` TIMESTAMP NOT NULL DEFAULT current_timestamp on update CURRENT_TIMESTAMP,
+  `commentCount` INT NOT NULL DEFAULT 0,
+  `likeCount` INT NOT NULL DEFAULT 0,
+  `shareCount` INT NOT NULL DEFAULT 0,
+  `postUrl` VARCHAR(45) NULL,
+  `postTags` TEXT NULL,
+  `postAlbum` INT NOT NULL DEFAULT 0,
+  `postCover` VARCHAR(100) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_osf_users_post_author_idx` (`post_author` ASC),
+  INDEX `fk_osf_users_post_author_idx` (`postAuthor` ASC),
   CONSTRAINT `fk_osf_users_post_author`
-    FOREIGN KEY (`post_author`)
+    FOREIGN KEY (`postAuthor`)
     REFERENCES `osf`.`osf_users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -50,19 +50,19 @@ ENGINE = InnoDB;
 drop table if EXISTS `osf`.`osf_comments`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_comments` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `comment_object_type` INT NOT NULL COMMENT 'post, album,...',
-  `comment_object_id` INT NOT NULL,
-  `comment_author` INT NOT NULL,
-  `comment_author_name` VARCHAR(100) NOT NULL,
-  `comment_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `comment_content` TEXT NOT NULL,
-  `comment_parent` INT NOT NULL DEFAULT 0,
-  `comment_parent_author_name` VARCHAR(100) NULL,
-  `comment_parent_author` INT NOT NULL DEFAULT 0,
+  `commentObjectType` INT NOT NULL COMMENT 'post, album,...',
+  `commentObjectId` INT NOT NULL,
+  `commentAuthor` INT NOT NULL,
+  `commentAuthorName` VARCHAR(100) NOT NULL,
+  `commentTs` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `commentContent` TEXT NOT NULL,
+  `commentParent` INT NOT NULL DEFAULT 0,
+  `commentParentAuthorName` VARCHAR(100) NULL,
+  `commentParentAuthor` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX `fk_osf_comments_comment_author_idx` (`comment_author` ASC),
+  INDEX `fk_osf_comments_comment_author_idx` (`commentAuthor` ASC),
   CONSTRAINT `fk_osf_comments_comment_author`
-    FOREIGN KEY (`comment_author`)
+    FOREIGN KEY (`commentAuthor`)
     REFERENCES `osf`.`osf_users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -72,23 +72,23 @@ ENGINE = InnoDB;
 drop table if EXISTS `osf`.`osf_events`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_events` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `object_type` INT NOT NULL,
-  `object_id` INT NOT NULL,
+  `objectType` INT NOT NULL,
+  `objectId` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
   `userName` VARCHAR(50) NULL,
   `userAvatar` VARCHAR(100) NULL,
-  `like_count` INT NOT NULL,
-  `share_count` INT NOT NULL,
-  `comment_count` INT NOT NULL,
+  `likeCount` INT NOT NULL,
+  `shareCount` INT NOT NULL,
+  `commentCount` INT NOT NULL,
   `title` TEXT NULL,
   `summary` TEXT NULL,
   `content` TEXT NULL,
   `tags` TEXT NULL,
-  `following_user_id` INT NULL,
-  `following_user_name` VARCHAR(50) NULL,
-  `follower_user_id` INT NULL,
-  `follower_user_name` VARCHAR(50) NULL,
+  `followingUserId` INT NULL,
+  `followingUserName` VARCHAR(50) NULL,
+  `followerUserId` INT NULL,
+  `followerUserName` VARCHAR(50) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -96,33 +96,33 @@ ENGINE = InnoDB;
 drop table if EXISTS `osf`.`osf_followings`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_followings` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
   `userName` VARCHAR(50) NULL,
-  `following_user_id` INT NOT NULL,
-  `following_user_name` VARCHAR(50) NULL,
+  `followingUserId` INT NOT NULL,
+  `followingUserName` VARCHAR(50) NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf`.`osf_followings` add unique(user_id, following_user_id);
+alter table `osf`.`osf_followings` add unique(userId, followingUserId);
 
 
 drop table if EXISTS `osf`.`osf_followers` ;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_followers` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
   `userName` VARCHAR(50) NULL,
-  `follower_user_id` INT NOT NULL,
-  `follower_user_name` VARCHAR(50) NULL,
+  `followerUserId` INT NOT NULL,
+  `followerUserName` VARCHAR(50) NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf`.`osf_followers` add unique(user_id, follower_user_id);
+alter table `osf`.`osf_followers` add unique(userId, followerUserId);
 
 
 drop table if EXISTS `osf`.`osf_albums`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_albums` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
   `create_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `album_title` TEXT NULL,
   `album_desc` TEXT NULL COMMENT '描述',
@@ -132,9 +132,9 @@ CREATE TABLE IF NOT EXISTS `osf`.`osf_albums` (
   `cover` VARCHAR(45) NULL,
   `album_tags` TEXT null,
   PRIMARY KEY (`id`),
-  INDEX `fk_osf_albums_album_author_idx` (`user_id` ASC),
+  INDEX `fk_osf_albums_album_author_idx` (`userId` ASC),
   CONSTRAINT `fk_osf_albums_album_author`
-    FOREIGN KEY (`user_id`)
+    FOREIGN KEY (`userId`)
     REFERENCES `osf`.`osf_users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -167,8 +167,8 @@ ENGINE = InnoDB;
 drop table if EXISTS `osf`.`osf_relations` ;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_relations` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `object_type` INT NOT NULL,
-  `object_id` INT NOT NULL,
+  `objectType` INT NOT NULL,
+  `objectId` INT NOT NULL,
   `tag_id` INT NOT NULL,
   `add_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`),
@@ -184,24 +184,24 @@ ENGINE = InnoDB;
 drop table if EXISTS `osf`.`osf_interests` ;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_interests` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
   `tag_id` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf_interests` add unique(`user_id`, `tag_id`);
+alter table `osf_interests` add unique(`userId`, `tag_id`);
 
 
 drop table if EXISTS `osf`.`osf_likes`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_likes` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
-  `object_type` INT NOT NULL,
-  `object_id` INT NOT NULL,
+  `userId` INT NOT NULL,
+  `objectType` INT NOT NULL,
+  `objectId` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf_likes` add unique(`user_id`, `object_type`, `object_id`);
+alter table `osf_likes` add unique(`userId`, `objectType`, `objectId`);
 
 
 drop table if EXISTS `osf`.`osf_notifications`;
@@ -209,8 +209,8 @@ CREATE TABLE IF NOT EXISTS `osf`.`osf_notifications` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `notify_type` INT NOT NULL,
   `notify_id` INT NOT NULL,
-  `object_type` INT NOT NULL,
-  `object_id` INT NOT NULL,
+  `objectType` INT NOT NULL,
+  `objectId` INT NOT NULL,
   `notified_user` INT NOT NULL,
   `notifier` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -18,7 +18,7 @@ import org.apache.lucene.search.TopDocs;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 
 @Service("userIndexService")
 public class UserIndexService implements IndexService<User>{

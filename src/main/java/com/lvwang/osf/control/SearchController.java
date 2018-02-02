@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;
 import com.lvwang.osf.service.FollowService;

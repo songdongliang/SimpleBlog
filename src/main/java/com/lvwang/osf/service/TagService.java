@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lvwang.osf.dao.TagDAO;
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Tag;
 import com.lvwang.osf.search.TagIndexService;
 import com.lvwang.osf.util.Property;

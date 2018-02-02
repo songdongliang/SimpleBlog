@@ -4,14 +4,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <c:forEach items="${feeds }" var="feed"> 
-	<c:if test="${feed.object_type == dic.object_type_shortpost }">
-		<div class="event row" type="spost" object_type="${feed.object_type }" object_id="${feed.object_id }">
+	<c:if test="${feed.objectType == dic.object_type_shortpost }">
+		<div class="event row" type="spost" objectType="${feed.objectType }" objectId="${feed.objectId }">
 		   <div class="label span2">
-		     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
+		     <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
 		   </div>
 		   <div class="content span6">
 		     <div class="summary">
-		       <a href="<c:url value="/user/${feed.user_id }" />">${feed.userName }</a> 说
+		       <a href="<c:url value="/user/${feed.userId }" />">${feed.userName }</a> 说
 		       <div class="date">
 		         ${feed.ts }
 		       </div>
@@ -24,16 +24,16 @@
 		     <div class="meta">							                     	
 					<div class="actions">
 						<a class="comment">
-					    	<i class="comment outline icon"></i> ${feed.comment_count }
+					    	<i class="comment outline icon"></i> ${feed.commentCount }
 						</a>                           
 				        <a class="like">
-					       	<c:if test="${feed.is_like }">
-					       		<i class="red heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-					       		<span>${feed.like_count }</span> 
+					       	<c:if test="${feed.like }">
+					       		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+					       		<span>${feed.likeCount }</span>
 					       	</c:if>
-					       	<c:if test="${!feed.is_like }">
-					       		<i class="heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-					       		<span>${feed.like_count }</span> 
+					       	<c:if test="${!feed.like }">
+					       		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+					       		<span>${feed.likeCount }</span>
 					       	</c:if>	                          	
 				    	</a>                         
 			   		</div>
@@ -48,21 +48,21 @@
 	</c:if>
 	
 <!-- new post -->
- <c:if test="${feed.object_type == dic.object_type_post}">
- <div class="event row" type="post" object_type="${feed.object_type }" object_id="${feed.object_id }">
+ <c:if test="${feed.objectType == dic.object_type_post}">
+ <div class="event row" type="post" objectType="${feed.objectType }" objectId="${feed.objectId }">
    <div class="label span2">
-     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
+     <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
    <div class="content span6">
      <div class="summary">
-       <a href="<c:url value="/user/${feed.user_id }" />">${feed.userName }</a> 发表了日志
+       <a href="<c:url value="/user/${feed.userId }" />">${feed.userName }</a> 发表了日志
        <div class="date">
          ${feed.ts }
        </div>
      </div>
      <div class="extra">
      	<div class="postheader">
-        		<a href="<c:url value="/post/${feed.object_id }" />">${feed.title }</a>
+        		<a href="<c:url value="/post/${feed.objectId }" />">${feed.title }</a>
          </div>
          <c:if test="${not empty feed.content }">
    		 	<img src="<c:url value="${img_base_url}${feed.content }${post_cover_thumbnail}"/>" alt="" />
@@ -83,16 +83,16 @@
 	   </c:if>							                     	
        <div class="actions">
 	 		<a class="comment">
-	            <i class="comment outline icon"></i> ${feed.comment_count }
+	            <i class="comment outline icon"></i> ${feed.commentCount }
 	        </a>                           
 	        <a class="like">
-	        	<c:if test="${feed.is_like }">
-	        		<i class="red heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-	        		<span>${feed.like_count }</span> 
+	        	<c:if test="${feed.like }">
+	        		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<span>${feed.likeCount }</span>
 	        	</c:if>
-	        	<c:if test="${!feed.is_like }">
-	        		<i class="heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-	        		<span>${feed.like_count }</span> 
+	        	<c:if test="${!feed.like }">
+	        		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<span>${feed.likeCount }</span>
 	        	</c:if>	                          	
 	        </a>                       
        </div>
@@ -108,21 +108,21 @@
  </c:if>
  
  <!-- new album -->
- <c:if test="${feed.object_type == dic.object_type_album }">
- <div class="event row" type="album" object_type="${feed.object_type }" object_id="${feed.object_id }">
+ <c:if test="${feed.objectType == dic.object_type_album }">
+ <div class="event row" type="album" objectType="${feed.objectType }" objectId="${feed.objectId }">
    <div class="label span2">
-     <a href="<c:url value="/user/${feed.user_id }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
+     <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
    <div class="content span6">
      <div class="summary">
-       <a>${feed.userName }</a> 上传了相册 <a href="<c:url value="/album/${feed.object_id }" /> "></a>
+       <a>${feed.userName }</a> 上传了相册 <a href="<c:url value="/album/${feed.objectId }" /> "></a>
     <div class="date">
       ${feed.ts }
     </div>                          
      </div>
      <div class="extra images">
        <c:forTokens items="${feed.content }" delims=":" var="img" begin="0" end="2">
-       	<a href="<c:url value="/album/${feed.object_id }/photos" />"><img alt="" src="${img_base_url }${img }${album_thumbnail}"></a>
+       	<a href="<c:url value="/album/${feed.objectId }/photos" />"><img alt="" src="${img_base_url }${img }${album_thumbnail}"></a>
        </c:forTokens>
      </div>
      <div class="extra">${feed.summary }</div>
@@ -137,16 +137,16 @@
 		</c:if>                       
         <div class="actions">
 			<a class="comment">
-                    <i class="comment outline icon"></i> ${feed.comment_count }
+                    <i class="comment outline icon"></i> ${feed.commentCount }
         	</a>                           
 	        <a class="like">
-	        	<c:if test="${feed.is_like }">
-	        		<i class="red heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-	        		<span>${feed.like_count }</span> 
+	        	<c:if test="${feed.like }">
+	        		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<span>${feed.likeCount }</span>
 	        	</c:if>
-	        	<c:if test="${!feed.is_like }">
-	        		<i class="heart icon" author="${feed.user_id }" object_type=${feed.object_type } object_id=${feed.object_id }></i> 
-	        		<span>${feed.like_count }</span> 
+	        	<c:if test="${!feed.like }">
+	        		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<span>${feed.likeCount }</span>
 	        	</c:if>	                          	
 	        </a>                          
        </div>

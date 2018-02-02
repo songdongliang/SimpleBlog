@@ -7,14 +7,14 @@
 	<meta charset="UTF-8">
 	<meta name="type" content="post">
 	<meta name="id" content="${post.id }">
-	<meta name="author" content="${post.post_author }">
+	<meta name="author" content="${post.postAuthor }">
 	<c:if test="${not empty sessionScope.user}">
 		<meta name="isLogin" content="true"/>
 	</c:if>
 	<c:if test="${empty sessionScope.user}">
 		<meta name="isLogin" content="false"/>
 	</c:if>
-	<title>${post.post_title }</title>
+	<title>${post.postTitle }</title>
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/bootstrap2.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/navbar.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/semantic.css">
@@ -44,7 +44,7 @@
 
 						<div class="post" id="post${post.id }">
 							<div class="header">
-								${post.post_title }
+								${post.postTitle }
 							</div>
 							<div class="date">
 								<i class="wait icon"></i><span>2015-05-01</span>
@@ -70,13 +70,13 @@
 									</c:if>
 								</div>
 								<div class="tags">
-									<c:forEach items="${post.post_tags_list }" var="tag">
+									<c:forEach items="${post.postTagsList }" var="tag">
 										<a class="ui label" href="<c:url value="/tag/${tag.id}" />">${tag.tag }</a>
 									</c:forEach>
 								</div>
 							</div>
 							<div class="post-content">
-								${post.post_content }
+								${post.postContent }
 							</div>
 
 						</div>
@@ -95,10 +95,10 @@
 								  <i class="wechat icon" id="wechatshare"></i>
 								</div>	
 								<div class="ui circular icon basic button post like">
-								  <c:if test="${!is_like }">
+								  <c:if test="${!like }">
 								  	<i class="empty red heart icon" id="like"></i>
 								  </c:if>
-								  <c:if test="${is_like }">
+								  <c:if test="${like }">
 								  	<i class="red heart icon" id="like"></i>
 								  </c:if>
 								</div>	

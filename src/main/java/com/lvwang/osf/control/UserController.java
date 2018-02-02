@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Post;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.Post;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.AlbumService;
 import com.lvwang.osf.service.FollowService;
 import com.lvwang.osf.service.PostService;
 import com.lvwang.osf.service.UserService;
-import com.lvwang.osf.util.Property;
 
 @Controller
 @RequestMapping("/user")

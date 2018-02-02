@@ -45,13 +45,13 @@
 				  			  
 <!-- 				  <div class="inline field">
 				    <label>隐私:</label>
-					<input type="radio" name="post_status" value="0" checked="checked"> 公开
-					<input type="radio" name="post_status" value="1"> 仅自己可见
+					<input type="radio" name="postStatus" value="0" checked="checked"> 公开
+					<input type="radio" name="postStatus" value="1"> 仅自己可见
 				  </div>
 				  <div class="inline field">
 				  	<label>评论:</label>
-					<input type="radio" name="comment_status" value="0" checked="checked"> 允许评论
-					<input type="radio" name="comment_status" value="1"> 不允许评论				  	
+					<input type="radio" name="commentStatus" value="0" checked="checked"> 允许评论
+					<input type="radio" name="commentStatus" value="1"> 不允许评论
 				  </div> -->
 				  <div class="ui button green" id="send">发表</div>
 				  <div class="ui button" id="cancel">取消</div>
@@ -97,8 +97,8 @@
     		var title = escape($('#title').val());
     		var content = $('#content').val();
 
-    		var post_status = 0 // $('input[name="post_status"][checked]').val();
-    		var comment_status = 0 // $('input[name="comment_status"][checked]').val();
+    		var postStatus = 0 // $('input[name="postStatus"][checked]').val();
+    		var commentStatus = 0 // $('input[name="commentStatus"][checked]').val();
     		$.ajax({
     			url: basePath + '/post/create',
     			type: 'POST',
@@ -107,13 +107,13 @@
     			       content: content,
     			       title: title,
     			       tags: tags.join(' '),
-    			       post_status: post_status,
-    			       comment_status: comment_status}
+    			       postStatus: postStatus,
+    			       commentStatus: commentStatus}
     		})
     		.success(function(data) {
     			$(that).removeClass('loading');
     			var status = data.status;
-    			var author = data.post.post_author;
+    			var author = data.post.postAuthor;
     			if(SUCCESS_POST_CREATE == status) {
     				self.location = basePath;
     			}

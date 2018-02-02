@@ -13,20 +13,22 @@ import java.util.UUID;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import com.alibaba.fastjson.JSON;
 import com.github.abel533.entity.Example;
 import com.lvwang.osf.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.UserDAO;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.search.UserIndexService;
 import com.lvwang.osf.util.CipherUtil;
 import com.lvwang.osf.util.Dic;
 import com.lvwang.osf.util.Property;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service("userService")
+@Transactional
+@Service
 public class UserService extends BaseService<User> {
 
 	/**
@@ -45,12 +47,11 @@ public class UserService extends BaseService<User> {
 	 * 注销
 	 */
 	private static final int STATUS_USER_CANCELLED = 3;
+
+	private static final String TOKEN_ = "TOKEN_";
+	private static final String USER_ID_ = "USER_ID_";
 	
 	private static final String DEFAULT_USER_AVATAR = "default-avatar.jpg";
-	
-//	@Autowired
-//	@Qualifier("userDao")
-//	private UserDAO userDao;
 	
 	@Autowired
 	@Qualifier("followService")
@@ -74,6 +75,9 @@ public class UserService extends BaseService<User> {
 
 	@Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisService redisService;
 	
 	private boolean validateEmail(String email) {
 		boolean result = true;
@@ -88,20 +92,27 @@ public class UserService extends BaseService<User> {
 	
 	public String newToken(User user) {
 		String token = UUID.randomUUID().toString();
-		userDao.insertToken(token, user);
-		return token;
+		String key = TOKEN_ + token;
+		redisService.set(key, JSON.toJSONString(user));
+		return key;
 	}
 	
 	public void delToken(String token) {
-		userDao.delToken(token);
+		redisService.del(token);
 	}
 	
 	public boolean checkToken(String token) {
-		return userDao.containsToken(token);
+		return redisService.containsKey(token);
 	}
-	
+
+    /**
+     * redis获取
+     * @param token
+     * @return
+     */
 	public User findUserByToken(String token) {
-		return userDao.getUserByToken(token);
+	    String jsonUser = redisService.get(token);
+		return JSON.parseObject(jsonUser,User.class);
 	}
 	
 	public User findByUsername(String username) {
@@ -113,18 +124,22 @@ public class UserService extends BaseService<User> {
 	public User findByEmail(String email) {
 	    User conditionUser = new User();
 	    conditionUser.setUserEmail(email);
-		return userMapper.selectOne(conditionUser);
+		return queryOne(conditionUser);
 	}
 	
 	public User findById(int id) {
-		return userMapper.selectByPrimaryKey(id);
+		return queryById(id);
 	}
 	
-	public List<User> findByIDs(List<Object> ids) {
+	public List<User> findByIDs(List ids) {
         Example example = new Example(User.class);
         example.createCriteria().andIn("id",ids);
 		return userMapper.selectByExample(example);
 	}
+
+	public String getPasswordByEmail(String email) {
+	    return userMapper.getPasswordByEmail(email);
+    }
 	
 	public Map<String, Object> login(String email, String password) {
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -160,7 +175,7 @@ public class UserService extends BaseService<User> {
 		}
 		
 		//5 password validate
-		if(!CipherUtil.validatePassword(userDao.getPwdByEmail(email), password)) {
+		if(!CipherUtil.validatePassword(userMapper.getPasswordByEmail(email), password)) {
 			ret.put("status", Property.ERROR_PWD_DIFF);
 			return ret;
 		}
@@ -307,12 +322,15 @@ public class UserService extends BaseService<User> {
 		//1 check user status
 		User user = findByEmail(email);
 		String status = null;
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		if(user == null){
 			status = Property.ERROR_EMAIL_NOT_REG;
 		} else if(STATUS_USER_INACTIVE == user.getUserStatus()){
 			String activationKey = CipherUtil.generateActivationUrl(email, new Date().toString());
-			userDao.updateActivationKey(user.getId(), activationKey);
+			User conditionUser = new User();
+			conditionUser.setId(user.getId());
+			conditionUser.setUserActivationKey(activationKey);
+			userMapper.updateByPrimaryKeySelective(conditionUser);
 			status = Property.SUCCESS_ACCOUNT_ACTIVATION_KEY_UPD;
 			map.put("activationKey", activationKey);
 		} else {
@@ -336,7 +354,7 @@ public class UserService extends BaseService<User> {
 				if(user.getUserActivationKey().equals(key)){
 					user.setUserActivationKey(null);
 					user.setUserStatus(STATUS_USER_NORMAL);
-					userDao.activateUser(user);
+					userMapper.updateByPrimaryKeySelective(user);
 				}else {
 					return Property.ERROR_ACCOUNT_ACTIVATION_EXPIRED;
 				}
@@ -351,7 +369,7 @@ public class UserService extends BaseService<User> {
 		}
 		return Property.SUCCESS_ACCOUNT_ACTIVATION;
 	}
-	
+
 	/**
 	 * 推荐用户
 	 * @param count
@@ -396,12 +414,18 @@ public class UserService extends BaseService<User> {
 	    User user = new User();
 	    user.setId(id);
 	    user.setUserAvatar(avatar);
-	    userMapper.updateByPrimaryKey(user);
+	    userMapper.updateByPrimaryKeySelective(user);
 		return Property.SUCCESS_AVATAR_CHANGE;
 	}
 	
-	public void updateUsernameAndDesc(int user_id, String username, String desc){
-		userDao.updateUsernameAndDesc(user_id, username, desc);
+	public void updateUsernameAndDesc(int id, String username, String desc){
+		User user = new User();
+		user.setId(id);
+		user.setUserName(username);
+		user.setUserDesc(desc);
+		userMapper.updateByPrimaryKeySelective(user);
+		//刷新缓存
+		redisService.set(USER_ID_ + id, JSON.toJSONString(user),30 * 60);
 	}
 	
 	/**
@@ -411,7 +435,7 @@ public class UserService extends BaseService<User> {
 	 */
 	public String updateResetPwdKey(String email){
 		String key = CipherUtil.generateRandomLinkUseEmail(email);
-		userDao.updateResetPwdKey(email, key);
+		userMapper.updateResetPwdKey(key, email);
 		return key;
 	}
 	
@@ -424,14 +448,13 @@ public class UserService extends BaseService<User> {
 		if( (email==null) || (key==null)){
 			return false;
 		}
-		String resetpwd_key = userDao.getRestPwdKey(email);
+		String resetPwdKey = userMapper.getResetPwdKey(email);
 		boolean result ;
-		if(resetpwd_key == null || resetpwd_key.length() ==0){
+		if (resetPwdKey == null || resetPwdKey.length() == 0){
 			result = false;
 		} else {
-			result = resetpwd_key.equals(key);
+			result = resetPwdKey.equals(key);
 		}
-		
 		return result;
 	}
 
@@ -441,15 +464,15 @@ public class UserService extends BaseService<User> {
 	 * @param password
 	 * @return
 	 */
-	public String resetPassword(String email, String password, String cfm_pwd){
+	public String resetPassword(String email, String password, String confirmPassword){
 		if( password == null || password.length() == 0){
 			return Property.ERROR_PWD_EMPTY;
 		}
-		if(cfm_pwd == null || cfm_pwd.length()==0){
+		if(confirmPassword == null || confirmPassword.length()==0){
 			return Property.ERROR_CFMPWD_EMPTY;
 		}
 			 
-		if(!password.equals(cfm_pwd)) {
+		if(!password.equals(confirmPassword)) {
 			return Property.ERROR_CFMPWD_NOTAGREE;
 		}
 		
@@ -457,39 +480,40 @@ public class UserService extends BaseService<User> {
 		if(vpf_rs != Property.SUCCESS_PWD_FORMAT)
 			return vpf_rs;
 		
-		userDao.updatePassword(email, CipherUtil.generatePassword(password));
-		userDao.updateResetPwdKey(email, null);
+		userMapper.updatePasswordByEmail(email, CipherUtil.generatePassword(password));
+		userMapper.updateResetPwdKey(null, email);
 		return Property.SUCCESS_PWD_RESET;
 	}
 	
 	/**
 	 * 修改密码
 	 * @param email
-	 * @param old_pwd
-	 * @param new_pwd
+	 * @param oldPassword
+	 * @param newPassword
 	 * @return
 	 */
-	public String changePassword(String email, String old_pwd, String new_pwd){
-		if( old_pwd == null || old_pwd.length() == 0){
+	public String changePassword(String email, String oldPassword, String newPassword){
+		if( oldPassword == null || oldPassword.length() == 0){
 			return Property.ERROR_PWD_EMPTY;
 		}
-		if( new_pwd == null || new_pwd.length() == 0){
+		if( newPassword == null || newPassword.length() == 0){
 			return Property.ERROR_PWD_EMPTY;
 		}
-		if(new_pwd.equals(old_pwd)){
+		if(newPassword.equals(oldPassword)){
 			return Property.ERROR_CFMPWD_SAME;
 		}
 				
-		String vpf_rs = CipherUtil.validatePasswordFormat(new_pwd);
-		if(vpf_rs != Property.SUCCESS_PWD_FORMAT)
-			return vpf_rs;
-		
-		String current_pwd = userDao.getPwdByEmail(email);
-		if(!current_pwd.equals(CipherUtil.generatePassword(old_pwd))){
+		String vpfRs = CipherUtil.validatePasswordFormat(newPassword);
+		if(vpfRs != Property.SUCCESS_PWD_FORMAT) {
+			return vpfRs;
+		}
+
+		String currentPwd = userMapper.getPasswordByEmail(email);
+		if(!currentPwd.equals(CipherUtil.generatePassword(oldPassword))){
 			return Property.ERROR_PWD_NOTAGREE;
 		}
 		
-		userDao.updatePassword(email, CipherUtil.generatePassword(new_pwd));
+		userMapper.updatePasswordByEmail(email, CipherUtil.generatePassword(newPassword));
 		return Property.SUCCESS_PWD_CHANGE;
 	}
 	
@@ -515,4 +539,6 @@ public class UserService extends BaseService<User> {
 		List user_ids = userIndexService.findUserByName(username);
 		return findByIDs(user_ids);
 	}
+
+
 }

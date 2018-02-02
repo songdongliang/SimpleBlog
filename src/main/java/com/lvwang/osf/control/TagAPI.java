@@ -1,4 +1,4 @@
-package com.lvwang.osf.api;
+package com.lvwang.osf.control;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lvwang.osf.model.Event;
+import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.FeedService;
 import com.lvwang.osf.service.InterestService;
 import com.lvwang.osf.service.TagService;
@@ -41,7 +41,6 @@ public class TagAPI {
 	private FeedService feedService;
 	
 	@Autowired
-	@Qualifier("userService")
 	private UserService userService;
 	
 	@ResponseBody

@@ -5,7 +5,24 @@
 
 <mapper namespace="com.lvwang.osf.mappers.UserMapper">
 
-   <select id="getUsers" parameterType="int" resultType="User">
+   <select id="getUsers" parameterType="int" resultType="com.lvwang.osf.pojo.User">
       SELECT * FROM osf_users limit #{count}
    </select>
+
+    <select id="getPasswordByEmail" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT user_pwd FROM osf_users WHERE user_email = #{email}
+    </select>
+
+    <select id="updatePasswordByEmail">
+        UPDATE TABLE osf_users SET user_pwd = #{password} WHERE user_email = #{email}
+    </select>
+
+    <select id="updateResetPwdKey">
+        UPDATE TABLE osf_users SET resetpwd_key = #{key} WHERE user_email = #{email}
+    </select>
+
+    <select id="getResetPwdKey">
+        SELECT resetpwd_key FROM osf_users WHERE user_email = #{email}
+    </select>
+
 </mapper>

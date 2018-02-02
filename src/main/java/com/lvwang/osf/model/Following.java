@@ -1,15 +1,23 @@
 package com.lvwang.osf.model;
 
+import com.lvwang.osf.pojo.BasePojo;
+
+import javax.persistence.*;
 import java.util.Date;
 
 
-
-public class Following {
+@Table(name = "osf_follows")
+public class Following extends BasePojo {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
-	private int user_id;
-	private String user_name;
-	private int following_user_id;
-	private String following_user_name;
+
+	private int userId;
+	private String userName;
+	private int followingUserId;
+	private String followingUserName;
+
 	private Date ts;
 	public int getId() {
 		return id;
@@ -17,29 +25,29 @@ public class Following {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getUser_id() {
-		return user_id;
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public int getFollowing_user_id() {
-		return following_user_id;
+	public int getFollowingUserId() {
+		return followingUserId;
 	}
-	public void setFollowing_user_id(int following_user_id) {
-		this.following_user_id = following_user_id;
+	public void setFollowingUserId(int followingUserId) {
+		this.followingUserId = followingUserId;
 	}
-	public String getFollowing_user_name() {
-		return following_user_name;
+	public String getFollowingUserName() {
+		return followingUserName;
 	}
-	public void setFollowing_user_name(String following_user_name) {
-		this.following_user_name = following_user_name;
+	public void setFollowingUserName(String followingUserName) {
+		this.followingUserName = followingUserName;
 	}
 	public Date getTs() {
 		return ts;

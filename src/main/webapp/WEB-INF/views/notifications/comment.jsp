@@ -57,12 +57,12 @@
 								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifier_avatar }" />">
 								    <div class="content">
 								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifier_name }</a>
-								      <c:if test="${notification.object_type eq dic.object_type_post }">
-								      	<div class="description">评论了你的文章:<a href="<c:url value="/post/${notification.object_id }" />" ><b>${notification.object_title }</b></a> ${notification.ts }</div>
+								      <c:if test="${notification.objectType eq dic.object_type_post }">
+								      	<div class="description">评论了你的文章:<a href="<c:url value="/post/${notification.objectId }" />" ><b>${notification.object_title }</b></a> ${notification.ts }</div>
 								      </c:if>
-								      <c:if test="${notification.object_type eq dic.object_type_album }">
+								      <c:if test="${notification.objectType eq dic.object_type_album }">
 								      	<div class="description">评论了你的
-								      		<a href="<c:url value="/album/${notification.object_id }/photos" />" >
+								      		<a href="<c:url value="/album/${notification.objectId }/photos" />" >
 								      			<b>
 								      				<c:if test="${empty notification.object_title}">
 								      					相册
@@ -82,7 +82,7 @@
 								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifier_avatar }" />">
 								    <div class="content">
 								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifier_name }</a>
-								      <div class="description">回复了你在:<a href="<c:url value="/post/${notification.object_id }" />" ><b>${notification.object_title }</b></a> ${notification.ts }</div>
+								      <div class="description">回复了你在:<a href="<c:url value="/post/${notification.objectId }" />" ><b>${notification.object_title }</b></a> ${notification.ts }</div>
 								    </div>
 								  </div>	
 							  </c:if>	

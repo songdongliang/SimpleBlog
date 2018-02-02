@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
@@ -16,15 +15,14 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Event;
-import com.lvwang.osf.model.Post;
-import com.lvwang.osf.model.ShortPost;
+import com.lvwang.osf.pojo.Event;
+import com.lvwang.osf.pojo.Post;
+import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.util.Dic;
 
 @Service("eventIndexService")
@@ -40,15 +38,15 @@ public class EventIndexService implements IndexService<Event>{
 		event.setId(e.getId());
 		event.setTitle(e.getTitle());
 		
-		int object_type = e.getObject_type();
+		int object_type = e.getObjectType();
 		if(Dic.OBJECT_TYPE_POST == object_type){
-			event.setContent(((Post)origin_obj).getPost_content());
+			event.setContent(((Post)origin_obj).getPostContent());
 		} else if(Dic.OBJECT_TYPE_ALBUM == object_type){
 			event.setTitle(((Album)origin_obj).getAlbum_desc());
 			event.setContent(((Album)origin_obj).getAlbum_desc());
 		} else if(Dic.OBJECT_TYPE_SHORTPOST == object_type){
 			event.setTitle("");
-			event.setContent(((ShortPost)origin_obj).getPost_content());
+			event.setContent(((ShortPost)origin_obj).getPostContent());
 		}
 		index(event);
 		

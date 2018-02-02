@@ -21,6 +21,7 @@
 				<value>classpath:property.properties</value>
 				<value>classpath:log4j.properties</value>
 				<value>classpath:httpclient.properties</value>
+				<value>classpath:redis.properties</value>
 			</list>
 		</property>
 	</bean>

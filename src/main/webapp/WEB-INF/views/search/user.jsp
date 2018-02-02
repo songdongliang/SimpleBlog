@@ -65,8 +65,8 @@
 							</div>
 							<div class="content">	
 								<c:forEach items="${feed.value }" var="f">
-									<c:if test="${f.object_type eq dic.object_type_post }">
-									   <a class="box" href="<c:url value="/post/${f.object_id }" />" href="<c:url value="/post/${f.object_id }" />">
+									<c:if test="${f.objectType eq dic.object_type_post }">
+									   <a class="box" href="<c:url value="/post/${f.objectId }" />" href="<c:url value="/post/${f.objectId }" />">
 											<img src="${img_base_url }${f.content }${album_thumbnail}" alt="" />
 											<div class="cover">
 												${f.title }
@@ -74,15 +74,15 @@
 										</a>
 							
 									</c:if>							
-									<c:if test="${f.object_type eq dic.object_type_album }">
-										<a class="box" href="<c:url value="/album/${f.object_id }/photos" />" href="<c:url value="/album/${f.object_id }/photos" />">
+									<c:if test="${f.objectType eq dic.object_type_album }">
+										<a class="box" href="<c:url value="/album/${f.objectId }/photos" />" href="<c:url value="/album/${f.objectId }/photos" />">
 											<img src="${img_base_url }${f.title }${album_thumbnail}" alt="" />
 											<div class="cover">
 												${f.summary }
 											</div>		
 										</a>							
 									</c:if>	
-									<c:if test="${f.object_type eq dic.object_type_shortpost }">
+									<c:if test="${f.objectType eq dic.object_type_shortpost }">
 										<div class="box" >
 											<i class="disabled large quote left icon"></i>
 											${f.summary }

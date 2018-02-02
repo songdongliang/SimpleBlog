@@ -29,7 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lvwang.osf.model.Album;
 import com.lvwang.osf.model.Photo;
 import com.lvwang.osf.model.Tag;
-import com.lvwang.osf.model.User;
+import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.AlbumService;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;

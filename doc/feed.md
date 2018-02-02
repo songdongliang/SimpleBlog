@@ -55,7 +55,7 @@
 
 Feed信息流采用Redis存储，每个用户都会有一个类型是List<Event_ID>的Feed流，保存10页收到的最新Feed
 
-	feeds:user:{user_id}   ------>   List<event_id>
+	feeds:user:{userId}   ------>   List<event_id>
 
 当用户进行之前所述的行为，用户的行为首先会被封装为一个Event事件，然后将Event_ID添加到其Follower的Feed流中
 
