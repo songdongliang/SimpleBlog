@@ -52,23 +52,23 @@
 				  <div class="ui tab  active" data-tab="notread">
 						<div class="ui relaxed list">
 							<c:forEach items="${notis }" var="notification" begin="0" end="9">
-							  <c:if test="${notification.notify_type eq dic.notify_type_like }">
+							  <c:if test="${notification.notifyType eq dic.notify_type_like }">
 								  <div class="item">
-								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifier_avatar }" />">
+								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifierAvatar }" />">
 								    <div class="content">
-								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifier_name }</a>
+								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifierName }</a>
 								      <c:if test="${notification.objectType eq dic.object_type_post }">
-								      	<div class="description">喜欢了你的文章:<a href="<c:url value="/post/${notification.objectId }" />" ><b>${notification.object_title }</b></a> ${notification.ts }</div>
+								      	<div class="description">喜欢了你的文章:<a href="<c:url value="/post/${notification.objectId }" />" ><b>${notification.objectTitle }</b></a> ${notification.ts }</div>
 								      </c:if>
 								      <c:if test="${notification.objectType eq dic.object_type_album }">
 								      	<div class="description">喜欢了你的
 								      		<a href="<c:url value="/album/${notification.objectId }/photos" />" >
 								      			<b>
-								      				<c:if test="${empty notification.object_title}">
+								      				<c:if test="${empty notification.objectTitle}">
 								      					相册
 								      				</c:if>
-								      				<c:if test="${not empty notification.object_title}">
-								      					${notification.object_title }
+								      				<c:if test="${not empty notification.objectTitle}">
+								      					${notification.objectTitle }
 								      				</c:if>								      				
 								      			</b>
 								      		</a> ${notification.ts }

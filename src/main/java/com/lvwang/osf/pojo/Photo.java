@@ -1,18 +1,23 @@
-package com.lvwang.osf.model;
+package com.lvwang.osf.pojo;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public class Photo {
+@Table(name = "osf_photos")
+public class Photo extends BasePojo{
 
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer id;
 	private String key;
-	private int album_id;
+	private int albumId;
 	private Date ts;
 	private String desc;
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getKey() {
@@ -21,11 +26,11 @@ public class Photo {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public int getAlbum_id() {
-		return album_id;
+	public int getAlbumId() {
+		return albumId;
 	}
-	public void setAlbum_id(int album_id) {
-		this.album_id = album_id;
+	public void setAlbumId(int albumId) {
+		this.albumId = albumId;
 	}
 	public String getDesc() {
 		return desc;

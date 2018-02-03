@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lvwang.osf.mappers.TagMapper">
+
+    <select id="getTagID" resultType="int">
+        select id from osf_tags where tag = #{tag}
+    </select>
+
+    <select id="getTagsHasCover" resultType="Tag">
+        select * from osf_tags where cover is not null limit 12
+    </select>
+
+    <select id="getTags" resultType="Tag">
+        select * from osf_tags where FIND_IN_SET(id, #{tagIds})
+    </select>
+
+</mapper>

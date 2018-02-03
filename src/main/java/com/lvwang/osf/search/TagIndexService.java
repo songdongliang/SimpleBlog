@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
@@ -19,7 +18,7 @@ import org.apache.lucene.search.TopDocs;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 
 @Service("tagIndexService")
 public class TagIndexService implements IndexService<Tag>{

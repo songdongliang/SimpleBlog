@@ -3,22 +3,21 @@ package com.lvwang.osf.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.lvwang.osf.mappers.ShortPostMapper;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.impl.ShortPostDAOImpl;
 import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.util.Property;
+
+import javax.annotation.Resource;
 
 @Service("shortPostService")
 public class ShortPostService extends PostService{
 
-	@Autowired
-	@Qualifier("shortPostDao")
-	private ShortPostDAOImpl shortPostDao;
-	
-	public Map<String, Object> newPost(Integer author, String content){		
+	@Resource
+	private ShortPostMapper shortPostMapper;
+
+	public Map<String, Object> newPost(Integer author, String content){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(content == null || content.length() == 0){
 			map.put("status", Property.ERROR_POST_EMPTY);
@@ -35,6 +34,6 @@ public class ShortPostService extends PostService{
 	
 	@Override
 	public long count(int userId){
-		return shortPostDao.count(userId);
+		return shortPostMapper.count(userId);
 	}
 }

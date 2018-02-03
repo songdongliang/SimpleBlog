@@ -1,13 +1,23 @@
-package com.lvwang.osf.model;
-
-import java.util.Date;
+package com.lvwang.osf.pojo;
 
 import com.lvwang.osf.search.Searchable;
 
-public class Tag implements Searchable{
+import java.util.Date;
+
+import javax.persistence.*;
+
+@Table(name = "osf_tags")
+public class Tag extends BasePojo implements Searchable{
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
+
 	private String tag;
-	private Date add_ts;
+
+	private Date addTs;
+
 	private String cover;
 	
 	public Tag() {
@@ -30,11 +40,11 @@ public class Tag implements Searchable{
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	public Date getAdd_ts() {
-		return add_ts;
+	public Date getAddTs() {
+		return addTs;
 	}
-	public void setAdd_ts(Date add_ts) {
-		this.add_ts = add_ts;
+	public void setAddTs(Date addTs) {
+		this.addTs = addTs;
 	}
 	public String getCover() {
 		return cover;

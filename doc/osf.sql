@@ -123,14 +123,14 @@ drop table if EXISTS `osf`.`osf_albums`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_albums` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `userId` INT NOT NULL,
-  `create_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `album_title` TEXT NULL,
-  `album_desc` TEXT NULL COMMENT '描述',
-  `last_add_ts` DATETIME NOT NULL DEFAULT current_timestamp,
-  `photos_count` INT NOT NULL DEFAULT 0,
+  `createTs` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `albumTitle` TEXT NULL,
+  `albumDesc` TEXT NULL COMMENT '描述',
+  `lastAddTs` DATETIME NOT NULL DEFAULT current_timestamp,
+  `photosCount` INT NOT NULL DEFAULT 0,
   `status` INT NOT NULL DEFAULT 0,
   `cover` VARCHAR(45) NULL,
-  `album_tags` TEXT null,
+  `albumTags` TEXT null,
   PRIMARY KEY (`id`),
   INDEX `fk_osf_albums_album_author_idx` (`userId` ASC),
   CONSTRAINT `fk_osf_albums_album_author`
@@ -145,7 +145,7 @@ drop table if EXISTS `osf`.`osf_photos`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_photos` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `key` VARCHAR(45) NOT NULL,
-  `album_id` INT NOT NULL,
+  `albumId` INT NOT NULL,
   `ts` TIMESTAMP NULL DEFAULT current_timestamp,
   `desc` VARCHAR(50) NULL,
   PRIMARY KEY (`id`))
@@ -157,7 +157,7 @@ drop table if EXISTS `osf`.`osf_tags`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_tags` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `tag` VARCHAR(30) NOT NULL,
-  `add_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `addTs` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `cover` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -169,12 +169,12 @@ CREATE TABLE IF NOT EXISTS `osf`.`osf_relations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `objectType` INT NOT NULL,
   `objectId` INT NOT NULL,
-  `tag_id` INT NOT NULL,
-  `add_ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  `tagId` INT NOT NULL,
+  `addTs` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`),
-  INDEX `fk_tag_id_idx` (`tag_id` ASC),
+  INDEX `fk_tag_id_idx` (`tagId` ASC),
   CONSTRAINT `fk_tag_id`
-    FOREIGN KEY (`tag_id`)
+    FOREIGN KEY (`tagId`)
     REFERENCES `osf`.`osf_tags` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -185,11 +185,11 @@ drop table if EXISTS `osf`.`osf_interests` ;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_interests` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `userId` INT NOT NULL,
-  `tag_id` INT NOT NULL,
+  `tagId` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-alter table `osf_interests` add unique(`userId`, `tag_id`);
+alter table `osf_interests` add unique(`userId`, `tagId`);
 
 
 drop table if EXISTS `osf`.`osf_likes`;
@@ -207,11 +207,11 @@ alter table `osf_likes` add unique(`userId`, `objectType`, `objectId`);
 drop table if EXISTS `osf`.`osf_notifications`;
 CREATE TABLE IF NOT EXISTS `osf`.`osf_notifications` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `notify_type` INT NOT NULL,
-  `notify_id` INT NOT NULL,
+  `notifyType` INT NOT NULL,
+  `notifyId` INT NOT NULL,
   `objectType` INT NOT NULL,
   `objectId` INT NOT NULL,
-  `notified_user` INT NOT NULL,
+  `notifiedUser` INT NOT NULL,
   `notifier` INT NOT NULL,
   `ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` INT NOT NULL DEFAULT 0,

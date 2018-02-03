@@ -3,13 +3,13 @@ package com.lvwang.osf.pojo;
 import java.util.Date;
 import java.util.List;
 
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.search.Searchable;
 import com.lvwang.osf.service.TagService;
 
 import javax.persistence.*;
 
 @Table(name = "osf_events")
-public class Event extends BasePojo{
+public class Event extends BasePojo implements Searchable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

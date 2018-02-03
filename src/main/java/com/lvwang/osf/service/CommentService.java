@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lvwang.osf.mappers.CommentMapper;
+import com.lvwang.osf.pojo.User;
 import org.springframework.stereotype.Service;
 
 import com.lvwang.osf.pojo.Comment;
@@ -107,7 +108,15 @@ public class CommentService extends BaseService<Comment>{
 		if(type == null) {
 			return 0;
 		}
-		String count = redisService.get(COUNTER, "comment:" + type + ":" + object_id);
+		String count = redisService.hget(COUNTER, "comment:" + type + ":" + object_id);
 		return count == null ? 0 : Integer.parseInt(count);
+	}
+
+	public User getCommentAuthor(int comment_id){
+		Comment comment = commentMapper.selectByPrimaryKey(comment_id);
+		User user = new User();
+		user.setId(comment.getCommentAuthor());
+		user.setUserName(comment.getCommentAuthorName());
+		return user;
 	}
 }

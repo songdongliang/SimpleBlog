@@ -9,21 +9,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
+import com.github.abel533.entity.Example;
+import com.lvwang.osf.mappers.AlbumMapper;
 import com.lvwang.osf.model.*;
+import com.lvwang.osf.pojo.Album;
+import com.lvwang.osf.pojo.Photo;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lvwang.osf.dao.AlbumDAO;
 import com.lvwang.osf.util.Property;
 
+@Transactional
 @Service("albumService")
-public class AlbumService {
+public class AlbumService extends BaseService<Album> {
 	
 	public static final int ALBUM_STAUS_NORMAL = 0;
     //待发布
@@ -32,9 +39,6 @@ public class AlbumService {
 
 	private static String IMG_BASE_URL = Property.IMG_BASE_URL;
 
-	@Autowired
-	private AlbumDAO albumDao;
-	
 	@Autowired
 	@Qualifier("userService")
 	private UserService userService;
@@ -49,6 +53,11 @@ public class AlbumService {
 
 	@Autowired
     private ApiService apiService;
+	@Resource
+	private PhotoService photoService;
+
+	@Resource
+	private AlbumMapper albumMapper;
 	
 	public String getImgType(MultipartFile img) {
 		String contentType = img.getContentType();
@@ -58,14 +67,13 @@ public class AlbumService {
 	public Map<String, Object> newAlbum(int user_id, String title, String desc, int status, String cover) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Album album = new Album();
-		album.setUser_id(user_id);
-		album.setAlbum_title(title);
-		album.setAlbum_desc(desc);
+		album.setUserId(user_id);
+		album.setAlbumTitle(title);
+		album.setAlbumDesc(desc);
 		album.setStatus(status);
 		album.setCover(cover);
-		int id = albumDao.saveAlbum(album);
-		if(id != 0){
-			album.setId(id);
+		int albumId = super.save(album);
+		if(albumId != 0){
 			map.put("album", album);
 			map.put("status", Property.SUCCESS_ALBUM_CREATE);
 		} else {
@@ -109,7 +117,7 @@ public class AlbumService {
 		Photo details = new Photo();
 		String key = UUID.randomUUID().toString()+"."+getImgType(img);
 		details.setKey(key);
-		details.setAlbum_id(album_id);
+		details.setAlbumId(album_id);
 		details.setDesc(desc);
 //		String etag = albumDao.uploadPhoto(img, details);
         String etag = "";
@@ -119,20 +127,20 @@ public class AlbumService {
 		} else {		
 			map.put("status", Property.SUCCESS_PHOTO_CREATE);			
 		}
-		int photo_id = albumDao.savePhoto(details);
-		if(photo_id == 0) {
+		int photoId = photoService.save(details);
+		if(photoId == 0) {
 			map.put("status", Property.ERROR_PHOTO_CREATE);
 			return map;
 		} 
-		details.setId(photo_id);
+		details.setId(photoId);
 		map.put("photo", details);		
 		return map;
 	}
 	
 	public List<Tag> newPhotos(Album album) {
 		//save tag
-		Map<String, Object> tagsmap = tagService.newTags(album.getAlbum_tags_list());
-		album.setAlbum_tags_list((List<Tag>)tagsmap.get("tags"));
+		Map<String, Object> tagsmap = tagService.newTags(album.getAlbumTagsList());
+		album.setAlbumTagsList((List<Tag>)tagsmap.get("tags"));
 		
 		updateAlbumInfo(album);
 		
@@ -146,8 +154,8 @@ public class AlbumService {
 		}
 		List<Photo> photos = album.getPhotos();
 		for(Photo photo : photos) {
-			photo.setAlbum_id(album.getId());
-			photo.setId(albumDao.savePhoto(photo));
+			photo.setAlbumId(album.getId());
+			photo.setId(photoService.save(photo));
 		}
 		
 		return (List<Tag>)tagsmap.get("tags");
@@ -156,52 +164,59 @@ public class AlbumService {
 	
 	
 	public String checkUserOfAlbum(int album_id, int user_id) {
-		int id = albumDao.getAlbumUser(album_id);
+		int id = albumMapper.getAlbumUser(album_id);
 		if(id != user_id) {
 			return Property.ERROR_ALBUM_PERMISSIONDENIED;
 		} else {
 			return Property.SUCCESS_ALBUM_ALLOWED;
 		}
 	}
-	
-	//获取用户的待发布相册
-	public Integer getToBeReleasedAlbum(int user_id) {
-		return albumDao.getAlbumID(user_id, ALBUM_STAUS_TOBERELEASED);
+
+	/**
+	 * 获取用户的待发布相册
+	 */
+	public Integer getToBeReleasedAlbum(int userId) {
+		return albumMapper.getAlbumID(userId, ALBUM_STAUS_TOBERELEASED);
+	}
+
+	public List<Photo> getPhotosOfAlbum(int albumId) {
+		return photoService.getPhotos(albumId);
 	}
 	
-	
-	public List<Photo> getPhotosOfAlbum(int album_id) {
-		return albumDao.getPhotos(album_id);
-	}
-	
-	public String updateAlbumDesc(int album_id, String album_desc) {
-		int effRows = albumDao.updateAlbumDesc(album_id, album_desc, ALBUM_STAUS_NORMAL);
-		if(effRows==1) {
-			return Property.SUCCESS_ALBUM_UPDATE;
-		} else {
-			return Property.ERROR_ALBUM_UPDDESC;
-		}
-	}
+//	public String updateAlbumDesc(int albumId, String album_desc) {
+//		int effRows = albumDao.updateAlbumDesc(albumId, album_desc, ALBUM_STAUS_NORMAL);
+//		if(effRows==1) {
+//			return Property.SUCCESS_ALBUM_UPDATE;
+//		} else {
+//			return Property.ERROR_ALBUM_UPDDESC;
+//		}
+//	}
 	
 	public String updatePhotoDesc(List<Photo> photos) {
 		for(Photo photo: photos) {
-			albumDao.updatePhotoDesc(photo.getId(), photo.getDesc());
+			photoService.updatePhotoDesc(photo.getId(), photo.getDesc());
 		}
 		return Property.SUCCESS_ALBUM_UPDATE;
 	}
 	
 	public String updateAlbumCover(int album_id, String cover) {
-		int effRows = albumDao.updateAlbumCover(album_id, cover);
-		if(effRows==1) {
+		Album album = new Album();
+		album.setId(album_id);
+		album.setCover(cover);
+		int effRows = super.updateSelective(album);
+		if(effRows == 1) {
 			return Property.SUCCESS_ALBUM_UPDATE;
 		} else {
 			return Property.ERROR_ALBUM_UPDCOVER;
 		}
 	}
 	
-	public String updatePhotosCount(int album_id, int count) {
-		int effRows = albumDao.updatePhotosCount(album_id, count);
-		if(effRows==1) {
+	public String updatePhotosCount(Integer albumId, Integer count) {
+		Album album = new Album();
+		album.setId(albumId);
+		album.setPhotosCount(count);
+		int effRows = super.updateSelective(album);
+		if(effRows == 1) {
 			return Property.SUCCESS_ALBUM_UPDATE;
 		} else {
 			return Property.ERROR_ALBUM_UPDCOVER;
@@ -209,16 +224,14 @@ public class AlbumService {
 	}
 	
 	public String updateAlbumInfo(Album album) {
-		albumDao.updateAlbumInfo(album);
+		super.updateSelective(album);
 		return Property.SUCCESS_ALBUM_UPDATE; 
 	}
 	
 	public List<Tag> updateAlbum(Album album) {
-		
-		
 		//save tag
-		Map<String, Object> tagsmap = tagService.newTags(album.getAlbum_tags_list());
-		album.setAlbum_tags_list((List<Tag>)tagsmap.get("tags"));
+		Map<String, Object> tagsmap = tagService.newTags(album.getAlbumTagsList());
+		album.setAlbumTagsList((List<Tag>)tagsmap.get("tags"));
 		
 		updateAlbumInfo(album);
 		updatePhotoDesc(album.getPhotos());
@@ -234,30 +247,32 @@ public class AlbumService {
 		return (List<Tag>)tagsmap.get("tags");
 	}
 	
-	public List<Album> getAlbumsOfUser(int id) {
-		return albumDao.getAlbumsOfUser(id);
+	public List<Album> getAlbumsOfUser(int userId) {
+		Example example = new Example(Album.class);
+		example.createCriteria().andEqualTo("user_id", userId);
+		return albumMapper.selectByExample(example);
 	}
 	
 	public Album getAlbum(int id) {
-		Album album = albumDao.getAlbum(id);
+		Album album = super.queryById(id);
 		List<Photo> photos = getPhotosOfAlbum(id);
 		album.setPhotos(photos);
 		return album;
 	}
 	
 	public String getKeyofPhoto(int id) {
-		return albumDao.getKey(id);
+		return photoService.getKey(id);
 	}
 	
 	public User getAuthorOfALbum(int id) {
-		int user_id = albumDao.getAuthorOfAlbum(id);
-		return userService.findById(user_id);
+		int userId = albumMapper.getAuthorOfAlbum(id);
+		return userService.findById(userId);
 	}
 	public User getAuthorOfPhoto(int id){
-		Album album = albumDao.getAlbumContainPhoto(id);
+		Album album = albumMapper.getAlbumContainPhoto(id);
 		User user = new User();
 		if(album != null){
-			user.setId(album.getUser_id());
+			user.setId(album.getUserId());
 		}
 		return user;
 	}
@@ -274,9 +289,6 @@ public class AlbumService {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ImageIO.write(croped_img, img_type, bos);  
 			
-			albumDao.delPhotoInBucket(key);
-			
-			String new_key = UUID.randomUUID().toString() + "." + img_type;
 			HttpResult httpResult = apiService.upload(Property.UPLOAD_URL,bos.toByteArray(),key);
 			if( httpResult.getCode() != null && httpResult.getCode() == 200){
 				if(ori_img.exists()){
@@ -294,7 +306,7 @@ public class AlbumService {
 	}
 	
 	public void deletePhoto(int id){
-		albumDao.delPhoto(id);
+		photoService.deleteById(id);
 	}
 
 }

@@ -52,11 +52,11 @@
 				  <div class="ui tab  active" data-tab="notread">
 						<div class="ui relaxed list">
 							<c:forEach items="${notis }" var="notification" begin="0" end="9">
-							  <c:if test="${notification.notify_type eq dic.notify_type_follow }">
+							  <c:if test="${notification.notifyType eq dic.notify_type_follow }">
 								  <div class="item">
-								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifier_avatar }" />">
+								    <img class="ui avatar image" src="<c:url value="${img_base_url }${notification.notifierAvatar }" />">
 								    <div class="content">
-								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifier_name }</a>
+								      <a class="header" href="<c:url value="/user/${notification.notifier }" /> ">${notification.notifierName }</a>
 								      	<div class="description">关注了你 ${notification.ts }</div>
 								    </div>
 								  </div>	

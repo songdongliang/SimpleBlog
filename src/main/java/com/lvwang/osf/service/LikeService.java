@@ -2,57 +2,79 @@ package com.lvwang.osf.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.github.abel533.entity.Example;
+import com.lvwang.osf.mappers.LikeMapper;
+import com.lvwang.osf.pojo.Like;
+import com.lvwang.osf.util.Dic;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.LikeDAO;
+import javax.annotation.Resource;
 
 @Service("likeService")
-public class LikeService {
+public class LikeService extends BaseService<Like> {
+
+	/**
+	 * 缓存喜欢object的用户id
+	 */
+	private static final String LIKE_ = "LIKE_";
+
+	@Resource
+	private LikeMapper likeMapper;
+
+	@Resource
+	private RedisService redisService;
 	
-	@Autowired
-	@Qualifier("likeDao")
-	private LikeDAO likeDao;
-	
-	
-	public void like(int user_id, int object_type, int object_id){
-		likeDao.like(user_id, object_type, object_id);
+	public void like(int userId, int objectType, int objectId){
+		Like like = new Like();
+		like.setUserId(userId);
+		like.setObjectId(objectId);
+		like.setObjectType(objectType);
+		super.save(like);
+		redisService.sadd(LIKE_ + Dic.checkType(objectType) + "_" + objectId,String.valueOf(userId));
 	}
 	
-	public void undoLike(int user_id, int object_type, int object_id){
-		likeDao.undoLike(user_id, object_type, object_id);
+	public void undoLike(int userId, int objectType, int objectId){
+		Example example = new Example(Like.class);
+		example.createCriteria()
+				.andEqualTo("userId", userId)
+				.andEqualTo("objectType", objectType)
+				.andEqualTo("objectId", objectId);
+		likeMapper.deleteByExample(example);
+		redisService.srem(LIKE_ + Dic.checkType(objectType) + "_" + objectId,String.valueOf(userId));
 	}
 	
 	/**
 	 * 判断用户是否喜欢某个对象
-	 * @param user_id
-	 * @param object_type
-	 * @param object_id
-	 * @return
 	 */
-	public boolean isLike(int user_id, int object_type, int object_id) {
-		return likeDao.isLike(user_id, object_type, object_id);
+	public boolean isLike(int userId, int objectType, int objectId) {
+		return redisService.sismember(LIKE_ + Dic.checkType(objectType) + "_" + objectId,String.valueOf(userId));
 	}
 	
 	/**
 	 * 返回喜欢某个对象的用户数量
-	 * @param object_type
-	 * @param object_id
+	 * @param objectType
+	 * @param objectId
 	 * @return
 	 */
-	public long likersCount(int object_type, int object_id) {
-		return likeDao.likersCount(object_type, object_id);
+	public long likersCount(int objectType, int objectId) {
+		return redisService.strlen(LIKE_ + Dic.checkType(objectType) + "_" + objectId);
 	}
 	
 	/**
 	 * 返回喜欢某个对象的用户ID列表
-	 * @param object_type
-	 * @param object_id
-	 * @return
 	 */
-	public List<Integer> likers(int object_type, int object_id){
-		return likeDao.getLikers(object_type, object_id);
+	public List<Integer> likers(int objectType, int objectId){
+		final String key = LIKE_ + Dic.checkType(objectType) + "_" + objectId;
+		List<Integer> likers = null;
+		if( redisService.smembers(key) == null ){
+			likers = likeMapper.getLikers(objectType, objectId);
+			String[] members = new String[likers.size()];
+			for (int i = 0;i < likers.size();i++) {
+				members[i] = String.valueOf(likers.get(i));
+			}
+			redisService.sadd(key,members);
+		}
+		return likers;
 	}
 	
 	/**

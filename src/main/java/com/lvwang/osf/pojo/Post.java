@@ -1,10 +1,6 @@
 package com.lvwang.osf.pojo;
 
-import com.github.abel533.mapper.BaseMapper;
-import com.lvwang.osf.model.Tag;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 

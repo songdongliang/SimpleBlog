@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class RedisService {
 
@@ -29,7 +32,7 @@ public class RedisService {
      * @param value
      * @return
      */
-    public String set(final String key, final String value){
+    public String hset(final String key, final String value){
         return this.execute(new Function<String, ShardedJedis>() {
             @Override
             public String callBack(ShardedJedis shardedJedis) {
@@ -44,7 +47,7 @@ public class RedisService {
      * @param key
      * @return
      */
-    public String get(final String key){
+    public String hget(final String key){
         return this.execute(new Function<String, ShardedJedis>() {
             @Override
             public String callBack(ShardedJedis shardedJedis) {
@@ -92,7 +95,7 @@ public class RedisService {
      * @param seconds
      * @return
      */
-    public String set(final String key, final String value, final Integer seconds) {
+    public String hset(final String key, final String value, final Integer seconds) {
         return this.execute(new Function<String, ShardedJedis>() {
             @Override
             public String callBack(ShardedJedis e) {
@@ -118,7 +121,7 @@ public class RedisService {
         });
     }
 
-    public Long set(final String hKey, final String field, final String value) {
+    public Long hset(final String hKey, final String field, final String value) {
         return this.execute(new Function<Long, ShardedJedis>() {
             @Override
             public Long callBack(ShardedJedis shardedJedis) {
@@ -127,11 +130,101 @@ public class RedisService {
         });
     }
 
-    public String get(final String hKey, final String field) {
+    public String hget(final String hKey, final String field) {
         return this.execute(new Function<String, ShardedJedis>() {
             @Override
             public String callBack(ShardedJedis shardedJedis) {
                 return shardedJedis.hget(hKey, field);
+            }
+        });
+    }
+
+    public Long sadd(final String key, final String...members) {
+        return this.execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.sadd(key, members);
+            }
+        });
+    }
+
+    public Set<String> smembers(final String key) {
+        return this.execute(new Function<Set<String>, ShardedJedis>() {
+            @Override
+            public Set<String> callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.smembers(key);
+            }
+        });
+    }
+
+    public Boolean sismember(final String key, final String member) {
+        return this.execute(new Function<Boolean, ShardedJedis>() {
+            @Override
+            public Boolean callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.sismember(key, member);
+            }
+        });
+    }
+
+    public Long srem(final String key, final String...members) {
+        return execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.srem(key,members);
+            }
+        });
+    }
+
+    public Long strlen(final String key) {
+        return execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.strlen(key);
+            }
+        });
+    }
+
+    public Set<String> hkeys(final String key) {
+        return execute(new Function<Set<String>, ShardedJedis>() {
+            @Override
+            public Set<String> callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.hkeys(key);
+            }
+        });
+    }
+
+    public Long lpush(final String key, final String...values) {
+        return execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.lpush(key, values);
+            }
+        });
+    }
+
+    public List<String> lrange(final String key, final int start, final int end) {
+        return execute(new Function<List<String>, ShardedJedis>() {
+            @Override
+            public List<String> callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.lrange(key,start,end);
+            }
+        });
+    }
+
+    public Long llen(final String key) {
+        return execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.llen(key);
+            }
+        });
+    }
+
+    public Long lrem(final String key, final int count, final String value) {
+        return execute(new Function<Long, ShardedJedis>() {
+            @Override
+            public Long callBack(ShardedJedis shardedJedis) {
+                return shardedJedis.lrem(key,count,value);
             }
         });
     }

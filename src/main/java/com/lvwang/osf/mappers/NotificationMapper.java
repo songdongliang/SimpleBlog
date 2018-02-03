@@ -1,27 +1,19 @@
 package com.lvwang.osf.mappers;
 
-import com.lvwang.osf.dao.NotificationDAO;
-import com.lvwang.osf.model.Notification;
+import com.github.abel533.mapper.Mapper;
+import com.lvwang.osf.pojo.Notification;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
-public interface NotificationMapper {
-    int save(Notification notification);
+public interface NotificationMapper extends Mapper<Notification>{
 
-    void delete(int id);
+    List<Notification> getNotificationsOfType(int userId, int notifyType);
 
-    Notification get(int notification_id);
+    List<Notification> getNotificationsOfTypes(int userId, @Param("notify_types")List<Integer> notifyTypes);
 
-    List<Notification> getAllOfUser(int user_id);
+    List<Map<String, Number>> getNotificationsCount(int userId);
 
-    List<Notification> getNotificationsOfType(int user_id, int notify_type);
-
-    List<Notification> getNotificationsOfTypes(int user_id, @Param("notify_types")List<Integer> notify_types);
-
-    List<Map<String, Number>> getNotificationsCount(int user_id);
-
-    void refreshNotification(Notification notification);
 }
 

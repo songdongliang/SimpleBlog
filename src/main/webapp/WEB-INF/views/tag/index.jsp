@@ -45,12 +45,12 @@
 				  		${tag }
 				  	</div>
 				  	<c:if test="${isInterest }">
-				  		<div class="ui mini basic button interest" tag_id="${id }">
+				  		<div class="ui mini basic button interest" tagId="${id }">
 				  			 已关注
 				  		</div>
 				  	</c:if>
 				  	<c:if test="${!isInterest }">
-				  		<div class="ui mini inverted yellow button interest" tag_id="${id }">
+				  		<div class="ui mini inverted yellow button interest" tagId="${id }">
 				  			+关注
 				  		</div>
 				  	</c:if>

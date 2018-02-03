@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.pojo.Post;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Dic;
 import com.lvwang.osf.util.Property;

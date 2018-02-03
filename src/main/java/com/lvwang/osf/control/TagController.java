@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.FeedService;
 import com.lvwang.osf.service.InterestService;

@@ -1,8 +1,11 @@
 package com.lvwang.osf.mappers;
 
-import com.github.abel533.mapper.BaseMapper;
+import com.github.abel533.mapper.Mapper;
 import com.lvwang.osf.pojo.Follower;
 
-public interface FollowerMapper extends BaseMapper<Follower>{
+import java.util.List;
 
+public interface FollowerMapper extends Mapper<Follower> {
+
+    List<Follower> getFollowers(int user_id);
 }

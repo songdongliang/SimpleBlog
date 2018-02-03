@@ -4,25 +4,22 @@
      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lvwang.osf.mappers.NotificationMapper">
-	<insert id="save" parameterType="com.lvwang.osf.model.Notification" useGeneratedKeys="true" keyProperty="id">
-		 insert into osf_notifications (notify_type,notify_id, objectType, objectId, notified_user, notifier)
-		 values(#{notify_type},#{notify_id}, #{objectType}, #{objectId}, #{notified_user}, #{notifier})
-	</insert>
-	<select id="getNotificationsOfType" resultType="com.lvwang.osf.model.Notification">
-		 select * from osf_notifications where notified_user=#{param1} and notify_type=#{param2} order by ts desc
+
+	<select id="getNotificationsOfType" resultType="com.lvwang.osf.pojo.Notification">
+		 select * from osf_notifications where notifiedUser = #{param1} and notifyType = #{param2} order by ts desc
 	</select>
-	<select id="getNotificationsOfTypes" resultType="com.lvwang.osf.model.Notification">
-		 select * from osf_notifications where notified_user= #{param1} 
-		 and notify_type in 
-		 <foreach item="notify_type" collection="notify_types" open="(" separator="," close=")">
-		 	#{notify_type}
+	<select id="getNotificationsOfTypes" resultType="com.lvwang.osf.pojo.Notification">
+		 select * from osf_notifications where notifiedUser= #{param1}
+		 and notifyType in
+		 <foreach item="notifyType" collection="notifyTypes" open="(" separator="," close=")">
+		 	#{notifyType}
 		 </foreach>
 		 order by ts desc
 	</select>
 	
 	<select id="getNotificationsCount" resultType="java.util.Map" parameterType="int">
-		 select notify_type,count(*) `count	` from
-		 osf_notifications where notified_user = #{userId} group by notify_type
+		 select notifyType,count(*) `count	` from
+		 osf_notifications where notifiedUser = #{userId} group by notifyType
 	</select>
 
 </mapper>

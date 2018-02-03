@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;
@@ -112,7 +112,7 @@ public class HomePage {
 		}
 		
 		mav.setViewName("welcome");
-		List<Tag> tags_recommend = tagService.getRecommendTags(0);
+		List<Tag> tags_recommend = tagService.getRecommendTags();
 		mav.addObject("tags", tags_recommend);
 		mav.addObject("dic", new Dic());
 		return mav;
@@ -131,7 +131,7 @@ public class HomePage {
 		mav.addObject("isFollowings", followService.isFollowing(user==null?0:user.getId(), rec_users));
 		mav.addObject("popusers", rec_users);
 				
-		List<Tag> tags_recommend = tagService.getRecommendTags(user==null?0:user.getId());
+		List<Tag> tags_recommend = tagService.getRecommendTags();
 		mav.addObject("poptags", tags_recommend);
 		
 		return mav;
@@ -144,7 +144,7 @@ public class HomePage {
 		
 		User user = (User) session.getAttribute("user");
 		
-		List<Tag> tags_recommend = tagService.getRecommendTags(user==null?0:user.getId());
+		List<Tag> tags_recommend = tagService.getRecommendTags();
 		mav.addObject("tags", tags_recommend);
 		mav.addObject("isInterests", interestService.hasInterestInTags(user==null?0:user.getId(), tags_recommend));
 		

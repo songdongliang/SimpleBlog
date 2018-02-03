@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lvwang.osf.pojo.Comment;
-import com.lvwang.osf.model.Notification;
+import com.lvwang.osf.pojo.Notification;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.CommentService;
 import com.lvwang.osf.service.NotificationService;
@@ -88,8 +88,8 @@ public class CommentAPI {
 		
 		if(comment.getCommentParent()!=0) {
 			//reply notification
-			notification.setNotify_type(Dic.NOTIFY_TYPE_COMMENT_REPLY);
-			notification.setNotified_user(comment_parent_author.getId());
+			notification.setNotifyType(Dic.NOTIFY_TYPE_COMMENT_REPLY);
+			notification.setNotifiedUser(comment_parent_author.getId());
 			notificationService.doNotify(notification);
 		} else {
 			//comment notification

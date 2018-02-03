@@ -5,19 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lvwang.osf.mappers.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lvwang.osf.dao.TagDAO;
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.search.TagIndexService;
 import com.lvwang.osf.util.Property;
 
+import javax.annotation.Resource;
+
 @Service("tagService")
-public class TagService {
+public class TagService extends BaseService<Tag> {
 	
 	@Autowired
 	@Qualifier("eventService")
@@ -34,10 +36,9 @@ public class TagService {
 	@Autowired
 	@Qualifier("tagIndexService")
 	private TagIndexService tagIndexService;
-	
-	@Autowired
-	@Qualifier("tagDao")
-	private TagDAO tagDao;
+
+	@Resource
+    private TagMapper tagMapper;
 	
 	private String check(String tag) {
 		if(tag == null || tag.length() == 0) {
@@ -47,34 +48,24 @@ public class TagService {
 	}
 	
 	public static List<Tag> toList(String tags) {
-		if(tags == null || tags.length() == 0)
-			return new ArrayList<Tag>();
-		String[] tag_and_id_strs = tags.split(" ");
-		List<Tag> tag_list = new ArrayList<Tag>();
-		for(String tag : tag_and_id_strs) {
-			String[] tag_and_id = tag.split(":");
+		if(tags == null || tags.length() == 0) {
+            return new ArrayList<Tag>();
+        }
+		String[] tagAndIdStrs = tags.split(" ");
+		List<Tag> tagList = new ArrayList<Tag>();
+		for(String tag : tagAndIdStrs) {
+			String[] tagAndId = tag.split(":");
 			Tag t = new Tag();
-			if(tag_and_id.length > 1) {
+			if(tagAndId.length > 1) {
 				t.setId(Integer.valueOf(tag.split(":")[1]) );
 			}
 			t.setTag(tag.split(":")[0]);
 			
-			tag_list.add(t);
+			tagList.add(t);
 		}
 		
-		return tag_list;
+		return tagList;
 	}
-	
-	
-//	public static String toString(List<String> tags) {
-//		if(tags == null || tags.size() == 0)
-//			return null;
-//		StringBuffer buffer = new StringBuffer();
-//		for(String tag: tags) {
-//			buffer.append(tag+" ");
-//		}
-//		return buffer.toString();
-//	}
 
 	public static String toString(List<Tag> tags) {
 		if(tags == null || tags.size() == 0)
@@ -94,7 +85,7 @@ public class TagService {
 			return ret;
 		}
 		
-		int id = tagDao.getTagID(tag);
+		int id = tagMapper.getTagID(tag);
 		if(id != 0) {
 			Tag tg = new Tag();
 			tg.setId(id);
@@ -103,12 +94,10 @@ public class TagService {
 			return ret;
 		}
 		
-		id = tagDao.save(new Tag(tag));
-		if(id != 0) {
-			Tag tg = new Tag();
-			tg.setId(id);
-			tg.setTag(tag);
-			ret.put("tag", tg);
+		Tag newTag = new Tag(tag);
+		int newTagId = super.save(newTag);
+		if(newTagId != 0) {
+			ret.put("tag", newTag);
 		}
 		return ret;
 	}
@@ -131,7 +120,7 @@ public class TagService {
 				return ret;
 			}
 			
-			Integer id = tagDao.getTagID(tag.getTag());
+			Integer id = tagMapper.getTagID(tag.getTag());
 			if(id != null) {
 				Tag tg = new Tag();				
 				tg.setId(id);
@@ -140,14 +129,11 @@ public class TagService {
 				continue;
 			}
 						
-			id = tagDao.save(tag);
-			if(id != null) {
-				Tag tg = new Tag();	
-				tg.setId(id);
-				tg.setTag(tag.getTag());
-				taglist.add(tg);
+			Integer newTagId = super.save(tag);
+			if(newTagId != null && newTagId != 0) {
+				taglist.add(tag);
 				//index tag
-				tagIndexService.add(tg);
+				tagIndexService.add(tag);
 			}
 		}
 		ret.put("status", Property.SUCCESS_TAG_CREATE);
@@ -155,7 +141,7 @@ public class TagService {
 	}
 	
 	public int getID(String tag){
-		return tagDao.getTagID(tag);
+		return tagMapper.getTagID(tag);
 	}
 	
 	public List<Tag> searchTag(String term) {
@@ -179,23 +165,22 @@ public class TagService {
 	/**
 	 * 获取推荐tag
 	 * 简单实现，获取有cover的tag
-	 * @param user_id
 	 * @return
 	 */
-	public List<Tag> getRecommendTags(int user_id){
-
-		return tagDao.getTagsHasCover();
+	public List<Tag> getRecommendTags(){
+		return tagMapper.getTagsHasCover();
 	}
 	
 	public Tag getTagByID(int id) {
-		return tagDao.getTagByID(id);
+		return super.queryById(id);
 	}
 	
-	public List<Tag> getTagsByIDs(List<Integer> ids) {
-		List<String> ids_str = new ArrayList<String>();
-		for(int i=0; i<ids.size(); i++) {
-			ids_str.add(String.valueOf(ids.get(i)));
+	private List<Tag> getTagsByIDs(List<Integer> ids) {
+		List<String> idsStr = new ArrayList<>();
+		for(int i = 0; i < ids.size(); i++) {
+			idsStr.add(String.valueOf(ids.get(i)));
 		}
-		return tagDao.getTags(ids_str);
+		return tagMapper.getTags(idsStr);
 	}
+
 }

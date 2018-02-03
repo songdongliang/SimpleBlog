@@ -56,12 +56,12 @@
 							<div class="header">
 								<div class="tag"><a href="<c:url value="/tag/${tag.id }" />">#${tag.tag }</a></div>
 								<c:if test="${!isInterests[tag.id] }">
-							  		<div class="ui mini inverted yellow button interest" tag_id="${tag.id }">
+							  		<div class="ui mini inverted yellow button interest" tagId="${tag.id }">
 							  			+关注
 							  		</div>
 								</c:if>		
 								<c:if test="${isInterests[tag.id] }">
-							  		<div class="ui mini basic button interest" tag_id="${tag.id }">
+							  		<div class="ui mini basic button interest" tagId="${tag.id }">
 							  			 已关注
 							  		</div>
 								</c:if>							

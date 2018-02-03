@@ -93,7 +93,7 @@ public class UserService extends BaseService<User> {
 	public String newToken(User user) {
 		String token = UUID.randomUUID().toString();
 		String key = TOKEN_ + token;
-		redisService.set(key, JSON.toJSONString(user));
+		redisService.hset(key, JSON.toJSONString(user));
 		return key;
 	}
 	
@@ -111,7 +111,7 @@ public class UserService extends BaseService<User> {
      * @return
      */
 	public User findUserByToken(String token) {
-	    String jsonUser = redisService.get(token);
+	    String jsonUser = redisService.hget(token);
 		return JSON.parseObject(jsonUser,User.class);
 	}
 	
@@ -425,7 +425,7 @@ public class UserService extends BaseService<User> {
 		user.setUserDesc(desc);
 		userMapper.updateByPrimaryKeySelective(user);
 		//刷新缓存
-		redisService.set(USER_ID_ + id, JSON.toJSONString(user),30 * 60);
+		redisService.hset(USER_ID_ + id, JSON.toJSONString(user),30 * 60);
 	}
 	
 	/**

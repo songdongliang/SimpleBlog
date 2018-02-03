@@ -81,7 +81,7 @@
 					
 						<div class="field">
 							<label>描述:</label>
-							<textarea rows="" cols="" id="album_desc"></textarea>
+							<textarea rows="" cols="" id="albumDesc"></textarea>
 						</div>
 						
 					</div>

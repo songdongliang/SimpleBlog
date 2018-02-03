@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.EventService;
 import com.lvwang.osf.service.FeedService;
@@ -66,7 +66,7 @@ public class ExploreController {
 		
 		mav.addObject("events", feedService.getRecommendFeeds(user==null?0:user.getId()));
 		
-		List<Tag> tags_recommend = tagService.getRecommendTags(user==null?0:user.getId());
+		List<Tag> tags_recommend = tagService.getRecommendTags();
 		mav.addObject("tags", tags_recommend);
 		mav.addObject("isInterests", interestService.hasInterestInTags(user==null?0:user.getId(), tags_recommend));
 		

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lvwang.osf.model.Notification;
+import com.lvwang.osf.pojo.Notification;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.InterestService;
 import com.lvwang.osf.service.LikeService;

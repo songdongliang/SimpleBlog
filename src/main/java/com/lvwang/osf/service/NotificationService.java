@@ -1,26 +1,25 @@
 package com.lvwang.osf.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lvwang.osf.mappers.NotificationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.impl.NotificationDAOImpl;
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Notification;
+import com.lvwang.osf.pojo.Notification;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Dic;
 
 @Service("notificationService")
-public class NotificationService {
-	
-	@Autowired
-	@Qualifier("notificationDao")
-	private NotificationDAOImpl notificationDao;
-	
+public class NotificationService extends BaseService<Notification> {
+
+	private static final String NOTIFY_KEY = "NOTIFICATION_";
+
 	@Autowired
 	@Qualifier("userService")
 	private UserService userService;
@@ -28,63 +27,98 @@ public class NotificationService {
 	@Autowired
 	@Qualifier("eventService")
 	private EventService eventService;
+	@Autowired
+	private RedisService redisService;
+
+	@Autowired
+	private NotificationMapper notificationMapper;
 	
 	/**
 	 * save notification
-	 * 
 	 * @param notification
 	 * @return notification id
 	 */
 	public int doNotify(Notification notification){
-		int id = notificationDao.save(notification);
-		//refreshNotifications(notification.getNotified_user());
+		int id = super.save(notification);
 		refreshNotification(notification);
 		return id;
 	}
 	
-	public Map<String, Long> getNotificationsCount(int user_id){
-		Map<String, Long> notifications = notificationDao.getNotificationsCount(user_id);
+	public Map<String, Long> getNotificationsCount(int userId){
+		final Map<String, Long> notifications = new HashMap<>();
+		if (!redisService.containsKey(NOTIFY_KEY + userId)){
+			initNotification(notifications);
+			refreshNotifications(userId, notifications);
+		} else{
+			for(String key: redisService.hkeys(NOTIFY_KEY + userId)){
+				notifications.put(key, Long.parseLong(redisService.hget(NOTIFY_KEY + userId, key)));
+			}
+		}
 		return notifications;
+	}
+
+	private void refreshNotifications(int userId, Map<String, Long> notifications){
+		List<Map<String, Number>> notificationsCount = notificationMapper.getNotificationsCount(userId);
+		if(notificationsCount != null && notificationsCount.size() != 0) {
+			for(Map<String, Number> notifyTypeCount: notificationsCount) {
+				notifications.put(Dic.toNotifyTypeDesc((Integer)notifyTypeCount.get("notifyType")), (Long)notifyTypeCount.get("count"));
+			}
+		}
+		for (Map.Entry<String,Long> entry : notifications.entrySet()) {
+			redisService.hset(NOTIFY_KEY + userId,entry.getKey(),String.valueOf(entry.getValue()));
+		}
+	}
+
+	private void initNotification(Map<String, Long> notifications){
+		notifications.put("comment", 0L);
+		notifications.put("comment_reply", 0L);
+		notifications.put("follow", 0L);
+		notifications.put("like", 0L);
+		notifications.put("system", 0L);
 	}
 	
 	public void refreshNotification(Notification notification){
-		notificationDao.refreshNotification(notification);
+		String count = redisService.hget(NOTIFY_KEY + notification.getNotifiedUser()
+				, Dic.toNotifyTypeDesc(notification.getNotifyType()));
+		redisService.hset(NOTIFY_KEY + notification.getNotifiedUser()
+				, Dic.toNotifyTypeDesc(notification.getNotifyType())
+				, String.valueOf(Long.parseLong(count) + 1));
 	}
 	
-	public List<Notification> getNotifications(int user_id, int notify_type){
+	public List<Notification> getNotifications(int userId, int notifyType){
 		
 		List<Notification> notifications  = null;
 		
-		if(notify_type == Dic.NOTIFY_TYPE_COMMENT) {
-			//notifications = notificationDao.getNotificationsOfTypes(user_id, Dic.NOTIFY_TYPE_COMMENT,Dic.NOTIFY_TYPE_COMMENT_REPLY);
-			notifications = notificationDao.getNotificationsOfTypes(user_id, Arrays.asList(Dic.NOTIFY_TYPE_COMMENT,Dic.NOTIFY_TYPE_COMMENT_REPLY));
+		if(notifyType == Dic.NOTIFY_TYPE_COMMENT) {
+			notifications = notificationMapper.getNotificationsOfTypes(userId
+					, Arrays.asList(Dic.NOTIFY_TYPE_COMMENT,Dic.NOTIFY_TYPE_COMMENT_REPLY));
 		} else {
-			notifications = notificationDao.getNotificationsOfType(user_id, notify_type);
+			notifications = notificationMapper.getNotificationsOfType(userId, notifyType);
 		}
 		
 		if(notifications != null) {
 			for(Notification notification : notifications){
 				User user = userService.findById(notification.getNotifier());
-				notification.setNotifier_name(user.getUserName());
-				notification.setNotifier_avatar(user.getUserAvatar());
+				notification.setNotifierName(user.getUserName());
+				notification.setNotifierAvatar(user.getUserAvatar());
 				
-				Event event = eventService.getEvent(notification.getObject_type(), notification.getObject_id());
+				Event event = eventService.getEvent(notification.getObjectType(), notification.getObjectId());
 				
-				String object_title = null;
-				if(Dic.OBJECT_TYPE_POST == notification.getObject_type()) {
-					object_title = event.getTitle();
-				} else if(Dic.OBJECT_TYPE_ALBUM == notification.getObject_type()){
-					object_title = event.getSummary();
-				} else if(Dic.OBJECT_TYPE_SHORTPOST == notification.getObject_type()) {
-					object_title = event.getSummary();
+				String objectTitle = null;
+				if(Dic.OBJECT_TYPE_POST == notification.getObjectType()) {
+					objectTitle = event.getTitle();
+				} else if(Dic.OBJECT_TYPE_ALBUM == notification.getObjectType()){
+					objectTitle = event.getSummary();
+				} else if(Dic.OBJECT_TYPE_SHORTPOST == notification.getObjectType()) {
+					objectTitle = event.getSummary();
 				} 
-				if(object_title != null){
-					int len = object_title.length();
+				if(objectTitle != null){
+					int len = objectTitle.length();
 					if(len > 20) {
-						object_title = object_title.substring(0, 20);
+						objectTitle = objectTitle.substring(0, 20);
 					}
 				}
-				notification.setObject_title(object_title);
+				notification.setObjectTitle(objectTitle);
 			}
 		}
 		return notifications;

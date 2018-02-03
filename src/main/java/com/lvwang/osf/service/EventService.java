@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.lvwang.osf.dao.AlbumDAO;
-import com.lvwang.osf.model.Album;
+import com.lvwang.osf.pojo.Album;
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Photo;
+import com.lvwang.osf.pojo.Photo;
 import com.lvwang.osf.pojo.Post;
-import com.lvwang.osf.model.Relation;
+import com.lvwang.osf.pojo.Relation;
 import com.lvwang.osf.pojo.ShortPost;
 import com.lvwang.osf.search.EventIndexService;
 import com.lvwang.osf.util.Dic;
@@ -28,10 +27,6 @@ public class EventService extends BaseService<Event>{
 	@Resource
 	private EventMapper eventMapper;
 
-	@Autowired
-	@Qualifier("albumDao")
-	private AlbumDAO albumDao;
-		
 	@Autowired
 	@Qualifier("eventIndexService")
 	private EventIndexService eventIndexService;
@@ -55,9 +50,9 @@ public class EventService extends BaseService<Event>{
 			Album album = (Album)obj;
 			event.setObjectType(Dic.OBJECT_TYPE_ALBUM);
 			event.setObjectId(album.getId());
-			event.setUserId(album.getUser_id());
+			event.setUserId(album.getUserId());
 			event.setTitle(album.getCover());
-			event.setSummary(album.getAlbum_desc());
+			event.setSummary(album.getAlbumDesc());
 			
 			List<Photo> photos = album.getPhotos();
 			StringBuffer keys = new StringBuffer();
@@ -68,7 +63,7 @@ public class EventService extends BaseService<Event>{
 			event.setLikeCount(0);
 			event.setShareCount(0);
 			event.setCommentCount(0);
-			event.setTags_list(album.getAlbum_tags_list());
+			event.setTags_list(album.getAlbumTagsList());
 			
 		} else if(Dic.OBJECT_TYPE_PHOTO == object_type) {
 			//event_id = eventDao.savePhotoEvent((Photo)obj);
@@ -118,10 +113,10 @@ public class EventService extends BaseService<Event>{
 		if(relations != null && relations.size() != 0) {
 			Map<Integer, List<Integer>> category = new HashMap<Integer, List<Integer>>();
 			for(Relation relation : relations) {
-				if(!category.containsKey(relation.getObject_type())) {
-					category.put(relation.getObject_type(), new ArrayList<Integer>());
+				if(!category.containsKey(relation.getObjectType())) {
+					category.put(relation.getObjectType(), new ArrayList<Integer>());
 				}
-				category.get(relation.getObject_type()).add(relation.getObject_id());
+				category.get(relation.getObjectType()).add(relation.getObjectId());
 			}
 			events = getEventsWithRelations(category);
 		}

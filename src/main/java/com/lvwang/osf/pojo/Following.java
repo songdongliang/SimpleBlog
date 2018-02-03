@@ -1,6 +1,4 @@
-package com.lvwang.osf.model;
-
-import com.lvwang.osf.pojo.BasePojo;
+package com.lvwang.osf.pojo;
 
 import javax.persistence.*;
 import java.util.Date;

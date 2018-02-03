@@ -19,7 +19,7 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import com.lvwang.osf.model.Album;
+import com.lvwang.osf.pojo.Album;
 import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.pojo.Post;
 import com.lvwang.osf.pojo.ShortPost;
@@ -42,8 +42,8 @@ public class EventIndexService implements IndexService<Event>{
 		if(Dic.OBJECT_TYPE_POST == object_type){
 			event.setContent(((Post)origin_obj).getPostContent());
 		} else if(Dic.OBJECT_TYPE_ALBUM == object_type){
-			event.setTitle(((Album)origin_obj).getAlbum_desc());
-			event.setContent(((Album)origin_obj).getAlbum_desc());
+			event.setTitle(((Album)origin_obj).getAlbumDesc());
+			event.setContent(((Album)origin_obj).getAlbumDesc());
 		} else if(Dic.OBJECT_TYPE_SHORTPOST == object_type){
 			event.setTitle("");
 			event.setContent(((ShortPost)origin_obj).getPostContent());

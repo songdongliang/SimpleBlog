@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lvwang.osf.model.Album;
+import com.lvwang.osf.pojo.Album;
 import com.lvwang.osf.pojo.Event;
-import com.lvwang.osf.model.Photo;
+import com.lvwang.osf.pojo.Photo;
 import com.lvwang.osf.pojo.ShortPost;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.AlbumService;
 import com.lvwang.osf.service.EventService;
@@ -91,7 +91,7 @@ public class TimeLineAPI {
 		try {
 			JsonNode root = mapper.readTree(params);
 			
-			album.setAlbum_desc(root.path("album_desc").getTextValue());
+			album.setAlbumDesc(root.path("album_desc").getTextValue());
 			
 			JsonNode photos = root.path("photos");
 			if(photos.size() > 0) {
@@ -100,7 +100,7 @@ public class TimeLineAPI {
 				List<Photo> photos2upd = new ArrayList<Photo>();
 				album.setPhotos(photos2upd);
 				for(int i=0; i<photos.size(); i++) {
-					//int photo_id = Integer.parseInt(photos.get(i).path("id").getTextValue());
+					//int photo_id = Integer.parseInt(photos.hget(i).path("id").getTextValue());
 					String key = photos.get(i).path("key").getTextValue();
 					String photo_desc = photos.get(i).path("desc").getTextValue();
 					Photo photo = new Photo();
@@ -111,14 +111,14 @@ public class TimeLineAPI {
 					
 					System.out.println("photo_key:"+key+" desc:"+photo_desc);
 				}
-				album.setPhotos_count(photos2upd.size());
+				album.setPhotosCount(photos2upd.size());
 			}
 			
 			JsonNode tags = root.path("tags");
 			if(tags.size() > 0) {
 				List<Tag> tag_list = new ArrayList<Tag>();
-				album.setAlbum_tags_list(tag_list);
-				album.setAlbum_tags(TagService.toString(tag_list));
+				album.setAlbumTagsList(tag_list);
+				album.setAlbumTags(TagService.toString(tag_list));
 				for(int i=0; i<tags.size(); i++) {
 					Tag t = new Tag();
 					t.setTag(tags.get(i).getTextValue());
@@ -150,19 +150,19 @@ public class TimeLineAPI {
 		List<Tag> tags = new ArrayList<Tag>();
 		
 		//text with no photos
-		if(album.getPhotos() == null || album.getPhotos_count() == 0) {	
-			if(album.getAlbum_desc() == null || album.getAlbum_desc().length() == 0) {
+		if(album.getPhotos() == null || album.getPhotosCount() == 0) {
+			if(album.getAlbumDesc() == null || album.getAlbumDesc().length() == 0) {
 				map.put("status", Property.ERROR_POST_EMPTY);
 				return map;
 			}
-			ShortPost spost = (ShortPost) shortPostService.newPost(user.getId(), album.getAlbum_desc()).get("spost");
+			ShortPost spost = (ShortPost) shortPostService.newPost(user.getId(), album.getAlbumDesc()).get("spost");
 			event_id = eventService.newEvent(Dic.OBJECT_TYPE_SHORTPOST, spost);
 			
 		} else {
 			//new album
 			int albumID = ((Album) albumService.newAlbum(user.getId(), null, null, AlbumService.ALBUM_STAUS_TOBERELEASED,null).get("album")).getId();
 			album.setId(albumID);
-			album.setUser_id(id);
+			album.setUserId(id);
 			
 			tags = albumService.newPhotos(album);
 			event_id = eventService.newEvent(Dic.OBJECT_TYPE_ALBUM, album);

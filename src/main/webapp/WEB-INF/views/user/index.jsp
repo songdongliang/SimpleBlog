@@ -102,7 +102,7 @@
 							      <img src="<c:url value="${img_base_url}${album.cover }?imageView2/1/w/200/h/200"/>">
 							    </a>
 							    <div class="extra">
-							      ${album.album_desc }
+							      ${album.albumDesc }
 							    </div>
 							  </div>						  						  
 						  </c:forEach>

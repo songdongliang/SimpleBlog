@@ -29,7 +29,7 @@
 	  
 	}
 	
-	/* The Javascript code will set the aspect ratio of the crop
+	/* The Javascript code will hset the aspect ratio of the crop
 	   area based on the size of the thumbnail preview,
 	   specified here */
 	#preview-pane .preview-container {

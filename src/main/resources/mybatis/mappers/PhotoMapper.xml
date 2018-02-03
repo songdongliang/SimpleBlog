@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lvwang.osf.mappers.PhotoMapper">
+
+    <select id="getPhotos" resultType="int">
+        select * from osf_photos where album_id = #{albumId} order by ts asc
+    </select>
+
+    <select id="updatePhotoDesc" resultType="int">
+        update osf_photos set `desc` = #{photoDesc} where id = #{photoId}
+    </select>
+
+    <select id="getKey" resultType="string">
+        select `key` from osf_photos where id = #{id}
+    </select>
+
+</mapper>

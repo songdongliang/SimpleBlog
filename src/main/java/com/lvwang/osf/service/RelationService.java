@@ -5,18 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.abel533.entity.Example;
+import com.lvwang.osf.mappers.RelationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lvwang.osf.dao.RelationDAO;
-import com.lvwang.osf.model.Relation;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Relation;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.util.Property;
 
 @Service("relationService")
-public class RelationService {
+public class RelationService extends BaseService<Relation> {
 	
 	public static final int RELATION_TYPE_POST = 0;
 	public static final int RELATION_TYPE_PHOTO = 1;
@@ -27,19 +28,18 @@ public class RelationService {
 	private TagService tagService;
 	
 	@Autowired
-	@Qualifier("relationDao")
-	private RelationDAO relationDao;
+	private RelationMapper relationMapper;
 	
 	@Transactional
-	public Map<String, Object> newRelation(int object_type, int object_id, int tag_id) {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		int id = relationDao.save(new Relation(object_type, object_id, tag_id));
-		if(id != 0){
+	public Map<String, Object> newRelation(int objectType, int objectId, int tagId) {
+		Map<String, Object> ret = new HashMap<>();
+		int relationId = super.save(new Relation(objectType, objectId, tagId));
+		if(relationId != 0){
 			Relation relation = new Relation();
-			relation.setId(id);
-			relation.setObject_type(object_type);
-			relation.setObject_id(object_id);
-			relation.setTag_id(tag_id);
+			relation.setId(relationId);
+			relation.setObjectType(objectType);
+			relation.setObjectId(objectId);
+			relation.setTagId(tagId);
 			ret.put("relation", relation);
 			ret.put("status", Property.SUCCESS_RELATION_CREATE);
 		} else {
@@ -48,23 +48,21 @@ public class RelationService {
 		return ret;
 	}
 	
-	public void newRelation(int object_type, int object_id, int[] tags_id) {
-		
-	}
-	
-	
 	/**
-	 * 
 	 * @param tag
 	 * @return
 	 */
 	public List<Relation> getRelationsWithTag(String tag){
 		List<Relation> relations = new ArrayList<Relation>();
-		int tag_id = tagService.getID(tag);
-		if(tag_id != 0) {
-			List<Relation> rels = relationDao.get(tag_id);
-			if(rels != null)
+		int tagId = tagService.getID(tag);
+		if(tagId != 0) {
+			Example example = new Example(Relation.class);
+			example.createCriteria().andEqualTo("tag_id",tagId);
+			example.setOrderByClause("add_ts");
+			List<Relation> rels = relationMapper.selectByExample(example);
+			if(rels != null) {
 				relations = rels;
+			}
 		}
 		return relations;
 	}
@@ -76,15 +74,14 @@ public class RelationService {
 	 * @return
 	 */
 	public List<Relation> getRelationsInTags(List<Tag> tags){
-		if(tags == null || tags.size() == 0)
-			return new ArrayList<Relation>();
-		
-		List<String> tag_ids = new ArrayList<String>();
-		for(Tag tag : tags) {
-			tag_ids.add(String.valueOf(tag.getId()));
+		if(tags == null || tags.size() == 0) {
+			return new ArrayList<>();
 		}
-		
-		return relationDao.getRelationsInTags(tag_ids);
+		List<String> tagIds = new ArrayList<>();
+		for(Tag tag : tags) {
+			tagIds.add(String.valueOf(tag.getId()));
+		}
+		return relationMapper.getRelationsInTags(tagIds);
 	}
 	
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lvwang.osf.mappers.InterestMapper">
+
+    <select id="getUsersInterestInTag" resultType="int">
+        select userId from osf_interests where tagId = #{tagId}
+    </select>
+
+    <select id="getTagsUserInterestedIn" parameterType="int">
+        select t2.* from osf_interests t1, osf_tags t2 where t1.userId = #{userId} and t1.tagId = t2.id
+    </select>
+
+</mapper>

@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lvwang.osf.model.Album;
-import com.lvwang.osf.model.Photo;
-import com.lvwang.osf.model.Tag;
+import com.lvwang.osf.pojo.Album;
+import com.lvwang.osf.pojo.Photo;
+import com.lvwang.osf.pojo.Tag;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.service.AlbumService;
 import com.lvwang.osf.service.EventService;
@@ -167,7 +167,7 @@ public class AlbumController {
 		try {
 			JsonNode root = mapper.readTree(params);
 			
-			album.setAlbum_desc(root.path("album_desc").getTextValue());
+			album.setAlbumDesc(root.path("album_desc").getTextValue());
 			
 			JsonNode photos = root.path("photos");
 			if(photos.size() > 0) {
@@ -187,14 +187,14 @@ public class AlbumController {
 					
 					System.out.println("photo_id:"+photo_id+" desc:"+photo_desc);
 				}
-				album.setPhotos_count(photos2upd.size());
+				album.setPhotosCount(photos2upd.size());
 			}
 			
 			JsonNode tags = root.path("tags");
 			if(tags.size() > 0) {
 				List<Tag> tag_list = new ArrayList<Tag>();
-				album.setAlbum_tags_list(tag_list);
-				album.setAlbum_tags(TagService.toString(tag_list));
+				album.setAlbumTagsList(tag_list);
+				album.setAlbumTags(TagService.toString(tag_list));
 				for(int i=0; i<tags.size(); i++) {
 					Tag t = new Tag();
 					t.setTag(tags.get(i).getTextValue());
@@ -223,14 +223,14 @@ public class AlbumController {
 		System.out.println(params);
 		
 		Album album = toAlbum(params);
-		if(album.getPhotos_count() == 0) {
+		if(album.getPhotosCount() == 0) {
 			map.put("status", Property.ERROR_ALBUM_EMPTY);
 			return map;
 		}
 		
 		album.setId((Integer)session.getAttribute("album_id"));
 		User user = (User)session.getAttribute("user");
-		album.setUser_id(user.getId());
+		album.setUserId(user.getId());
 		album.setPhotos((List<Photo>)session.getAttribute("photos") );
 		List<Tag> tags = albumService.updateAlbum(album);
 		
@@ -326,7 +326,7 @@ public class AlbumController {
 		
 		//upload photo
 		map = albumService.uploadPhoto(img);
-		//set post cover
+		//hset post cover
 		session.setAttribute("post_cover", map.get("key"));
 		return map;
 	}

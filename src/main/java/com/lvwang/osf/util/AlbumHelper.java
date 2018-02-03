@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lvwang.osf.model.Photo;
+import com.lvwang.osf.pojo.Photo;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;

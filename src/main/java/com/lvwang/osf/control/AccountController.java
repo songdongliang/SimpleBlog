@@ -100,7 +100,7 @@ public class AccountController {
 						   @RequestParam("email") String email,
 						   HttpSession session){
 		ModelAndView mav = new ModelAndView();
-		//set user login
+		//hset user login
 		User user = userService.findByEmail(email);
 		session.setAttribute("user", user);
 		
