@@ -73,13 +73,13 @@ public class PostService extends BaseService<Post>{
 	@Qualifier("feedService")
 	private FeedService feedService;
 	
-    @Resource
+    @Autowired
     private PostMapper postMapper;
 	
 	public Map<String, Object> newPost(Integer author, String title, String content,
 						Integer post_status, Integer comment_status, String param_tags, String post_cover) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		//1 field check
 		if(author == null || 

@@ -35,9 +35,9 @@ public class AccountController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(HttpSession session) {
-		if(session.getAttribute("user") != null)
+		if(session.getAttribute("user") != null) {
 			return "redirect:/";
-		
+		}
 		return "account/login";
 	}
 	
@@ -48,20 +48,20 @@ public class AccountController {
 	
 	@ResponseBody
 	@RequestMapping(value="/setting/info", method=RequestMethod.POST)
-	public Map<String, Object> settingInfo(@RequestParam("user_name") String user_name, 
-							  @RequestParam("user_desc") String user_desc,
+	public Map<String, Object> settingInfo(User user,
 							  HttpSession session){	
 		User me = (User)session.getAttribute("user");
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		String status = null;
-		
-		if(user_name == null || user_name.length() == 0){
-			user_name = me.getUserName();
+
+		String userName = user.getUserName();
+		if(userName == null || userName.length() == 0){
+			userName = me.getUserName();
 		} else {
-			User user = userService.findByUsername(user_name);
+			User _user = userService.findByUsername(userName);
 			
-			if(user != null){
+			if(_user != null){
 				status = Property.ERROR_USERNAME_EXIST;
 				map.put("status", status);
 				return map;
@@ -71,12 +71,12 @@ public class AccountController {
 		
 		//username is ok, but return a error status
 		status = Property.ERROR_USERNAME_NOTEXIST;
-		userService.updateUsernameAndDesc(me.getId(), 
-										  user_name,
-										  user_desc);
+		userService.updateUsernameAndDesc(me.getId(),
+				userName,
+				user.getUserDesc());
 		//update session
-		me.setUserName(user_name);
-		me.setUserDesc(user_desc);
+		me.setUserName(userName);
+		me.setUserDesc(user.getUserDesc());
 	
 		map.put("status", status);
 		return map;

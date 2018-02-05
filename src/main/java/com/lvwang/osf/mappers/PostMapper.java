@@ -1,11 +1,11 @@
 package com.lvwang.osf.mappers;
 
-import com.github.abel533.mapper.BaseMapper;
+import com.github.abel533.mapper.Mapper;
 import com.lvwang.osf.pojo.Post;
 
 import java.util.List;
 
-public interface PostMapper extends BaseMapper<Post>{
+public interface PostMapper extends Mapper<Post> {
 
     List<Post> getPostsByUserID(int userId);
 

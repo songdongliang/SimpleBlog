@@ -5,7 +5,11 @@
 
 <mapper namespace="com.lvwang.osf.mappers.UserMapper">
 
-   <select id="getUsers" parameterType="int" resultType="com.lvwang.osf.pojo.User">
+    <select id="findUserByEmail" resultType="User">
+        SELECT * FROM osf_users WHERE user_email = #{email}
+    </select>
+
+   <select id="getUsers" parameterType="int" resultType="User">
       SELECT * FROM osf_users limit #{count}
    </select>
 

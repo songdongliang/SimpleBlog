@@ -8,7 +8,4 @@ import java.util.List;
 
 public interface FollowingMapper extends Mapper<Following> {
 
-    boolean hasFollowing(int user_a, int user_b);
-
-    List<Integer> isFollowingUsers(@Param("user_id")int user_id, @Param("following_ids")List<Integer> following_ids);
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FollowerMapper extends Mapper<Follower> {
 
-    List<Follower> getFollowers(int user_id);
+
 }

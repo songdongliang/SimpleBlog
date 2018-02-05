@@ -118,13 +118,13 @@ public class UserService extends BaseService<User> {
 	public User findByUsername(String username) {
 	    User user = new User();
 	    user.setUserName(username);
-		return userMapper.selectOne(user);
+		return queryOne(user);
 	}
 	
 	public User findByEmail(String email) {
-	    User conditionUser = new User();
-	    conditionUser.setUserEmail(email);
-		return queryOne(conditionUser);
+		User user = new User();
+		user.setUserEmail(email);
+		return queryOne(user);
 	}
 	
 	public User findById(int id) {

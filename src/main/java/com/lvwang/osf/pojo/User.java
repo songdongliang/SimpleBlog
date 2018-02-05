@@ -1,6 +1,5 @@
 package com.lvwang.osf.pojo;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.lvwang.osf.search.Searchable;
@@ -8,30 +7,33 @@ import com.lvwang.osf.search.Searchable;
 import javax.persistence.*;
 
 @Table(name = "osf_users")
-public class User extends BasePojo implements Serializable, Searchable{
+public class User extends BasePojo implements Searchable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 
 	private String userName;
 	private String userEmail;
 	private String userPwd;
+
+	@Transient
 	private String userConfirmPwd;
-	private String userNickname;
 	private Date userRegisteredDate;
-	private int userStatus;
+	private Integer userStatus;
 	private String userAvatar;
+
+	@Column(name = "user_activationKey")
 	private String userActivationKey;
 	private String userDesc;
 
 	@Override
 	public boolean equals(Object that){
 		User user = (User)that;
-		return this.id == user.getId();
+		return this.id.equals(user.getId());
 	}
 
 	@Override
@@ -57,28 +59,23 @@ public class User extends BasePojo implements Serializable, Searchable{
 	public void setUserPwd(String userPwd) {
 		this.userPwd = userPwd;
 	}
-	public String getUserNickname() {
-		return userNickname;
-	}
-	public void setUserNickname(String userNickname) {
-		this.userNickname = userNickname;
-	}
+
 	public Date getUserRegisteredDate() {
 		return userRegisteredDate;
 	}
 	public void setUserRegisteredDate(Date userRegisteredDate) {
 		this.userRegisteredDate = userRegisteredDate;
 	}
-	public int getUserStatus() {
+	public Integer getUserStatus() {
 		return userStatus;
 	}
-	public void setUserStatus(int userStatus) {
+	public void setUserStatus(Integer userStatus) {
 		this.userStatus = userStatus;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUserActivationKey() {

@@ -1,13 +1,13 @@
 package com.lvwang.osf.mappers;
 
 
-import com.github.abel533.mapper.BaseMapper;
+import com.github.abel533.mapper.Mapper;
 import com.lvwang.osf.pojo.Comment;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface CommentMapper extends BaseMapper<Comment>{
+public interface CommentMapper extends Mapper<Comment> {
 
     /**
      * 通过内容类型获取列表

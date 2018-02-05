@@ -1,13 +1,13 @@
 package com.lvwang.osf.mappers;
 
-import com.github.abel533.mapper.BaseMapper;
+import com.github.abel533.mapper.Mapper;
 import com.lvwang.osf.pojo.Event;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
-public interface EventMapper extends BaseMapper<Event>{
+public interface EventMapper extends Mapper<Event> {
 
     List<Event> getEvents(@Param("start") int start,@Param("step") int step);
 

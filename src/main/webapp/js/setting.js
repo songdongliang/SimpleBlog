@@ -36,8 +36,8 @@ $(document).ready(function(){
           type: 'POST',
           dataType: 'json',
           data:{
-        	  user_name: user_name,
-        	  user_desc:user_desc
+        	  userName: user_name,
+        	  userDesc:user_desc
           }
         })
         .success(function(data){

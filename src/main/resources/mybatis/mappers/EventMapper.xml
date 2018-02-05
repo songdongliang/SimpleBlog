@@ -4,36 +4,15 @@
      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lvwang.osf.mappers.EventMapper"> 
-	<insert id="save" parameterType="com.lvwang.osf.pojo.Event" useGeneratedKeys="true" keyProperty="id">
-			insert into  osf_events   
-			 values(null,#{objectType},#{objectId},#{ts},
-			 #{userId},#{userName},#{userAvatar},#{likeCount},
-			 #{shareCount},#{commentCount},#{title},#{summary},
-			 #{content},#{tags_str},#{followingUserId},
-			 #{followingUserName},#{followerUserId},
-			 #{followerUserName})
-	</insert>
-	
-	<select id="getEvent" resultType="com.lvwang.osf.pojo.Event">
+	<select id="getEvent" resultType="Event">
 		select * from osf_events where objectType=#{param1} and objectId=#{param2}
 	</select>
 	
-	<select id="getEvents" resultType="com.lvwang.osf.pojo.Event">
+	<select id="getEvents" resultType="Event">
 		select * from osf_events limit #{param1},#{param2}
 	</select>
 	
-	<select id="getEventsWithIDs" parameterType="list" resultType="com.lvwang.osf.pojo.Event">
-		select * from osf_events 
-		<where>
-			 id in 
-			 <foreach item="event_id" collection="event_ids" open="(" separator="," close=")">
-			 	#{event_id}
-			 </foreach>
-		</where> 
-		order by ts desc
-	</select>
-	
-	<select id="getEventsWithRelations" parameterType="map" resultType="com.lvwang.osf.pojo.Event">
+	<select id="getEventsWithRelations" parameterType="map" resultType="Event">
 		select * from osf_events 
 		<where>
 			<if test="0 != null">
@@ -53,18 +32,14 @@
 		</where>
 	</select>
 	
-	<select id="getEventsOfUser" resultType="com.lvwang.osf.pojo.Event">
+	<select id="getEventsOfUser" resultType="Event">
 		select * from osf_events where userId=#{param1} order by ts desc limit #{param2}
 	</select>
 	
-	<select id="getEventsHasPhoto" resultType="com.lvwang.osf.pojo.Event">
+	<select id="getEventsHasPhoto" resultType="Event">
 		select * from osf_events where (objectType=0 and content is not null)
 		or (objectType=2 and title is not null) limit #{param1},#{param2}
 	</select>
-	
-	<delete id="delete" parameterType="int">
-		delete from osf_events where id=#{id}
-	</delete>
 	
 	<delete id="deleteByObject">
 		delete from osf_events where objectType=#{param1} and objectId=#{param2}

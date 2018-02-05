@@ -18,4 +18,6 @@ public interface UserMapper extends Mapper<User> {
 
     String getResetPwdKey(String email);
 
+    User findUserByEmail(String email);
+
 }

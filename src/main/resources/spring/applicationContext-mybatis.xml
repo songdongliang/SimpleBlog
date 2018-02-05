@@ -21,11 +21,6 @@
 	<!-- 定义Mapper接口的扫描器 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.lvwang.osf.mappers"/>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-	</bean>
-
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 
 </beans>

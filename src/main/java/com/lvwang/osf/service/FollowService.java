@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 
 @Transactional
 @Service
-public class FollowService extends BaseService {
+public class FollowService {
 	
 	@Resource
 	private FollowerService followerService;

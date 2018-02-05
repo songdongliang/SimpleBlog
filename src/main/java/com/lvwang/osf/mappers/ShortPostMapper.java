@@ -1,5 +1,8 @@
 package com.lvwang.osf.mappers;
 
-public interface ShortPostMapper extends PostMapper {
+import com.github.abel533.mapper.Mapper;
+import com.lvwang.osf.pojo.ShortPost;
+
+public interface ShortPostMapper extends Mapper<ShortPost> {
 	
 }
