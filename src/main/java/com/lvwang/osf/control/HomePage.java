@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ import com.lvwang.osf.util.Dic;
 @Controller
 public class HomePage {
 
-	@Autowired
-	@Qualifier("eventService")
+	@Resource
 	private EventService eventService;
 	
 	@Autowired
@@ -57,16 +57,21 @@ public class HomePage {
 	public ModelAndView showHomePage(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
-		
+        List<Event> feeds = eventService.queryAll();
+        for(Event event : feeds) {
+            User user = userService.findById(event.getUserId());
+            event.setUserName(user.getUserName());
+            event.setUserAvatar(user.getUserAvatar());
+        }
+        mav.addObject("feeds", feeds);
+        mav.addObject("dic", new Dic());
 		User user = (User)session.getAttribute("user");
 		if(user == null) {
 			return mav;
 		}
 		mav.addObject("counter", userService.getCounterOfFollowAndShortPost(user.getId()));
-		List<Event> feeds = feedService.getFeeds(user.getId());
-		mav.addObject("feeds", feeds);
-		
-		mav.addObject("dic", new Dic());
+//		List<Event> feeds = feedService.getFeeds(user.getId());
+
 		return mav;
 		
 	}
@@ -112,8 +117,8 @@ public class HomePage {
 		}
 		
 		mav.setViewName("welcome");
-		List<Tag> tags_recommend = tagService.getRecommendTags();
-		mav.addObject("tags", tags_recommend);
+		List<Tag> recommendTags = tagService.getRecommendTags();
+		mav.addObject("tags", recommendTags);
 		mav.addObject("dic", new Dic());
 		return mav;
 	}
@@ -123,16 +128,13 @@ public class HomePage {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("sidebar");
 		User user = (User)session.getAttribute("user");
-		if(user == null){
-			return mav;
-		}
-		
-		List<User> rec_users = userService.getRecommendUsers(user==null?0:user.getId(), 4);
-		mav.addObject("isFollowings", followService.isFollowing(user==null?0:user.getId(), rec_users));
-		mav.addObject("popusers", rec_users);
+
+		List<User> recommendUsers = userService.getRecommendUsers(user == null ? 0 : user.getId(), 4);
+		mav.addObject("isFollowings", followService.isFollowing(user == null ? 0:user.getId(), recommendUsers));
+		mav.addObject("popusers", recommendUsers);
 				
-		List<Tag> tags_recommend = tagService.getRecommendTags();
-		mav.addObject("poptags", tags_recommend);
+		List<Tag> recommendTags = tagService.getRecommendTags();
+		mav.addObject("poptags", recommendTags);
 		
 		return mav;
 	}

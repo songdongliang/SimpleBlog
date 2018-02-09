@@ -36,12 +36,17 @@ public class Event extends BasePojo implements Searchable{
 	private String title;
 	private String summary;
 	private String content;
+
+	@Transient
 	private List<Tag> tags;
+	@Transient
 	private String tagsStr;
 	private int followingUserId;
 	private String followingUserName;
 	private int followerUserId;
 	private String followerUserName;
+
+	@Transient
 	private boolean isLike;
 	public int getId() {
 		return id;

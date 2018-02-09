@@ -6,11 +6,11 @@
 <mapper namespace="com.lvwang.osf.mappers.InterestMapper">
 
     <select id="getUsersInterestInTag" resultType="int">
-        select userId from osf_interests where tagId = #{tagId}
+        select user_id from osf_interests where tag_id = #{tagId}
     </select>
 
     <select id="getTagsUserInterestedIn" parameterType="int">
-        select t2.* from osf_interests t1, osf_tags t2 where t1.userId = #{userId} and t1.tagId = t2.id
+        select t2.* from osf_interests t1, osf_tags t2 where t1.user_id = #{userId} and t1.tag_id = t2.id
     </select>
 
 </mapper>

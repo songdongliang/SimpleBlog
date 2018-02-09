@@ -17,9 +17,7 @@ import javax.annotation.Resource;
 public class ShortPostService extends BaseService<ShortPost> {
 
 	@Resource
-	private PostMapper postMapper;
-	@Resource
-	private UserService userService;
+	private PostService postService;
 
 	public Map<String, Object> newPost(Integer author, String content){
 		Map<String, Object> map = new HashMap<>();
@@ -30,19 +28,18 @@ public class ShortPostService extends BaseService<ShortPost> {
 		ShortPost spost = new ShortPost();
 		spost.setPostAuthor(author);
 		spost.setPostContent(content);
-		spost.setId(super.save(spost));
+		spost.setId(postService.save(spost));
 		map.put("spost", spost);
 		map.put("status", Property.SUCCESS_POST_CREATE);
 		return map;
 	}
 
 	public User getAuthorOfPost(int id) {
-		int userId = postMapper.getAuthorOfPost(id);
-		return userService.findById(userId);
+		return postService.getAuthorOfPost(id);
 	}
 	
 	public long count(int userId){
-		return postMapper.count(userId);
+		return postService.count(userId);
 	}
 
 }

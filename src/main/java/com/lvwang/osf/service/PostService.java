@@ -20,8 +20,6 @@ import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Dic;
 import com.lvwang.osf.util.Property;
 
-import javax.annotation.Resource;
-
 @Transactional
 @Service
 public class PostService extends BaseService<Post>{
@@ -77,7 +75,7 @@ public class PostService extends BaseService<Post>{
     private PostMapper postMapper;
 	
 	public Map<String, Object> newPost(Integer author, String title, String content,
-						Integer post_status, Integer comment_status, String param_tags, String post_cover) {
+									   Integer postStatus, Integer commentStatus, String paramTags, String postCover) {
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -89,16 +87,16 @@ public class PostService extends BaseService<Post>{
 			return map;
 		}
 
-		if(post_status == null) {
-			post_status = POST_STATUS_PUB;
+		if(postStatus == null) {
+			postStatus = POST_STATUS_PUB;
 		}
-		if(post_status < 0 || post_status > 3) {
+		if(postStatus < 0 || postStatus > 3) {
 			map.put("status", Property.ERROR_POST_STATUS);
 			return map;
 		}
-		if(comment_status == null) {
-			post_status = COMMENT_STATUS_ALLOWED;
-		} else if(comment_status != 0 && comment_status != 1) {
+		if(commentStatus == null) {
+			postStatus = COMMENT_STATUS_ALLOWED;
+		} else if(commentStatus != 0 && commentStatus != 1) {
 			map.put("status", Property.ERROR_COMMENT_STATUS);
 		}
 		//2 save post
@@ -107,18 +105,18 @@ public class PostService extends BaseService<Post>{
 		post.setPostTitle(title);
 		post.setPostExcerpt(getSummary(content));
 		post.setPostContent(content);
-		post.setPostStatus(post_status);
-		post.setCommentStatus(comment_status);
+		post.setPostStatus(postStatus);
+		post.setCommentStatus(commentStatus);
 		post.setLikeCount(0);
 		post.setShareCount(0);
 		post.setCommentCount(0);
 		
-		post.setPostCover(post_cover);
+		post.setPostCover(postCover);
 
 		//3 save tags
-		if(param_tags != null && param_tags.length() != 0) {	
+		if(paramTags != null && paramTags.length() != 0) {
 			//此处会为tag建立index
-			Map<String, Object> tagsmap = tagService.newTags(TagService.toList(param_tags));
+			Map<String, Object> tagsmap = tagService.newTags(TagService.toList(paramTags));
 			
 			post.setPostTagsList((List<Tag>)tagsmap.get("tags"));
 			int id = savePost(post);

@@ -28,6 +28,7 @@ public class Post extends BasePojo {
 	private int commentCount;
 	private String postUrl;
 	private String postTags;
+    @Transient
 	private List<Tag> postTagsList;
 	private int postAlbum;
 	private String postCover;
