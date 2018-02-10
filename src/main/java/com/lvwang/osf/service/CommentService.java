@@ -40,32 +40,32 @@ public class CommentService extends BaseService<Comment>{
 	@Resource
 	private RedisService redisService;
 	
-	public Map<String, String> newComment(Integer comment_object_type, Integer comment_object_id,
-							 Integer comment_author, String comment_author_name, 
-							 String comment_content, Integer comment_parent, 
-							 int comment_parent_author, String comment_parent_author_name){
+	public Map<String, String> newComment(Integer commentObjectType, Integer commentObjectId,
+										  Integer commentAuthor, String commentAuthorName,
+										  String commentContent, Integer commentParent,
+										  int commentParentAuthor, String commentParentAuthorName){
 		
-		Map<String, String> ret = new HashMap<String, String>();
-		if(comment_content == null || comment_content.length() == 0) {
+		Map<String, String> ret = new HashMap<>();
+		if(commentContent == null || commentContent.length() == 0) {
 			ret.put("status", Property.ERROR_COMMENT_EMPTY);
 			return ret;
 		}
 		//不支持的评论类型
-		if(Dic.checkType(comment_object_type) == null){
+		if(Dic.checkType(commentObjectType) == null){
 			ret.put("status", Property.ERROR_COMMENT_TYPE);
 			return ret;
 		}
 
 		Comment comment = new Comment();
-		comment.setCommentObjectType(comment_object_type);
-		comment.setCommentObjectId(comment_object_id);
-		comment.setCommentAuthor(comment_author);
-		comment.setCommentAuthorName(comment_author_name);
-		comment.setCommentContent(comment_content);
-		comment.setCommentParent(comment_parent);
-		comment.setCommentParentAuthor(comment_parent_author);
-		comment.setCommentParentAuthorName(comment_parent_author_name);
-		save(comment);
+		comment.setCommentObjectType(commentObjectType);
+		comment.setCommentObjectId(commentObjectId);
+		comment.setCommentAuthor(commentAuthor);
+		comment.setCommentAuthorName(commentAuthorName);
+		comment.setCommentContent(commentContent);
+		comment.setCommentParent(commentParent);
+		comment.setCommentParentAuthor(commentParentAuthor);
+		comment.setCommentParentAuthorName(commentParentAuthorName);
+		super.save(comment);
 		ret.put("status", Property.SUCCESS_COMMENT_CREATE);
 		ret.put("id", String.valueOf(comment.getId()));
 		return ret;

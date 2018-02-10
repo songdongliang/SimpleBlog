@@ -54,7 +54,7 @@ public class ShortPostController {
 		Map<String, Object> map = shortPostService.newPost(user.getId(), content);
 		
 		ShortPost spost = (ShortPost) map.get("spost");	
-		int event_id = eventService.newEvent(Dic.OBJECT_TYPE_SHORTPOST, spost);
+		int event_id = eventService.newEvent(Dic.OBJECT_TYPE_SHORT_POST, spost);
 		
 		List<Integer> followers = followService.getFollowerIDs(user.getId());
 		followers.add(user.getId());

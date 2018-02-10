@@ -44,7 +44,7 @@ public class EventIndexService implements IndexService<Event>{
 		} else if(Dic.OBJECT_TYPE_ALBUM == object_type){
 			event.setTitle(((Album)origin_obj).getAlbumDesc());
 			event.setContent(((Album)origin_obj).getAlbumDesc());
-		} else if(Dic.OBJECT_TYPE_SHORTPOST == object_type){
+		} else if(Dic.OBJECT_TYPE_SHORT_POST == object_type){
 			event.setTitle("");
 			event.setContent(((ShortPost)origin_obj).getPostContent());
 		}

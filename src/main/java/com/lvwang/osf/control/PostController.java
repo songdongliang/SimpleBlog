@@ -28,8 +28,6 @@ import com.lvwang.osf.service.FollowService;
 import com.lvwang.osf.service.InterestService;
 import com.lvwang.osf.service.LikeService;
 import com.lvwang.osf.service.PostService;
-import com.lvwang.osf.service.RelationService;
-import com.lvwang.osf.service.TagService;
 import com.lvwang.osf.util.Dic;
 import com.lvwang.osf.util.Property;
 
@@ -40,14 +38,6 @@ public class PostController {
 	@Autowired
 	@Qualifier("postService")
 	private PostService postService;
-	
-	@Autowired
-	@Qualifier("relationService")
-	private RelationService relationService;
-	
-	@Autowired
-	@Qualifier("tagService")
-	private TagService tagService;
 	
 	@Autowired
 	@Qualifier("eventService")
@@ -99,38 +89,37 @@ public class PostController {
 						HttpSession session) {
 				
 		User user = (User)session.getAttribute("user");
-		String post_cover = (String) session.getAttribute("post_cover");
+		String postCover = (String) session.getAttribute("post_cover");
 		session.removeAttribute("post_cover");
 		//1 save post
 		Map<String, Object> map = postService
-				.newPost(user.getId(), title, content, postStatus, commentStatus, paramTags, post_cover);
+				.newPost(user.getId(), title, content, postStatus, commentStatus, paramTags, postCover);
 		String status = (String)map.get("status");
 		Post post = (Post)map.get("post");
 
 		//2 add event 
 		if(Property.SUCCESS_POST_CREATE.equals(status)) {
-			int event_id = eventService.newEvent(Dic.OBJECT_TYPE_POST, post);
+			int eventId = eventService.newEvent(Dic.OBJECT_TYPE_POST, post);
 			
 			//3 push to followers
 			List<Integer> followers = followService.getFollowerIDs(user.getId());
 			followers.add(user.getId());
-			feedService.push(followers, event_id);
+			feedService.push(followers, eventId);
 			
 			//4 push to users who follow the tags in the post
 			List<Tag> tags = (ArrayList<Tag>)map.get("tags");
 			//push to users who follow the tags
-			Set<Integer> followers_set = new HashSet<Integer>();
+			Set<Integer> followersSet = new HashSet<>();
 			for(Tag tag : tags) {
-				List<Integer> i_users = interestService.getUsersInterestedInTag(tag.getId());
-				for(int u: i_users) {
+				List<Integer> userIds = interestService.getUsersInterestedInTag(tag.getId());
+				for(int u: userIds) {
 					if(u != user.getId())
-						followers_set.add(u);
+						followersSet.add(u);
 				}
-							
 				//cache feeds to tag list
-				feedService.cacheFeed2Tag(tag.getId(), event_id);
+				feedService.cacheFeed2Tag(tag.getId(), eventId);
 			}
-			feedService.push(new ArrayList<Integer>(followers_set), event_id);
+			feedService.push(new ArrayList<>(followersSet), eventId);
 			
 		}
 		return map;

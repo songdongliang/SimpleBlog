@@ -62,10 +62,10 @@ public class CommentAPI {
 	@RequestMapping(value="/create", method=RequestMethod.POST)	
 	public Map<String, String> createComment(@RequestBody Comment comment,
 											 @RequestAttribute("uid") Integer id) {
-		User user = (User)userService.findById(id);
-		User comment_parent_author = new User();
-		if(comment.getCommentParent() !=0 ){
-			comment_parent_author = commentService.getCommentAuthor(comment.getCommentParent());
+		User user = userService.findById(id);
+		User commentParentAuthor = new User();
+		if(comment.getCommentParent() != 0 ){
+			commentParentAuthor = commentService.getCommentAuthor(comment.getCommentParent());
 		}
 		
 		Map<String, String> ret = commentService.newComment(comment.getCommentObjectType(),
@@ -74,8 +74,8 @@ public class CommentAPI {
 															user.getUserName(),
 															comment.getCommentContent(),
 															comment.getCommentParent(),
-															comment_parent_author.getId(),
-															comment_parent_author.getUserName());
+															commentParentAuthor.getId(),
+															commentParentAuthor.getUserName());
 		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
 													  comment.getCommentObjectType(),
@@ -89,7 +89,7 @@ public class CommentAPI {
 		if(comment.getCommentParent()!=0) {
 			//reply notification
 			notification.setNotifyType(Dic.NOTIFY_TYPE_COMMENT_REPLY);
-			notification.setNotifiedUser(comment_parent_author.getId());
+			notification.setNotifiedUser(commentParentAuthor.getId());
 			notificationService.doNotify(notification);
 		} else {
 			//comment notification
@@ -100,8 +100,8 @@ public class CommentAPI {
 		ret.put("avatar", userService.findById(user.getId()).getUserAvatar());
 		ret.put("author_id", String.valueOf(user.getId()));
 		ret.put("author_name", user.getUserName());
-		ret.put("reply_to_author", String.valueOf(comment_parent_author.getId()));
-		ret.put("reply_to_authorname", comment_parent_author.getUserName());
+		ret.put("reply_to_author", String.valueOf(commentParentAuthor.getId()));
+		ret.put("reply_to_authorname", commentParentAuthor.getUserName());
 		return ret;
 	}
 

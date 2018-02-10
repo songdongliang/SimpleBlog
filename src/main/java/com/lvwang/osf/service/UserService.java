@@ -522,7 +522,7 @@ public class UserService extends BaseService<User> {
 			return postService.getAuthorOfPost(object_id);
 		} else if(object_type == Dic.OBJECT_TYPE_ALBUM){
 			return albumService.getAuthorOfALbum(object_id);
-		} else if(object_type == Dic.OBJECT_TYPE_SHORTPOST) {
+		} else if(object_type == Dic.OBJECT_TYPE_SHORT_POST) {
 			return shortPostService.getAuthorOfPost(object_id);
 		} else if(object_type == Dic.OBJECT_TYPE_PHOTO) {
 			return albumService.getAuthorOfPhoto(object_id);

@@ -5,7 +5,7 @@ public class Dic {
 	public static final int OBJECT_TYPE_PHOTO = 1;
 	public static final int OBJECT_TYPE_ALBUM = 2;
 	public static final int OBJECT_TYPE_FOLLOWING = 3;
-	public static final int OBJECT_TYPE_SHORTPOST = 4;
+	public static final int OBJECT_TYPE_SHORT_POST = 4;
 	public static final int OBJECT_TYPE_USER = 5;
 	
 	
@@ -61,7 +61,7 @@ public class Dic {
 			return "photo";
 		} else if(object_type == OBJECT_TYPE_POST) {
 			return "post";
-		} else if(object_type == OBJECT_TYPE_SHORTPOST){
+		} else if(object_type == OBJECT_TYPE_SHORT_POST){
 			return "shortpost";
 		} else if(object_type == OBJECT_TYPE_FOLLOWING){
 			return "following";

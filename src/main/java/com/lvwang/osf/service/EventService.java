@@ -31,9 +31,9 @@ public class EventService extends BaseService<Event>{
 	@Qualifier("eventIndexService")
 	private EventIndexService eventIndexService;
 	
-	private Event toEvent(int object_type, Object obj) {
+	private Event toEvent(int objectType, Object obj) {
 		Event event = new Event();
-		if(Dic.OBJECT_TYPE_POST == object_type) {
+		if(Dic.OBJECT_TYPE_POST == objectType) {
 			Post post = (Post)obj;
 			event.setObjectType(Dic.OBJECT_TYPE_POST);
 			event.setObjectId(post.getId());
@@ -44,9 +44,8 @@ public class EventService extends BaseService<Event>{
 			event.setLikeCount(post.getLikeCount());
 			event.setShareCount(post.getShareCount());
 			event.setCommentCount(post.getCommentCount());
-			event.setTags_list(post.getPostTagsList());
-			
-		} else if(Dic.OBJECT_TYPE_ALBUM == object_type) {
+			event.setTags(post.getPostTagsList());
+		} else if(Dic.OBJECT_TYPE_ALBUM == objectType) {
 			Album album = (Album)obj;
 			event.setObjectType(Dic.OBJECT_TYPE_ALBUM);
 			event.setObjectId(album.getId());
@@ -55,21 +54,22 @@ public class EventService extends BaseService<Event>{
 			event.setSummary(album.getAlbumDesc());
 			
 			List<Photo> photos = album.getPhotos();
-			StringBuffer keys = new StringBuffer();
+			StringBuilder keys = new StringBuilder();
 			for(Photo photo:photos) {
-				keys.append(photo.getKey()+":");
+				keys.append(photo.getKey());
+				keys.append(":");
 			}
 			event.setContent(keys.toString());
 			event.setLikeCount(0);
 			event.setShareCount(0);
 			event.setCommentCount(0);
-			event.setTags_list(album.getAlbumTagsList());
+			event.setTags(album.getAlbumTagsList());
 			
-		} else if(Dic.OBJECT_TYPE_PHOTO == object_type) {
+		} else if(Dic.OBJECT_TYPE_PHOTO == objectType) {
 			//event_id = eventDao.savePhotoEvent((Photo)obj);
-		} else if(Dic.OBJECT_TYPE_SHORTPOST == object_type){
+		} else if(Dic.OBJECT_TYPE_SHORT_POST == objectType){
 			ShortPost spost = (ShortPost) obj;
-			event.setObjectType(Dic.OBJECT_TYPE_SHORTPOST);
+			event.setObjectType(Dic.OBJECT_TYPE_SHORT_POST);
 			event.setObjectId(spost.getId());
 			event.setSummary(spost.getPostContent());
 			event.setUserId(spost.getPostAuthor());
@@ -106,12 +106,12 @@ public class EventService extends BaseService<Event>{
 	
 	
 	/**
-	 * 根据relation关系(objectType, object_id)查询event
+	 * 根据relation关系(objectType, objectId)查询event
 	 */
 	public List<Event> getEventsWithRelations(List<Relation> relations) {
 		List<Event> events = new ArrayList<Event>();
 		if(relations != null && relations.size() != 0) {
-			Map<Integer, List<Integer>> category = new HashMap<Integer, List<Integer>>();
+			Map<Integer, List<Integer>> category = new HashMap<>();
 			for(Relation relation : relations) {
 				if(!category.containsKey(relation.getObjectType())) {
 					category.put(relation.getObjectType(), new ArrayList<Integer>());
@@ -140,27 +140,27 @@ public class EventService extends BaseService<Event>{
 		return eventMapper.getEventsHasPhoto(start, step);
 	}
 	
-	public Event getEvent(int object_type, int object_id){
-		return eventMapper.getEvent(object_type, object_id);
+	public Event getEvent(int objectType, int objectId){
+		return eventMapper.getEvent(objectType, objectId);
 	}
 	
 	/**
 	 * 根据event id查询event
 	 */
-	public List<Event> getEventsWithIDs(List<Integer> event_ids) {
-		return queryByIds(Event.class,event_ids,"id");
+	public List<Event> getEventsWithIDs(List<Integer> eventIds) {
+		return queryByIds(Event.class, eventIds,"id");
 	}
 	
-	public List<Event> getEventsOfUser(int user_id, int count){
-		return eventMapper.getEventsOfUser(user_id, count);
+	public List<Event> getEventsOfUser(int userId, int count){
+		return eventMapper.getEventsOfUser(userId, count);
 	}
 
 	public void delete(int id){
 		deleteById(id);
 	}
 	
-	public void delete(int object_type, int object_id){
-		eventMapper.deleteByObject(object_type, object_id);
+	public void delete(int objectType, int objectId){
+		eventMapper.deleteByObject(objectType, objectId);
 	}
 
 }

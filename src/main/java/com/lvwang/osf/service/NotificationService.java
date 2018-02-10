@@ -109,7 +109,7 @@ public class NotificationService extends BaseService<Notification> {
 					objectTitle = event.getTitle();
 				} else if(Dic.OBJECT_TYPE_ALBUM == notification.getObjectType()){
 					objectTitle = event.getSummary();
-				} else if(Dic.OBJECT_TYPE_SHORTPOST == notification.getObjectType()) {
+				} else if(Dic.OBJECT_TYPE_SHORT_POST == notification.getObjectType()) {
 					objectTitle = event.getSummary();
 				} 
 				if(objectTitle != null){

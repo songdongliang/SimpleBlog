@@ -135,7 +135,7 @@ public class Event extends BasePojo implements Searchable{
 	public void setTags(String tags) {
 		this.tags = TagService.toList(tags);
 	}
-	public void setTags_list(List<Tag> tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 	public int getFollowingUserId() {

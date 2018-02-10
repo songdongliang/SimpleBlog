@@ -156,7 +156,7 @@ public class TimeLineAPI {
 				return map;
 			}
 			ShortPost spost = (ShortPost) shortPostService.newPost(user.getId(), album.getAlbumDesc()).get("spost");
-			event_id = eventService.newEvent(Dic.OBJECT_TYPE_SHORTPOST, spost);
+			event_id = eventService.newEvent(Dic.OBJECT_TYPE_SHORT_POST, spost);
 			
 		} else {
 			//new album

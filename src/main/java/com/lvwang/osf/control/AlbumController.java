@@ -234,26 +234,26 @@ public class AlbumController {
 		album.setPhotos((List<Photo>)session.getAttribute("photos") );
 		List<Tag> tags = albumService.updateAlbum(album);
 		
-		int event_id = eventService.newEvent(Dic.OBJECT_TYPE_ALBUM, album);
+		int eventId = eventService.newEvent(Dic.OBJECT_TYPE_ALBUM, album);
 		
 		//push to users who follow u
 		List<Integer> followers = followService.getFollowerIDs(user.getId());
 		followers.add(user.getId());
-		feedService.push(followers, event_id);
+		feedService.push(followers, eventId);
 		
 		//push to users who follow the tags
-		Set<Integer> followers_set = new HashSet<Integer>();
+		Set<Integer> followersSet = new HashSet<>();
 		for(Tag tag : tags) {
-			List<Integer> i_users = interestService.getUsersInterestedInTag(tag.getId());
-			for(int u: i_users) {
+			List<Integer> userIds = interestService.getUsersInterestedInTag(tag.getId());
+			for(int u: userIds) {
 				if(u != user.getId())
-					followers_set.add(u);
+					followersSet.add(u);
 			}
 						
 			//cache feeds to tag list
-			feedService.cacheFeed2Tag(tag.getId(), event_id);
+			feedService.cacheFeed2Tag(tag.getId(), eventId);
 		}
-		feedService.push(new ArrayList<Integer>(followers_set), event_id);
+		feedService.push(new ArrayList<Integer>(followersSet), eventId);
 		
 		map.put("album", album);
 		map.put("status", Property.SUCCESS_ALBUM_UPDATE);
