@@ -51,7 +51,7 @@ public class UserService extends BaseService<User> {
 	private static final String TOKEN_ = "TOKEN_";
 	private static final String USER_ID_ = "USER_ID_";
 	
-	private static final String DEFAULT_USER_AVATAR = "default-avatar.jpg";
+	private static final String DEFAULT_USER_AVATAR = "group1/M00/00/00/wKgqgFqSSv6AXAcDAACA5C9vxNM384.jpg";
 	
 	@Autowired
 	@Qualifier("followService")

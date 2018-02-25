@@ -331,4 +331,4 @@ CREATE TABLE `osf_users` (
 -- Records of osf_users
 -- ----------------------------
 INSERT INTO `osf_users` VALUES ('1', '泉水', 'songdongliang111@gmail.com', 'ED359AAE0884567C73201D519D7857FB', '2018-01-31 15:03:50', '0', 'ROXjRu1dwyOQiqSrtK7qBg==', 'group1/M00/00/00/wKgqgFpysxWABESaAAAhEkq_pOs80.jpeg', null, null, '2018-02-01 17:08:03', '2018-02-01 17:20:05');
-INSERT INTO `osf_users` VALUES ('2', '演员', 'songdongliang111@qq.com', 'ED359AAE0884567C73201D519D7857FB', '2018-02-01 15:44:54', '0', '9AlVsQanUTu9Yb7NxazDDA==', 'default-avatar.jpg', null, null, '2018-02-01 17:08:03', '2018-02-01 17:20:05');
+INSERT INTO `osf_users` VALUES ('2', '演员', 'songdongliang111@qq.com', 'ED359AAE0884567C73201D519D7857FB', '2018-02-01 15:44:54', '0', '9AlVsQanUTu9Yb7NxazDDA==', '173ur96139.iok.lagroup1/M00/00/00/wKgqgFqSSv6AXAcDAACA5C9vxNM384.jpg', null, null, '2018-02-01 17:08:03', '2018-02-01 17:20:05');

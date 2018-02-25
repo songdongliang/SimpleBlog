@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.google.gson.Gson;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -339,13 +341,13 @@ public class AlbumController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/upload/avatar", method=RequestMethod.POST)
-	public Map<String, Object> avatarUpload(@RequestParam("avatar_file") MultipartFile img,
+	public String avatarUpload(@RequestParam("avatar_file") MultipartFile img,
 										    HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if(img.isEmpty()) {
 			map.put("status", Property.ERROR_PHOTO_EMPTY);
-			return map;
+			return new Gson().toJson(map);
 		}
 		
 		//upload photo
@@ -355,8 +357,7 @@ public class AlbumController {
 		albumService.saveImgToLocal(img, (String)map.get("key"));
 		
 		session.setAttribute("temp_avatar", map.get("key"));
-		
-		return map;
+		return new Gson().toJson(map);
 	}
 	
 	@ResponseBody
