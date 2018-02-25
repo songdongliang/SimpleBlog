@@ -341,13 +341,13 @@ public class AlbumController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/upload/avatar", method=RequestMethod.POST)
-	public String avatarUpload(@RequestParam("avatar_file") MultipartFile img,
+	public Map<String, Object> avatarUpload(@RequestParam("avatar_file") MultipartFile img,
 										    HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if(img.isEmpty()) {
 			map.put("status", Property.ERROR_PHOTO_EMPTY);
-			return new Gson().toJson(map);
+			return map;
 		}
 		
 		//upload photo
@@ -357,7 +357,7 @@ public class AlbumController {
 		albumService.saveImgToLocal(img, (String)map.get("key"));
 		
 		session.setAttribute("temp_avatar", map.get("key"));
-		return new Gson().toJson(map);
+		return map;
 	}
 	
 	@ResponseBody
