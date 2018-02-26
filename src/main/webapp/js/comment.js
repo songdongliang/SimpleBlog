@@ -43,7 +43,7 @@ $(document).ready(function(){
 			//var replyTo = $(this).attr('replyTo');
 			header = '<a class="author">我</a> 回复 ' + '<a class="author">'+replyTo+'</a>';
 		}			
-		var commentContent = escape($('#replycontent').val());
+		var commentContent = $('#replycontent').val();
 		if(commentContent == null || commentContent.length == 0) {
 			return;
 		}
@@ -57,9 +57,8 @@ $(document).ready(function(){
 		} else {
 			return;
 		}
-
-		var commentObjectID = $('meta[name=id]').attr('content');
-
+        var commentObjectID = $('meta[name=id]').attr('content');
+        var commentParent = $('meta[name=author]').attr('content');
 		$.ajax({
 			url: basePath + '/comment/create',
 			type: 'POST',

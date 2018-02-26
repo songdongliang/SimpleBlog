@@ -69,10 +69,9 @@ $(document).ready(function(){
  	                		secureuri:false,
  	                		fileElementId:'avatar_file',
  	                		success: function (data, status){
- 	                				data = jQuery(data).find('pre:first').text();
- 	                				data = jQuery.parseJSON(data);
- 	                				
- 	                				jcrop_api.setImage(data.link);
+ 	                				data = $(data).find('body').text()
+ 	                				data = $.parseJSON(data);
+; 	                				jcrop_api.setImage(data.link);
  	                				$('#target_img_cnt img').attr('src', data.link);
  	                				$('#preview-pane img').attr('src', data.link);
  	                				$('.crop_avatar_area').show();
