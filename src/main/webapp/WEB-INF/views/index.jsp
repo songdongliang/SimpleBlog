@@ -30,7 +30,7 @@
           <div class="span8">  
 	          	<div class="header_box">
 	          		<div class="ui avatar image">
-	                	<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517216832745&di=f0bda5e1565830202ecc30b1cdf82655&imgtype=0&src=http%3A%2F%2Fimg0.pclady.com.cn%2Fpclady%2F1610%2F27%2F1608138_1.jpg">
+	                	<img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=299817906,1710598418&fm=27&gp=0.jpg">
 	                </div>                
 					<div id="action_bar">
 						<div class="ui labeled icon menu actions" >

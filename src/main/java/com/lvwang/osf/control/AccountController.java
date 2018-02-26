@@ -252,6 +252,6 @@ public class AccountController {
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "account/login";
+		return "redirect:/";
 	}
 }

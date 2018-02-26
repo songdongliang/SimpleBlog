@@ -5,7 +5,7 @@
 
 <c:forEach items="${feeds }" var="feed"> 
 	<c:if test="${feed.objectType == dic.object_type_shortpost }">
-		<div class="event row" type="spost" objectType="${feed.objectType }" objectId="${feed.objectId }">
+		<div class="event row" type="spost" object_type="${feed.objectType }" object_id="${feed.objectId }" author="${feed.userId}">
 		   <div class="label span2">
 		     <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
 		   </div>
@@ -28,11 +28,11 @@
 						</a>                           
 				        <a class="like">
 					       	<c:if test="${feed.like }">
-					       		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+					       		<i class="red heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 					       		<span>${feed.likeCount }</span>
 					       	</c:if>
 					       	<c:if test="${!feed.like }">
-					       		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+					       		<i class="heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 					       		<span>${feed.likeCount }</span>
 					       	</c:if>	                          	
 				    	</a>                         
@@ -49,7 +49,7 @@
 	
 <!-- new post -->
  <c:if test="${feed.objectType == dic.object_type_post}">
- <div class="event row" type="post" objectType="${feed.objectType }" objectId="${feed.objectId }">
+ <div class="event row" type="post" object_type="${feed.objectType }" object_id="${feed.objectId }">
    <div class="label span2">
      <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
@@ -87,11 +87,11 @@
 	        </a>                           
 	        <a class="like">
 	        	<c:if test="${feed.like }">
-	        		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<i class="red heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 	        		<span>${feed.likeCount }</span>
 	        	</c:if>
 	        	<c:if test="${!feed.like }">
-	        		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<i class="heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 	        		<span>${feed.likeCount }</span>
 	        	</c:if>	                          	
 	        </a>                       
@@ -109,7 +109,7 @@
  
  <!-- new album -->
  <c:if test="${feed.objectType == dic.object_type_album }">
- <div class="event row" type="album" objectType="${feed.objectType }" objectId="${feed.objectId }">
+ <div class="event row" type="album" object_type="${feed.objectType }" object_id="${feed.objectId }">
    <div class="label span2">
      <a href="<c:url value="/user/${feed.userId }" />"><img src="${img_base_url}${feed.userAvatar }"></a>
    </div>
@@ -141,11 +141,11 @@
         	</a>                           
 	        <a class="like">
 	        	<c:if test="${feed.like }">
-	        		<i class="red heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<i class="red heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 	        		<span>${feed.likeCount }</span>
 	        	</c:if>
 	        	<c:if test="${!feed.like }">
-	        		<i class="heart icon" author="${feed.userId }" objectType=${feed.objectType } objectId=${feed.objectId }></i>
+	        		<i class="heart icon" author="${feed.userId }" object_type=${feed.objectType } object_id=${feed.objectId }></i>
 	        		<span>${feed.likeCount }</span>
 	        	</c:if>	                          	
 	        </a>                          

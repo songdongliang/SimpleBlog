@@ -58,9 +58,10 @@
 		var comment_object_type = $(event).attr('object_type');
 		var comment_object_id = $(event).attr('object_id');
 		var comment_content = escape($(this).prev().val());
+        var comment_parent = $(event).attr('author');
 		
 		var that = this;
-		//comment_parent = '0';
+
 		$.ajax({
 			url: basePath + '/comment/create',
 			type: 'POST',

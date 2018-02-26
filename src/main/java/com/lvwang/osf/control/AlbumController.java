@@ -368,7 +368,7 @@ public class AlbumController {
 										 @RequestParam("height") int height,
 									     HttpSession session){
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		String key = (String) session.getAttribute("temp_avatar");
 		if(key == null || key.length() == 0){

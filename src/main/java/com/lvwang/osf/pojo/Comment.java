@@ -19,6 +19,7 @@ public class Comment extends BasePojo{
 
 	private String commentAuthorName;
 
+	@Transient
 	private String commentAuthorAvatar;
 
 	private Date commentTs;

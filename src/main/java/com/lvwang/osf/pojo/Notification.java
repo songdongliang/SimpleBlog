@@ -46,8 +46,11 @@ public class Notification extends BasePojo {
 	/**
 	 * 以下属性用于通知展现
 	 */
+	@Transient
 	private String notifierName;
+	@Transient
 	private String notifierAvatar;
+	@Transient
 	private String objectTitle;
 	
 	

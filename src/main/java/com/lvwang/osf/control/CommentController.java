@@ -67,9 +67,9 @@ public class CommentController {
 											 @RequestParam("comment_parent") int comment_parent,
 											 HttpSession session) {
 		User user = (User)session.getAttribute("user");
-		User comment_parent_author = new User();
-		if(comment_parent !=0 ){
-			comment_parent_author = commentService.getCommentAuthor(comment_parent);
+		User commentParentAuthor = new User();
+		if(comment_parent != 0 ){
+			commentParentAuthor = commentService.getCommentAuthor(comment_parent);
 		}
 		
 		Map<String, String> ret = commentService.newComment(comment_object_type, 
@@ -78,8 +78,8 @@ public class CommentController {
 															user.getUserName(),
 															comment_content, 
 															comment_parent,
-															comment_parent_author.getId(),
-															comment_parent_author.getUserName());
+															commentParentAuthor.getId(),
+															commentParentAuthor.getUserName());
 		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
 													  comment_object_type,
@@ -92,7 +92,7 @@ public class CommentController {
 		if(comment_parent!=0) {
 			//reply notification
 			notification.setNotifyType(Dic.NOTIFY_TYPE_COMMENT_REPLY);
-			notification.setNotifiedUser(comment_parent_author.getId());
+			notification.setNotifiedUser(commentParentAuthor.getId());
 			notificationService.doNotify(notification);
 		} else {
 			//comment notification
@@ -103,8 +103,8 @@ public class CommentController {
 		ret.put("avatar", userService.findById(user.getId()).getUserAvatar());
 		ret.put("author_id", String.valueOf(user.getId()));
 		ret.put("author_name", user.getUserName());
-		ret.put("reply_to_author", String.valueOf(comment_parent_author.getId()));
-		ret.put("reply_to_authorname", comment_parent_author.getUserName());
+		ret.put("reply_to_author", String.valueOf(commentParentAuthor.getId()));
+		ret.put("reply_to_authorname", commentParentAuthor.getUserName());
 		return ret;
 	}
 	

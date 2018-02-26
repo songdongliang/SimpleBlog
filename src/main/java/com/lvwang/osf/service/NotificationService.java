@@ -14,6 +14,7 @@ import com.lvwang.osf.pojo.Event;
 import com.lvwang.osf.pojo.Notification;
 import com.lvwang.osf.pojo.User;
 import com.lvwang.osf.util.Dic;
+import org.springframework.util.StringUtils;
 
 @Service("notificationService")
 public class NotificationService extends BaseService<Notification> {
@@ -80,6 +81,9 @@ public class NotificationService extends BaseService<Notification> {
 	public void refreshNotification(Notification notification){
 		String count = redisService.hget(NOTIFY_KEY + notification.getNotifiedUser()
 				, Dic.toNotifyTypeDesc(notification.getNotifyType()));
+		if (StringUtils.isEmpty(count)) {
+			count = "0";
+		}
 		redisService.hset(NOTIFY_KEY + notification.getNotifiedUser()
 				, Dic.toNotifyTypeDesc(notification.getNotifyType())
 				, String.valueOf(Long.parseLong(count) + 1));
