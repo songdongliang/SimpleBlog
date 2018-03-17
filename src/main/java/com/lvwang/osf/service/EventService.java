@@ -89,7 +89,6 @@ public class EventService extends BaseService<Event>{
 	public int newEvent(int objectType, Object obj) {
 		Event event = toEvent(objectType, obj);
 		save(event);
-		event.setId(event.getId());
 		eventIndexService.add(event, obj);
 		return event.getId();
 	}
@@ -163,4 +162,11 @@ public class EventService extends BaseService<Event>{
 		eventMapper.deleteByObject(objectType, objectId);
 	}
 
+	public void commentCountAdd(int objectId) {
+		eventMapper.commentCountAdd(objectId);
+	}
+
+	public void likeCountAdd(int objectId) {
+		eventMapper.likeCountAdd(objectId);
+	}
 }

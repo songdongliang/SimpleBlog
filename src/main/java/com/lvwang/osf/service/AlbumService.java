@@ -105,6 +105,7 @@ public class AlbumService extends BaseService<Album> {
                 map.put("key",key);
                 map.put("link", IMG_BASE_URL + httpResult.getData());
                 map.put("status", Property.SUCCESS_PHOTO_CREATE);
+                map.put("simpleLink",httpResult.getData());
             }
         } catch (IOException e) {
             e.printStackTrace();

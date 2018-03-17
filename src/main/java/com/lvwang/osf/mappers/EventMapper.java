@@ -20,4 +20,8 @@ public interface EventMapper extends Mapper<Event> {
     List<Event> getEventsHasPhoto(int start, int step);
 
     List<Event> getEventsOfUser(int user_id, int count);
+
+    void commentCountAdd(int objectId);
+
+    void likeCountAdd(int objectId);
 }

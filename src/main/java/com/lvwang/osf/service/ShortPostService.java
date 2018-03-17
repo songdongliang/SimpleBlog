@@ -28,7 +28,7 @@ public class ShortPostService extends BaseService<ShortPost> {
 		ShortPost spost = new ShortPost();
 		spost.setPostAuthor(author);
 		spost.setPostContent(content);
-		spost.setId(postService.save(spost));
+		postService.save(spost);
 		map.put("spost", spost);
 		map.put("status", Property.SUCCESS_POST_CREATE);
 		return map;

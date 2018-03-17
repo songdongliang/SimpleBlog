@@ -77,13 +77,13 @@ public class HomePage {
 	}
 	
 	@RequestMapping("/popup_usercard/{user_id}")
-	public ModelAndView getPopupUserCard(@PathVariable("user_id") String user_id){
+	public ModelAndView getPopupUserCard(@PathVariable("user_id") String userId){
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("popup_usercard");
-		User user = userService.findById(Integer.valueOf(user_id));
+		User user = userService.findById(Integer.valueOf(userId));
 		if(user != null) {
 			mav.addObject("u", user);
-			mav.addObject("counter", userService.getCounterOfFollowAndShortPost(Integer.valueOf(user_id)));
+			mav.addObject("counter", userService.getCounterOfFollowAndShortPost(Integer.valueOf(userId)));
 		}
 		
 		return mav;

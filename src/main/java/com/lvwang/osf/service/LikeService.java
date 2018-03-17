@@ -23,6 +23,11 @@ public class LikeService extends BaseService<Like> {
 
 	@Resource
 	private RedisService redisService;
+
+	@Resource
+	private PostService postService;
+	@Resource
+	private EventService eventService;
 	
 	public void like(int userId, int objectType, int objectId){
 		Like like = new Like();
@@ -30,6 +35,8 @@ public class LikeService extends BaseService<Like> {
 		like.setObjectId(objectId);
 		like.setObjectType(objectType);
 		super.save(like);
+		postService.likeCountAdd(objectId);
+		eventService.likeCountAdd(objectId);
 		redisService.sadd(LIKE_ + Dic.checkType(objectType) + "_" + objectId,String.valueOf(userId));
 	}
 	

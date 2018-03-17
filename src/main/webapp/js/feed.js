@@ -69,7 +69,7 @@
 			data: {comment_object_type: comment_object_type,
 				   comment_object_id: comment_object_id,
 				   comment_content: comment_content,
-				   comment_parent:comment_parent==null?0:comment_parent
+				   comment_parent:comment_parent == null ? 0 : comment_parent
 				   }
 		})
 		.success(function(data){

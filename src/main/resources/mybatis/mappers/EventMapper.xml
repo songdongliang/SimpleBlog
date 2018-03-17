@@ -5,7 +5,7 @@
 
 <mapper namespace="com.lvwang.osf.mappers.EventMapper"> 
 	<select id="getEvent" resultType="Event">
-		select * from osf_events where objectType=#{param1} and objectId=#{param2}
+		select * from osf_events where object_type=#{param1} and object_id=#{param2}
 	</select>
 	
 	<select id="getEvents" resultType="Event">
@@ -16,15 +16,15 @@
 		select * from osf_events 
 		<where>
 			<if test="0 != null">
-				(objectType=0 and
-					<foreach item="objectId" collection="0" open="(" separator="," close=")">
+				(object_type=0 and
+					<foreach item="object_id" collection="0" open="(" separator="," close=")">
 						#{objectId}
 					</foreach>
 				)
 			</if>
 			<if test="2 != null">
-				or (objectType=2 and
-					<foreach item="objectId" collection="2" open="(" separator="," close=")">
+				or (object_type=2 and
+					<foreach item="object_id" collection="2" open="(" separator="," close=")">
 						#{objectId}
 					</foreach>
 				)
@@ -33,16 +33,24 @@
 	</select>
 	
 	<select id="getEventsOfUser" resultType="Event">
-		select * from osf_events where userId=#{param1} order by ts desc limit #{param2}
+		select * from osf_events where user_id=#{param1} order by ts desc limit #{param2}
 	</select>
 	
 	<select id="getEventsHasPhoto" resultType="Event">
-		select * from osf_events where (objectType=0 and content is not null)
-		or (objectType=2 and title is not null) limit #{param1},#{param2}
+		select * from osf_events where (object_type=0 and content is not null)
+		or (object_type=2 and title is not null) limit #{param1},#{param2}
 	</select>
 	
 	<delete id="deleteByObject">
-		delete from osf_events where objectType=#{param1} and objectId=#{param2}
+		delete from osf_events where object_type=#{param1} and object_id=#{param2}
 	</delete>
+
+	<update id="commentCountAdd">
+		UPDATE osf_events SET comment_count = comment_count + 1 WHERE object_id = #{objectId};
+	</update>
+
+	<update id="likeCountAdd">
+		UPDATE osf_events SET like_count = like_count + 1 WHERE object_id = #{objectId};
+	</update>
 
 </mapper>

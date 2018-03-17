@@ -10,11 +10,18 @@
     </select>
 
     <select id="count" resultType="long">
-        select count(1) counter from osf_posts where post_author = #{userId} and post_title is not null
+        select count(1) counter from osf_posts where post_author = #{userId} and post_content is not null
     </select>
 
     <select id="getAuthorOfPost" resultType="int">
         select post_author from osf_posts where id = #{id}
     </select>
 
+    <update id="commentCountAdd">
+        UPDATE osf_posts SET comment_count = comment_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="likeCountAdd">
+        UPDATE osf_posts SET like_count = like_count + 1 WHERE id = #{id}
+    </update>
 </mapper>

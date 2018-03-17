@@ -328,6 +328,7 @@ public class AlbumController {
 		
 		//upload photo
 		map = albumService.uploadPhoto(img);
+		map.put("key",map.get("simpleLink"));
 		//hset post cover
 		session.setAttribute("post_cover", map.get("key"));
 		return map;

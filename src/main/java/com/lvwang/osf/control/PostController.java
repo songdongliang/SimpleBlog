@@ -129,7 +129,7 @@ public class PostController {
 	@ResponseBody
 	@RequestMapping("/delete/{id}")
 	public Map<String, Object> deletePost(@PathVariable("id") int id){
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		postService.deletePost(id);
 		map.put("status", Property.SUCCESS_POST_DELETE);
 		return map;

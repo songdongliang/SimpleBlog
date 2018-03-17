@@ -98,8 +98,8 @@ public class FeedService {
 	}
 	
 	public List<Event> getFeeds(int userId, int count){
-		List<Integer> event_ids = getEventIDs(userId, 0, count-1);
-		return decorateFeeds(userId, event_ids);
+		List<Integer> eventIDs = getEventIDs(userId, 0, count - 1);
+		return decorateFeeds(userId, eventIDs);
 	}
 	
 	private List<Event> decorateFeeds(int user_id, List<Integer> event_ids){

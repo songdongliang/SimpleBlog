@@ -12,4 +12,8 @@ public interface PostMapper extends Mapper<Post> {
     Long count(int userId);
 
     int getAuthorOfPost(int id);
+
+    void commentCountAdd(int id);
+
+    void likeCountAdd(int id);
 }

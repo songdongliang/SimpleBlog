@@ -3,8 +3,10 @@ package com.lvwang.osf.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import com.lvwang.osf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,10 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lvwang.osf.pojo.Comment;
 import com.lvwang.osf.pojo.Notification;
 import com.lvwang.osf.pojo.User;
-import com.lvwang.osf.service.CommentService;
-import com.lvwang.osf.service.NotificationService;
-import com.lvwang.osf.service.PostService;
-import com.lvwang.osf.service.UserService;
 import com.lvwang.osf.util.Dic;
 import com.lvwang.osf.util.Property;
 
@@ -40,16 +38,17 @@ public class CommentController {
 	@Autowired
 	@Qualifier("notificationService")
 	private NotificationService notificationService;
+
+	@Resource
+    private EventService eventService;
+	@Resource
+    private PostService postService;
 	 
-	@Autowired
-	@Qualifier("postService")
-	private PostService postService;
-	
 	@ResponseBody
 	@RequestMapping("/{id}")
 	public Map<String, Object> comment(@PathVariable("id") int id) {
 		Comment comment = commentService.findCommentByID(id);
-		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> ret = new HashMap<>();
 		if(comment == null) {
 			ret.put("status", Property.ERROR);
 		}else {
@@ -61,7 +60,7 @@ public class CommentController {
 	
 	@ResponseBody
 	@RequestMapping(value="/create", method=RequestMethod.POST)	
-	public Map<String, String> createComment(@RequestParam("comment_object_type") int comment_object_type,
+	public Map<String, String> createComment(@RequestParam("comment_object_type") int commentObjectType,
 											 @RequestParam("comment_object_id") int comment_object_id,
 											 @RequestParam("comment_content") String comment_content,
 											 @RequestParam("comment_parent") int comment_parent,
@@ -69,10 +68,10 @@ public class CommentController {
 		User user = (User)session.getAttribute("user");
 		User commentParentAuthor = new User();
 		if(comment_parent != 0 ){
-			commentParentAuthor = commentService.getCommentAuthor(comment_parent);
+			commentParentAuthor = userService.queryById(comment_parent);
 		}
 		
-		Map<String, String> ret = commentService.newComment(comment_object_type, 
+		Map<String, String> ret = commentService.newComment(commentObjectType,
 															comment_object_id, 
 															user.getId(), 
 															user.getUserName(),
@@ -80,16 +79,15 @@ public class CommentController {
 															comment_parent,
 															commentParentAuthor.getId(),
 															commentParentAuthor.getUserName());
-		Notification notification =  new Notification(Dic.NOTIFY_TYPE_COMMENT,
+		Notification notification = new Notification(Dic.NOTIFY_TYPE_COMMENT,
 													  Integer.parseInt(ret.get("id")),
-													  comment_object_type,
+                                                      commentObjectType,
 													  comment_object_id,
-													  userService.getAuthor(comment_object_type, comment_object_id).getId(),
-													  user.getId()
-													  );
+													  userService.getAuthor(commentObjectType, comment_object_id).getId(),
+													  user.getId());
 		
 		
-		if(comment_parent!=0) {
+		if(comment_parent != 0) {
 			//reply notification
 			notification.setNotifyType(Dic.NOTIFY_TYPE_COMMENT_REPLY);
 			notification.setNotifiedUser(commentParentAuthor.getId());
@@ -98,8 +96,9 @@ public class CommentController {
 			//comment notification
 			notificationService.doNotify(notification);
 		}
-		
-		
+		//评论数加1
+        postService.commentCountAdd(comment_object_id);
+		eventService.commentCountAdd(comment_object_id);
 		ret.put("avatar", userService.findById(user.getId()).getUserAvatar());
 		ret.put("author_id", String.valueOf(user.getId()));
 		ret.put("author_name", user.getUserName());

@@ -23,7 +23,9 @@ public class Album extends BasePojo {
 	private Integer likeCount;
 	private Integer shareCount;
 	private Integer commentCount;
+	@Transient
 	private List<Photo> photos;
+	@Transient
 	private List<Tag> albumTagsList;
 	private String albumTags;
 	public Integer getId() {

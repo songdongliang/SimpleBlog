@@ -119,9 +119,8 @@ public class PostService extends BaseService<Post>{
 			Map<String, Object> tagsmap = tagService.newTags(TagService.toList(paramTags));
 			
 			post.setPostTagsList((List<Tag>)tagsmap.get("tags"));
-			int id = savePost(post);
-			post.setId(id);
-			
+			savePost(post);
+
 			//4 save post tag relation
 			for(Tag tag: (List<Tag>)tagsmap.get("tags")) {
 				Map<String, Object> relmap = relationService.newRelation(
@@ -131,8 +130,7 @@ public class PostService extends BaseService<Post>{
 			}			
 			map.put("tags", tagsmap.get("tags"));
 		} else {
-			int id = savePost(post);
-			post.setId(id);
+			savePost(post);
 			map.put("tags", new ArrayList<Tag>());
 		}
 				
@@ -178,5 +176,13 @@ public class PostService extends BaseService<Post>{
 			eventService.delete(Dic.OBJECT_TYPE_POST, id);
 			feedService.delete(event.getObjectType(), event.getObjectId());
 		}
+	}
+
+	public void commentCountAdd(int id) {
+		postMapper.commentCountAdd(id);
+	}
+
+	public void likeCountAdd(int id) {
+		postMapper.likeCountAdd(id);
 	}
 }
